@@ -9,7 +9,7 @@ function LoginPage() {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
-
+//vcl
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
