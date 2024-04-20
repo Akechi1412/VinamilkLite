@@ -7,6 +7,8 @@ export default {
         primary: '#0213AF',
         secondary: '#FFFFF1',
         tertiary: '#D3E1FF',
+        'vinamilk-blue': '#0213af',
+        'vinamilk-blue-light': '#859BDC',
       },
     },
     fontFamily: {
