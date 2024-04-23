@@ -116,14 +116,31 @@ class Request
      * @param   array       $requestData
      * @return  bool|string true if all rules are passed, a error message otherwise
      */
-    public function validate(array $requestData, array $rules)
+    public function validate(array $requestData)
     {
-        if (empty($rules)) {
-            throw new Exception('Cannot validate with empty rules!');
+        $errors = [];
+        
+        // Kiểm tra trường email
+        if (empty($requestData['email'])) {
+            $errors['email'] = 'Email is required.';
+        } elseif (!filter_var($requestData['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Invalid email format.';
+        } elseif (!preg_match('/@gmail\.com$/', $requestData['email'])) {
+            $errors['email'] = 'Email must be a Gmail address.';
         }
-        // todo
-        return true;
+    
+        // Kiểm tra trường password
+        if (empty($requestData['password'])) {
+            $errors['password'] = 'Password is required.';
+        } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $requestData['password'])) {
+            $errors['password'] = 'Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long.';
+        }
+    
+        // Trả về dữ liệu JSON chứa thông tin về các lỗi nếu có
+        header('Content-Type: application/json');
+        echo json_encode($errors);
     }
+    
 
     /**
      * The function is used to sanitize input data.
@@ -147,3 +164,13 @@ class Request
         return $data;
     }
 }
+// Khởi tạo một đối tượng request
+$request = new Request();
+var_dump($_POST); 
+// Kiểm tra dữ liệu và trả về các lỗi (nếu có)
+$requestData = $_POST; // Hoặc có thể là $_GET hoặc dữ liệu từ bất kỳ nguồn nào khác
+$request->validate($requestData);
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");

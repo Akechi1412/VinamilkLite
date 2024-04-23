@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks';
-import { Loading } from '../../components/common';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { profile, login, refresh } = useAuth();
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
@@ -22,45 +20,52 @@ function LoginPage() {
     event.preventDefault();
 
     try {
-      await login({ email, password });
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+
+      const response = await axios.post('http://localhost/VinamilkLite/api/core/Request.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      const data = response.data;
+
+      if (data === 'true') {
+        // Đăng nhập thành công, chuyển hướng đến trang chính
+        navigate('/', { replace: true });
+      } else {
+        // Đăng nhập thất bại, hiển thị thông báo lỗi từ server
+        setError(data);
+      }
     } catch (error) {
-      console.log(error);
+      // Xử lý lỗi từ yêu cầu AJAX
+      console.error('Error:', error);
+      setError('Đã xảy ra lỗi, vui lòng thử lại sau.');
     }
   };
 
-  useEffect(() => {
-    if (profile) {
-      navigate('/', { replace: true });
-      return;
-    }
-
-    (async () => {
-      try {
-        await refresh();
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [profile]);
-
-  if (loading) return <Loading fullScreen />;
-
   return (
     <div>
-      <form className="flex flex-col" action="">
-        <input onChange={handleEmailChange} value={email} type="email" placeholder="email" />
+      <form className="flex flex-col" onSubmit={handleLogin} noValidate>
+        <input
+          onChange={handleEmailChange}
+          value={email}
+          type="email"
+          placeholder="Email"
+          required
+        />
         <input
           onChange={handlePasswordChange}
           value={password}
           type="password"
-          placeholder="password"
+          placeholder="Password"
+          required
         />
-        <button onClick={handleLogin} type="submit">
-          Đăng nhập
-        </button>
+        <button type="submit">Đăng nhập</button>
       </form>
+      {error && <span className="text-red-500">{error}</span>}
     </div>
   );
 }
