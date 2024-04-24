@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use Exception;
+require 'vendor/autoload.php';
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class AuthController extends Controller
 {
@@ -60,6 +62,118 @@ class AuthController extends Controller
             'Register successfully.'
         );
     }
+    public function generateOTP($length = 6) {
+        $characters = '0123456789';
+        $otp = '';
+        $max = strlen($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $otp .= $characters[rand(0, $max)];
+        }
+        return $otp;
+    }
+    
+    public function sendOTPByEmail()
+    {
+        $otp = $this->generateOTP();
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $email = $this->request->params('email');
+        try {       
+            session_start();
+            
+            $_SESSION['otp_email'] = [
+                'email' => $email,
+                'otp' => $otp,
+                
+                'created_at' => time()
+                
+            ];
+            session_write_close();
+            
+           
+            // Thiết lập máy chủ SMTP và gửi email
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Thay đổi bằng máy chủ SMTP của bạn
+            $mail->SMTPAuth = true;
+            $mail->Username = 'webvinamilklite@gmail.com'; // Thay đổi bằng email của bạn
+            $mail->Password = 'wrzctoqwlpvgllbh'; // Thay đổi bằng mật khẩu của bạn
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->setFrom('webvinamilklite@gmail.com', 'vinamilklite232'); // Thay đổi bằng email và tên của bạn
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $subject = 'Xác minh đăng ký';
+            $subject_encoded = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+            $mail->Subject = $subject_encoded;
+            $mail->Body = 'Mã OTP của bạn là: ' . $otp;
+            $mail->send();
+    
+            return true; // Gửi email thành công
+             // Lưu OTP vào session
+            
+        } catch (Exception $e) {
+           throw $e; // Gặp lỗi khi gửi email
+        }
+    }
+    
+    public function verifyOTP()
+    {
+        session_start();
+        $inputOTP = $this->request->params('otp');
+        $sessionData = isset($_SESSION['otp_email']) ? $_SESSION['otp_email'] : null;
+        // Kiểm tra xem có biến đếm lần nhập sai OTP không
+        $failedAttempts = isset($_SESSION['otp_failed_attempts']) ? $_SESSION['otp_failed_attempts'] : 0;
+
+        // Lấy dữ liệu từ session
+        var_dump($_SESSION);
+        
+        
+        // Kiểm tra xem session có chứa dữ liệu về OTP không
+        if ($sessionData !== null) {
+            
+            $savedOTP = isset($sessionData['otp']) ? $sessionData['otp'] : '';
+            $createdAt = isset($sessionData['created_at']) ? $sessionData['created_at'] : 0;
+            if (time() - $createdAt > 5 * 60) { // Nếu quá 5 phút
+                // Gửi lại OTP mới và cập nhật session
+                
+                return false;
+            }
+            echo $savedOTP;
+            
+            
+            // So sánh OTP nhập vào với OTP đã lưu
+            if ($savedOTP === $inputOTP ) {
+                
+                $_SESSION['otp_failed_attempts'] = 0;
+               
+                // Xác thực thành công
+                echo "Xác thực thành công!";
+                
+                // Reset biến đếm lần nhập sai
+                return true;
+            } else { 
+                
+                
+                $failedAttempts++;
+                echo $failedAttempts;
+                $_SESSION['otp_failed_attempts'] = $failedAttempts;
+                echo "Nhập sai rồi";
+                
+                if ($failedAttempts >= 3) {
+                    
+                    session_destroy();
+                    
+                }
+                
+                return false;
+                
+               
+    }
+    
+    }
+    
+    }
+
 
     /**
      * User login.
