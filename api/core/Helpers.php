@@ -56,6 +56,13 @@ function generateJwtToken($userId, $secretKey, $expireIn)
     return JWT::encode($payload, $secretKey, 'HS256');
 }
 
+/**
+ * Validate JSON web token.
+ *
+ * @param   string  $jwt
+ * @param   string  $secretKey
+ * @return  array
+ */
 function validateJwtToken($jwt, $secretKey)
 {
     try {
@@ -69,4 +76,21 @@ function validateJwtToken($jwt, $secretKey)
     } catch (Exception $e) {
         throw new Exception('Invalid token');
     }
+}
+
+/**
+ * Generate OTP.
+ *
+ * @param   int     $length
+ * @return  string  OTP
+ */
+function  generateOtp($length = 6)
+{
+    $characters = '0123456789';
+    $otp = '';
+    $max = strlen($characters) - 1;
+    for ($i = 0; $i < $length; $i++) {
+        $otp .= $characters[rand(0, $max)];
+    }
+    return $otp;
 }

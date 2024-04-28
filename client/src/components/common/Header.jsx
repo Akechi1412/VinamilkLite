@@ -14,6 +14,7 @@ function Header({ hasTransiton = false }) {
   const [className, setClassName] = useState(
     'h-[80px] lg:h-[72px] bg-transparent lg:bg-secondary border-0 lg:border-b text-secondary lg:text-primary'
   );
+
   const [scrolled, setScrolled] = useState(false);
   const { profile, refresh, logout } = useAuth();
 
@@ -41,6 +42,8 @@ function Header({ hasTransiton = false }) {
     if (hasTransiton) {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setClassName('h-[80px] lg:h-[72px] bg-secondary border-b text-primary');
     }
   }, [hasTransiton]);
 
@@ -80,7 +83,7 @@ function Header({ hasTransiton = false }) {
           <a className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" href="/">
             <img
               className="w-[122px] lg:w-[98px] h-[40px] md:h-[32px] object-fill lg:hidden"
-              src={scrolled ? Logo : WhiteLogo}
+              src={hasTransiton ? (scrolled ? Logo : WhiteLogo) : Logo}
               alt="Vinamilk"
             />
             <img
