@@ -1,0 +1,191 @@
+[
+  {
+    "id": "1",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 1",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "2",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 2",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "3",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 3",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "4",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 4",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "5",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 5",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "6",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 6",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "7",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 7",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "8",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 8",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "9",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 9",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "10",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 10",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "11",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 11",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "12",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 12",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "13",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 13",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "14",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 14",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "15",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 15",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "16",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 16",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "17",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 17",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "18",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 18",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "19",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 19",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "20",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 20",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "21",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 21",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "22",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 22",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "23",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 23",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "24",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 24",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "25",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 25",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "26",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 26",
+    "price": "10000",
+    "sale": "9000"
+  },
+  {
+    "id": "27",
+    "image": "https://images.pexels.com/photos/1325467/pexels-photo-1325467.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "name": "Sản phẩm 27",
+    "price": "10000",
+    "sale": "9000"
+  }
+]

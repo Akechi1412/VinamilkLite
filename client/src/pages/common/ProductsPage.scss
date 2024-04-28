@@ -1,0 +1,15 @@
+.slider-container {
+  position: relative;
+  .slick-prev,
+  .slick-next {
+    position: absolute;
+    top: 50%;
+  }
+  .slick-prev {
+    z-index: 9999;
+    left: 0%;
+  }
+  .slick-next {
+    right: 0%;
+  }
+}
