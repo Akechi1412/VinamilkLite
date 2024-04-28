@@ -47,6 +47,12 @@ use Core\Router;
 
 $router = new Router($request->getUri(), $request->getMethod());
 
+// Start session
+session_start();
+
+// Set timezone
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 // Require routes
 require_once ROUTES_PATH . 'auth.route.php';
 require_once ROUTES_PATH . 'user.route.php';

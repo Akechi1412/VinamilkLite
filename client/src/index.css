@@ -20,6 +20,10 @@
 }
 
 @layer base {
+  body {
+    background-color: #fffff1;
+  }
+
   .container-sm {
     width: 100%;
     max-width: 1280px;
