@@ -13,7 +13,7 @@ function RegisterPage() {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(null);
   const [otp, setOtp] = useState(new Array(6).fill(''));
-  const [otpSent, setOtpSent] = useState(true);
+  const [otpSent, setOtpSent] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
   const eyeiconRef = useRef(null);
