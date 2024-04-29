@@ -91,6 +91,10 @@ class UserController extends Controller
         $userData['id'] = uniqid('user');
         $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
 
+        $datetime = date('Y-m-d H:i:s');
+        $userData['created_at'] = $datetime;
+        $userData['updated_at'] = $datetime;
+
         $result = $this->userModel->create($userData);
         if ($result === false) {
             return $this->response->status(500)->json(
@@ -135,6 +139,9 @@ class UserController extends Controller
             $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
         }
 
+        $datetime = date('Y-m-d H:i:s');
+        $userData['updated_at'] = $datetime;
+
         $result = $this->userModel->update($userData, $id);
         if ($result === false) {
             return $this->response->status(500)->json(
@@ -176,6 +183,9 @@ class UserController extends Controller
         }
 
         $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
+
+        $datetime = date('Y-m-d H:i:s');
+        $userData['updated_at'] = $datetime;
 
         $result = $this->userModel->updateAll($userData, $id);
         if ($result === false) {

@@ -1,11 +1,23 @@
 import PropTypes from 'prop-types';
 import { Header, Footer } from '../common';
+import { useEffect, useState } from 'react';
 
 function MainLayout({ children, hasTransitionHeader = false }) {
+  const [className, setClassName] = useState('min-h-screen flex flex-col');
+
+  useEffect(() => {
+    if (!hasTransitionHeader) {
+      setClassName(
+        (className) =>
+          (className += ' before:block before:bg-transparent before:h-20 lg:before:hidden')
+      );
+    }
+  }, [hasTransitionHeader]);
+
   return (
-    <div className="min-h-screen">
+    <div className={className}>
       <Header hasTransiton={hasTransitionHeader} />
-      {children}
+      <div className="flex-1">{children}</div>
       <Footer />
     </div>
   );

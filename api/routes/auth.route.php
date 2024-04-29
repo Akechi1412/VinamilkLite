@@ -8,6 +8,14 @@ $router->post('/auth/register', function () use ($authController) {
     echo $authController->register();
 });
 
+$router->post('/auth/resend-otp', function () use ($authController) {
+    echo $authController->resendOtp();
+});
+
+$router->post('/auth/verify-otp', function () use ($authController) {
+    echo $authController->verifyOtp();
+});
+
 $router->post('/auth/login', function () use ($authController) {
     echo $authController->login();
 });

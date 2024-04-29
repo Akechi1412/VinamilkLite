@@ -3,13 +3,16 @@
 namespace Core;
 
 use Exception;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 class Request
 {
     /**
      * Get params from request. 
      * 
-     * @return  mixed
+     * @param   string  $key
+     * @return  string|string[]
      */
     public function params($key = '')
     {
@@ -23,23 +26,24 @@ class Request
     /**
      * Get body from request. 
      * 
-     * @return  mixed
+     * @param   string  $key
+     * @return  string|string[]
      */
     public function body($key = '')
     {
         $data = json_decode(file_get_contents('php://input'), true);
         if ($key != '') {
-            return isset($data[$key]) ? $this->sanitize($data[$key]) : [];
+            return isset($data[$key]) ? $this->purify($data[$key]) : [];
         }
 
-        return $this->sanitize($data);
+        return $this->purify($data);
     }
 
     /**
      * Get value for server super global var.
      *
      * @param   string  $key
-     * @return  string
+     * @return  string|string[]
      */
     public function server($key = '')
     {
@@ -83,7 +87,7 @@ class Request
      * Get header.
      *
      * @param   string  $key
-     * @return  mixed
+     * @return  string|string[]
      */
     public function getHeader($key = '')
     {
@@ -99,7 +103,7 @@ class Request
      * Get Cookie.
      *
      * @param   string  $key
-     * @return  mixed
+     * @return  string|string[]
      */
     public function getCookie($key = '')
     {
@@ -121,15 +125,17 @@ class Request
         if (empty($rules)) {
             throw new Exception('Cannot validate with empty rules!');
         }
-        // todo
+
+
+
         return true;
     }
 
     /**
      * The function is used to sanitize input data.
      *
-     * @param   mixed   $data
-     * @return  mixed
+     * @param   string|string[]   $data
+     * @return  string|string[]
      */
     private function sanitize($data)
     {
@@ -145,5 +151,25 @@ class Request
         }
 
         return $data;
+    }
+
+    /**
+     * The function is used to purify input.
+     *
+     * @param   string|string[]   $data
+     * @return  string|string[]
+     */
+    private function purify($data)
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Attr.AllowedFrameTargets', ['_blank']);
+        $config->set('AutoFormat.RemoveEmpty', true);
+        $purifier = new HTMLPurifier($config);
+
+        if (is_array($data)) {
+            return $purifier->purifyArray($data);
+        }
+
+        return $purifier->purify($data);
     }
 }

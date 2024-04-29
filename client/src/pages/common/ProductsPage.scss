@@ -13,3 +13,30 @@
     right: 0%;
   }
 }
+
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+  font-size: 1.2rem;
+  gap: 5px;
+}
+
+.pagination .page-num {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+}
+
+.pagination .page-num:hover {
+  background-color: #0213af;
+  color: white;
+}
+
+.pagination .active {
+  background-color: #0213af;
+  color: white;
+}
