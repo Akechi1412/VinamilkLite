@@ -9,6 +9,7 @@ export default {
         tertiary: '#D3E1FF',
         'vinamilk-blue': '#0213af',
         'vinamilk-blue-light': '#859BDC',
+        'vinamilk-cream': '#F7FFF1',
       },
     },
     fontFamily: {
