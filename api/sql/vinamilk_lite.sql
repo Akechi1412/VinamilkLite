@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2024 at 05:23 PM
+-- Generation Time: May 02, 2024 at 02:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,7 +33,7 @@ CREATE TABLE `addresses` (
   `ward_id` int(11) NOT NULL,
   `detail` varchar(255) NOT NULL,
   `phone` varchar(10) NOT NULL,
-  `default` tinyint(4) NOT NULL DEFAULT 0,
+  `as_default` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -75,7 +75,7 @@ CREATE TABLE `collections` (
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `order` int(11) DEFAULT NULL,
+  `collection_order` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -84,7 +84,7 @@ CREATE TABLE `collections` (
 -- Dumping data for table `collections`
 --
 
-INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `order`, `created_at`, `updated_at`) VALUES
+INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `collection_order`, `created_at`, `updated_at`) VALUES
 (1, 'Sữa tươi & Sữa dinh dưỡng', 'sua-tuoi-va-sua-dinh-duong', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F8b46ad2e7ff84d8f9f7176019446eba5?format=webp&width=2000', 6, '2024-04-26 07:16:40', '2024-04-26 07:16:40'),
 (2, 'Sữa cho mẹ mang thai & bé', 'sua-cho-me-mang-thai-va-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F42a528850641476b901e83b846c9572f?format=webp&width=2000', 5, '2024-04-26 07:18:55', '2024-04-26 07:18:55'),
 (3, 'Ăn dặm cho bé', 'an-dam-cho-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ffbbf4f61b5894990aa8a9c06dacc4723?format=webp&width=2000', 4, '2024-04-26 07:18:55', '2024-04-26 07:18:55'),
@@ -108,6 +108,29 @@ CREATE TABLE `comments` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` int(11) NOT NULL,
+  `full_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `solved` tinyint(4) NOT NULL DEFAULT 0,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contacts`
+--
+
+INSERT INTO `contacts` (`id`, `full_name`, `email`, `content`, `solved`, `created_at`, `updated_at`) VALUES
+(1, 'Nguyễn Trần Hoài Phong', 'nguyenphong.tranhoai@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-01 10:11:40', '2024-05-01 10:11:40');
 
 -- --------------------------------------------------------
 
@@ -879,7 +902,7 @@ CREATE TABLE `news_categories` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
-  `order` int(11) DEFAULT NULL,
+  `cate_order` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -888,7 +911,7 @@ CREATE TABLE `news_categories` (
 -- Dumping data for table `news_categories`
 --
 
-INSERT INTO `news_categories` (`id`, `name`, `slug`, `order`, `created_at`, `updated_at`) VALUES
+INSERT INTO `news_categories` (`id`, `name`, `slug`, `cate_order`, `created_at`, `updated_at`) VALUES
 (1, 'Thành tựu và giải thưởng', 'thanh-tuu-va-giai-thuong', 4, '2024-04-26 21:14:55', '2024-04-26 21:14:55'),
 (2, 'Chương trình khuyến mãi', 'chuong-trinh-khuyen-mai', 3, '2024-04-26 21:14:55', '2024-04-26 21:14:55'),
 (3, 'Sản phẩm và công nghệ', 'san-pham-va-cong-nghe', 2, '2024-04-26 21:27:46', '2024-04-26 21:27:46'),
@@ -903,10 +926,36 @@ INSERT INTO `news_categories` (`id`, `name`, `slug`, `order`, `created_at`, `upd
 --
 
 CREATE TABLE `options` (
-  `id` int(11) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `value` longtext NOT NULL
+  `option_key` varchar(255) NOT NULL,
+  `option_value` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `options`
+--
+
+INSERT INTO `options` (`option_key`, `option_value`) VALUES
+('about-desc', 'Tổng giám đốc công ty cổ phần sữa Việt Nam Vinamilk'),
+('about-image', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F902fda938ad949529ac6f59b94e09ac4?format=webp&width=1200'),
+('about-quote', 'Muốn có sản phẩm đi đầu thì phải luôn sáng tạo. Sáng tạo là yếu tố sống còn.'),
+('about-sections', '[{\"title\":\"Tầm nhìn\",\"image\":\"https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Fca6547288f1a4648b39c67dddd815d0b\",\"description\":\"Trở thành biểu tượng niềm tin hàng đầu Việt Nam về sản phẩm dinh dưỡng và sức khỏe phục vụ cuộc sống con người\"},{\"title\":\"Sứ mệnh\",\"image\":\"https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Fd782dc5ca7a5410a9305a3631b049615\",\"description\":\"Vinamilk cam kết mang đến cho cộng đồng nguồn dinh dưỡng và chất lượng cao cấp hàng đầu bằng chính sự trân trọng, tình yêu và trách nhiệm cao của mình với cuộc sống con người và xã hội\"},{\"title\":\"Lời hứa\",\"image\":\"https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ff209b9c9448a4e218f4e595b5f6a8814\",\"description\":\"Tại Vinamilk, sự minh bạch không chỉ là một lời hứa sáo rỗng trên nhãn mác. Chúng tôi không ngừng tìm kiếm các đối tác phù hợp trên toàn thế giới để mang về các nguyên liệu và phương pháp sản xuất tiên tiến nhất. Đó là lời cam kết về sự tôn trọng và công bằng đối với nhân viên, khách hàng và nhà cung cấp. \"}]'),
+('about-title', 'Bà. Mai Kiều Liên'),
+('certificate-info', 'Số giấy chứng nhận đăng ký doanh nghiệp: 0300588569. Ngày cấp: 20/11/2003. Nơi cấp: Sở Kế hoạch và Đầu tư thành phố Hồ Chí Minh'),
+('certificate-link', 'http://online.gov.vn/Home/WebDetails/53186'),
+('contact-address', 'Số 10, Đường Tân Trào, Phường Tân Phú, Quận 7, Tp. Hồ Chí Minh'),
+('contact-email', 'vinamilk@vinamilk.com.vn'),
+('contact-fax', '(028) 54 161 226'),
+('contact-image', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Fed5b874d5a1c4e6bba8dbaaa3854faa2?format=webp&width=2000'),
+('contact-phone', '(028) 54 155 555'),
+('email', 'vinamilkgmb@gmail.com'),
+('footer-menu', '[{\"title\":\"Về Vinamilk\",\"items\":[{\"title\":\"Giới thiệu\",\"href\":\"/about-us\"},{\"title\":\"Sản phẩm\",\"href\":\"/collections/all-products\"},{\"title\":\"Tin tức\",\"href\":\"/news\"},{\"title\":\"Liên hệ\",\"href\":\"/contact\"}]},{\"title\":\"Chính sách\",\"items\":[{\"title\":\"Điều khoản sử dụng\",\"href\":\"/\"},{\"title\":\"Chính sách bảo mật\",\"href\":\"/\"},{\"title\":\"Đổi trả và hoàn tiền\",\"href\":\"/\"}]}]'),
+('header-menu', '[{\"title\":\"Giới thiệu\",\"href\":\"/about-us\"},{\"title\":\"Sản phẩm\",\"href\":\"/collections/all-products\"},{\"title\":\"Tin tức\",\"href\":\"/news\"},{\"title\":\"Liên hệ\",\"href\":\"/contact\"}]'),
+('hero-image', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ff2458a4766ea46b4989970ceb0c3473b'),
+('identity-content', 'Ngày qua ngày, Vinamilk đồng hành với hàng triệu người dân khắp 50 quốc gia, chúng tôi đã vươn ra ngoài phạm vi sản phẩm sữa. Hôm nay, trong cuộc viễn chinh vào tương lai, chúng tôi hướng đến bạn bằng tất cả quyết tâm và khả năng của mình để mỗi sản phẩm là một lời hứa - rằng bạn có thể chăm sóc tốt cho bản thân và cả người mình thương quý.'),
+('identity-image', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F171f40f6b9df4a01900eeb437f65f15e?format=webp&width=1600'),
+('logo', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Feb688229807949df9efda570984d97eb'),
+('social-link', '{\"facebook\":\"https://www.facebook.com/vinamilkofficial\",\"instagram\":\"https://www.instagram.com/vinamilk_lovenature/\",\"linkedin\":\"https://www.linkedin.com/company/vinamilk\",\"youtube\":\"https://www.youtube.com/channel/UCS9JKqDiIJqps1S8kpcx2Xg\",\"tiktok\":\"https://www.tiktok.com/@vinamilk.official\"}'),
+('white-logo', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F19bd1aa1b9d2423fa02faae0d3ab7ef0');
 
 -- --------------------------------------------------------
 
@@ -1241,7 +1290,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `avatar`, `role`, `ban_expired`, `created_at`, `updated_at`) VALUES
-('user660760c2688ef', 'Name', 'No', 'admin123@gmail.com', '$2y$10$lSfmytxl3sxujj2.2pN15.kuonaIrDfb53oR.DDoggxrEekV1GeY2', NULL, 'admin', NULL, '2024-04-26 03:59:58', '2024-04-26 03:59:58'),
+('user660760c2688ef', 'Name', 'No', 'admin123@gmail.com', '$2y$10$EZECSZmquLHGM38jbpl5N.zUu.2V3bZsIAf2AY4nvCebbIVyOePja', 'https://firebasestorage.googleapis.com/v0/b/vinamilk-lite-cf427.appspot.com/o/users%2F1714624870055_222.jpg?alt=media&amp;token=abd0aae7-192a-4dff-b8c2-f9d4434b31f4', 'admin', NULL, '2024-04-26 03:59:58', '2024-05-02 13:36:32'),
 ('user660760f561bd0', 'Cường', 'Lê Mạnh', 'cuongle2001@gmai.com', '$2y$10$fmMSH4OP5wWh7RJCN20UKeYNmqpAgTYqoohp4IYY/3.F6j1o6MVvS', NULL, 'subscriber', NULL, '2024-04-26 03:59:58', '2024-04-26 03:59:58');
 
 -- --------------------------------------------------------
@@ -11885,6 +11934,12 @@ ALTER TABLE `comments`
   ADD KEY `news_id` (`news_id`);
 
 --
+-- Indexes for table `contacts`
+--
+ALTER TABLE `contacts`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `districts`
 --
 ALTER TABLE `districts`
@@ -11909,7 +11964,7 @@ ALTER TABLE `news_categories`
 -- Indexes for table `options`
 --
 ALTER TABLE `options`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`option_key`);
 
 --
 -- Indexes for table `orders`
@@ -12013,6 +12068,12 @@ ALTER TABLE `comments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `contacts`
+--
+ALTER TABLE `contacts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `districts`
 --
 ALTER TABLE `districts`
@@ -12023,12 +12084,6 @@ ALTER TABLE `districts`
 --
 ALTER TABLE `news_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `options`
---
-ALTER TABLE `options`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `packing`
