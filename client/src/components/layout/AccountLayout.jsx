@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import ArrowBottom from '../../assets/images/arrow-bottom.svg';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function AccountLayout({ children }) {
   const location = useLocation();
@@ -68,22 +68,30 @@ function AccountLayout({ children }) {
                 <h6 className="py-4 text-[1.125rem] font-semibold">Quản lý tài khoản</h6>
                 <ul>
                   <li>
-                    <a
-                      style={{ background: currentPage === 'account' ? '#D3E1FF' : 'transparent' }}
-                      className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
-                      href="/account"
-                    >
-                      <img className="mr-3 w-6 h-6" src={AccountIcon} alt="" />
-                      <span>Hồ sơ cá nhân</span>
-                    </a>
-                    <a
-                      style={{ background: currentPage === 'address' ? '#D3E1FF' : 'transparent' }}
-                      className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
-                      href="/account/address"
-                    >
-                      <img className="mr-3 w-6 h-6" src={AddressIcon} alt="" />
-                      <span>Địa chỉ</span>
-                    </a>
+                    <Link to="/account">
+                      <div
+                        style={{
+                          background: currentPage === 'account' ? '#D3E1FF' : 'transparent',
+                        }}
+                        className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
+                      >
+                        <img className="mr-3 w-6 h-6" src={AccountIcon} alt="" />
+                        <span>Hồ sơ cá nhân</span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/account/address">
+                      <div
+                        style={{
+                          background: currentPage === 'address' ? '#D3E1FF' : 'transparent',
+                        }}
+                        className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
+                      >
+                        <img className="mr-3 w-6 h-6" src={AddressIcon} alt="" />
+                        <span>Địa chỉ</span>
+                      </div>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -91,14 +99,15 @@ function AccountLayout({ children }) {
                 <h6 className="py-4 text-[1.125rem] font-semibold">Quản lý đơn hàng</h6>
                 <ul>
                   <li>
-                    <a
-                      style={{ background: currentPage === 'orders' ? '#D3E1FF' : 'transparent' }}
-                      className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
-                      href="/account/orders"
-                    >
-                      <img className="mr-3 w-6 h-6" src={OrderIcon} alt="" />
-                      <span>Đơn hàng</span>
-                    </a>
+                    <Link to="/account/orders">
+                      <div
+                        style={{ background: currentPage === 'orders' ? '#D3E1FF' : 'transparent' }}
+                        className="flex items-center px-4 py-3 hover:font-semibold rounded-lg"
+                      >
+                        <img className="mr-3 w-6 h-6" src={OrderIcon} alt="" />
+                        <span>Đơn hàng</span>
+                      </div>
+                    </Link>
                   </li>
                 </ul>
               </div>
