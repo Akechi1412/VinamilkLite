@@ -11,3 +11,4 @@ export { default as AdminOptionsPage } from './AdminOptionsPage';
 export { default as AdminBrandsPage } from './AdminBrandsPage';
 export { default as AdminCommentsPage } from './AdminCommentsPage';
 export { default as AdminPackingPage } from './AdminPackingPage';
+export { default as AdminProfilePage } from './AdminProfilePage';

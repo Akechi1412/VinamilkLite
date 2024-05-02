@@ -30,6 +30,7 @@ import {
   AdminContactsPage,
   AdminOrdersPage,
   AdminOptionsPage,
+  AdminProfilePage,
 } from './pages/admin';
 import AdminPage from './pages/admin/AdminPage';
 
@@ -67,6 +68,7 @@ function App() {
           <Route path="contacts" element={<AdminContactsPage />} />
           <Route path="brands" element={<AdminBrandsPage />} />
           <Route path="options" element={<AdminOptionsPage />} />
+          <Route path="profile" element={<AdminProfilePage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
