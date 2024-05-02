@@ -9,6 +9,7 @@ import TiktokIcon from '../../assets/images/tiktok.svg';
 import CertificateImage from '../../assets/images/certificate.webp';
 import { useEffect, useState } from 'react';
 import { optionApi } from '../../api';
+import { Link } from 'react-router-dom';
 
 function Footer() {
   const [footerMenu, setFooterMenu] = useState([]);
@@ -85,9 +86,9 @@ function Footer() {
                     <ul>
                       {column.items?.map((item, index) => (
                         <li className="py-[6px]" key={index}>
-                          <a className="font-lora hover:underline" href={item.href || '/'}>
+                          <Link className="font-lora hover:underline" to={item.href || '/'}>
                             {item.title}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>

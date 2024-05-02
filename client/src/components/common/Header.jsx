@@ -11,7 +11,7 @@ import ArrowBottomIcon from '../../assets/images/arrow-bottom.svg';
 import RegisterIcon from '../../assets/images/user-register.svg';
 import { useAuth } from '../../hooks';
 import { Overlay, SearchBar, Loading } from '../../components/common';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { optionApi } from '../../api';
 
@@ -157,16 +157,16 @@ function Header({ hasTransiton = false }) {
               </div>
             )}
 
-            <a className="lg:hidden" href={menu[0]?.href}>
+            <Link className="lg:hidden" to={menu[0]?.href}>
               {menu[0]?.title}
-            </a>
-            <a className="ml-5 lg:hidden" href={menu[1]?.href}>
+            </Link>
+            <Link className="ml-5 lg:hidden" to={menu[1]?.href}>
               {menu[1]?.title}
-            </a>
+            </Link>
           </div>
-          <a
+          <Link
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-appear"
-            href="/"
+            to="/"
           >
             <img
               className="w-[122px] lg:w-[98px] h-[40px] md:h-[32px] object-fill lg:hidden"
@@ -178,14 +178,14 @@ function Header({ hasTransiton = false }) {
               src={logo}
               alt="Vinamilk"
             />
-          </a>
+          </Link>
           <div className="flex animate-appear-from-right">
-            <a className="px-3 lg:hidden" href={menu[2]?.href}>
+            <Link className="px-3 lg:hidden" to={menu[2]?.href}>
               {menu[2]?.title}
-            </a>
-            <a className="px-3 lg:hidden" href={menu[3]?.href}>
+            </Link>
+            <Link className="px-3 lg:hidden" to={menu[3]?.href}>
               {menu[3]?.title}
-            </a>
+            </Link>
             <div
               onClick={() => setSearchExpanded(true)}
               className="cursor-pointer flex items-center justify-center w-6 h-6 ml-3 mr-2"
@@ -209,7 +209,7 @@ function Header({ hasTransiton = false }) {
               </svg>
             </div>
             <div className="relative flex items-center justify-center w-6 h-6 mx-2 lg:hidden group/item">
-              <a href="/account">
+              <Link to="/account">
                 <svg
                   width="24"
                   height="24"
@@ -231,7 +231,7 @@ function Header({ hasTransiton = false }) {
                     fill="currentColor"
                   ></path>
                 </svg>
-              </a>
+              </Link>
               <div className="invisible transition-all group-hover/item:visible absolute right-[-40px] top-full min-w-[200px] w-max translate-y-[10px] bg-secondary rounded-md border border-slate-300 shadow-md after:absolute after:top-0 after:right-[42px] after:translate-y-[-10px] after:block after:border-l-[10px] after:border-r-[10px] after:border-b-[10px] after:border-transparent after:border-b-secondary before:absolute before:top-0 before:right-[39px] before:translate-y-[-11px] before:block before:border-l-[12px] before:border-r-[12px] before:border-b-[11px] before:border-transparent before:border-b-slate-300">
                 {profile ? (
                   <div className="text-primary text-base font-inter">
@@ -245,9 +245,9 @@ function Header({ hasTransiton = false }) {
                     </div>
                     <ul className="p-1">
                       <li>
-                        <a
+                        <Link
                           className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          href="/account"
+                          to="/account"
                         >
                           <img
                             className="w-6 h-6 rounded-full object-cover"
@@ -255,12 +255,12 @@ function Header({ hasTransiton = false }) {
                             alt="Account"
                           />
                           <span className="ml-3">Tài khoản</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          href="/account/orders"
+                          to="/account/orders"
                         >
                           <img
                             className="w-6 h-6 rounded-full object-cover"
@@ -268,7 +268,7 @@ function Header({ hasTransiton = false }) {
                             alt="Orders"
                           />
                           <span className="ml-3">Đơn hàng</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
                         <div
@@ -289,9 +289,9 @@ function Header({ hasTransiton = false }) {
                   <div className="text-primary text-base font-inter">
                     <ul className="p-1">
                       <li>
-                        <a
+                        <Link
                           className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          href="/login"
+                          to="/login"
                         >
                           <img
                             className="w-6 h-6 rounded-full object-cover"
@@ -299,12 +299,12 @@ function Header({ hasTransiton = false }) {
                             alt="Login"
                           />
                           <span className="ml-3">Đăng nhập</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          href="/register"
+                          to="/register"
                         >
                           <img
                             className="w-6 h-6 rounded-full object-cover"
@@ -312,7 +312,7 @@ function Header({ hasTransiton = false }) {
                             alt="Register"
                           />
                           <span className="ml-3">Đăng ký</span>
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -372,39 +372,20 @@ function Header({ hasTransiton = false }) {
         <Overlay excludeHeader handleClickOut={() => setMenuExpanded(false)}>
           <nav className="w-screen max-w-xl h-full bg-secondary overflow-y-auto">
             <ul className="text-primary text-[18px]">
-              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
-                <a
-                  className="flex justify-between items-center font-vs-std py-5 px-4"
-                  href="/about-us"
+              {menu.map((item, index) => (
+                <li
+                  key={index}
+                  className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light"
                 >
-                  <span>Giới thiệu</span>
-                  <img src={ArrowRightIcon} alt="" />
-                </a>
-              </li>
-              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
-                <a
-                  className="flex justify-between items-center font-vs-std py-5 px-4"
-                  href="/collections/all-products"
-                >
-                  <span>Sản phẩm</span>
-                  <img src={ArrowRightIcon} alt="" />
-                </a>
-              </li>
-              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
-                <a className="flex justify-between items-center font-vs-std py-5 px-4" href="/news">
-                  <span>Tin tức</span>
-                  <img src={ArrowRightIcon} alt="" />
-                </a>
-              </li>
-              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
-                <a
-                  className="flex justify-between items-center font-vs-std py-5 px-4"
-                  href="/contact"
-                >
-                  <span>Liên hệ</span>
-                  <img src={ArrowRightIcon} alt="" />
-                </a>
-              </li>
+                  <Link
+                    className="flex justify-between items-center font-vs-std py-5 px-4"
+                    to={item.href}
+                  >
+                    <span>{item.title}</span>
+                    <img src={ArrowRightIcon} alt="" />
+                  </Link>
+                </li>
+              ))}
               <li className="cursor-pointer animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
                 <div
                   onClick={() => setSubMenuExpanded((state) => !state)}
@@ -428,22 +409,22 @@ function Header({ hasTransiton = false }) {
                           </div>
                         </li>
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <a
+                          <Link
                             className="flex items-center font-vs-std pl-6 pr-4 py-4"
-                            href="/account"
+                            to="/account"
                           >
                             <img className="w-6 h-6 mr-2" src={AccountIcon} alt="" />
                             <span>Tài khoản</span>
-                          </a>
+                          </Link>
                         </li>
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <a
+                          <Link
                             className="flex items-center font-vs-std pl-6 pr-4 py-4"
-                            href="/account/orders"
+                            to="/account/orders"
                           >
                             <img className="w-6 h-6 mr-2" src={OrderIcon} alt="" />
                             <span>Đơn hàng</span>
-                          </a>
+                          </Link>
                         </li>
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
                           <div
@@ -458,19 +439,22 @@ function Header({ hasTransiton = false }) {
                     ) : (
                       <ul>
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <a className="flex items-center font-vs-std pl-6 pr-4 py-4" href="/login">
+                          <Link
+                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                            to="/login"
+                          >
                             <img className="w-6 h-6 mr-2" src={LoginIcon} alt="" />
                             <span>Đăng nhập</span>
-                          </a>
+                          </Link>
                         </li>
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <div
+                          <Link
                             className="flex items-center font-vs-std pl-6 pr-4 py-4"
-                            href="/register"
+                            to="/register"
                           >
                             <img className="w-6 h-6 mr-2" src={RegisterIcon} alt="" />
                             <span>Đăng ký</span>
-                          </div>
+                          </Link>
                         </li>
                       </ul>
                     )}

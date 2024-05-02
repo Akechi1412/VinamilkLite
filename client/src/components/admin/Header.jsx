@@ -1,7 +1,7 @@
 function Header() {
   return (
-    <header>
-      <div className="h-[60px] shadow-lg"></div>
+    <header className="h-[60px] shadow-md">
+      <div></div>
     </header>
   );
 }
