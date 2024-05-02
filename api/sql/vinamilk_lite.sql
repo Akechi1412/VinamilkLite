@@ -21,6 +21,10 @@ SET time_zone = "+00:00";
 -- Database: `vinamilk_lite`
 --
 
+DROP DATABASE IF EXISTS `vinamilk_lite`;
+CREATE DATABASE `vinamilk_lite`;
+USE `vinamilk_lite`;
+
 -- --------------------------------------------------------
 
 --
