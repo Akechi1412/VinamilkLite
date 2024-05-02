@@ -19,7 +19,7 @@ class Auth extends Model
      * @var array
      * 
      */
-    protected $selectedFields = ['id', 'email', 'password', 'first_name', 'last_name', 'role'];
+    protected $selectedFields = ['id', 'email', 'password', 'first_name', 'last_name', 'role', 'avatar', 'role', 'ban_expired', 'created_at', 'updated_at'];
 
     /**
      * Get a user by email from the table.
@@ -29,8 +29,14 @@ class Auth extends Model
      */
     public function getByEmail($email)
     {
-        return $this->db->table($this->tableName)
+        $result =  $this->db->table($this->tableName)
             ->select($this->selectedFields)
-            ->where(['email' => $email])->execute()[0];
+            ->where(['email' => $email])->execute();
+
+        if (!empty($result)) {
+            return $result[0];
+        } else {
+            return [];
+        }
     }
 }

@@ -20,11 +20,16 @@ const useAuth = () => {
     setProfile(data.profile);
   };
 
-  const updateProfile = async () => {
-    // todo
+  const updateProfile = async (data) => {
+    const { data: profileData } = await authApi.updateProfile(data);
+    setProfile(profileData);
   };
 
-  return { profile, login, logout, refresh, updateProfile };
+  const changePassword = async (data) => {
+    await authApi.changePassword(data);
+  };
+
+  return { profile, login, logout, refresh, updateProfile, changePassword };
 };
 
 export default useAuth;

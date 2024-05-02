@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Middlewares\AuthMiddleware;
 
 $authController = new AuthController();
 
@@ -27,3 +28,11 @@ $router->post('/auth/refresh', function () use ($authController) {
 $router->post('/auth/logout', function () use ($authController) {
     echo $authController->logout();
 });
+
+$router->patch('/auth/profile', function () use ($authController) {
+    echo $authController->updateProfile();
+})->addMiddleware(new AuthMiddleware());
+
+$router->patch('/auth/password', function () use ($authController) {
+    echo $authController->changePassword();
+})->addMiddleware(new AuthMiddleware(false, true));

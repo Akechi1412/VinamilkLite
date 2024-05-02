@@ -54,7 +54,9 @@ session_start();
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 // Require routes
-require_once ROUTES_PATH . 'auth.route.php';
-require_once ROUTES_PATH . 'user.route.php';
+$routeFiles = glob(ROUTES_PATH . '*.php');
+foreach ($routeFiles as $file) {
+    require_once $file;
+}
 
 $router->dispatch();

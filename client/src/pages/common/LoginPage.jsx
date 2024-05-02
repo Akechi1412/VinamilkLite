@@ -64,11 +64,20 @@ function LoginPage() {
   const handleLogin = async (event) => {
     event.preventDefault();
 
+    if (!email.trim()) {
+      setEmailCheck('Email là bắt buộc!');
+      return;
+    }
+    if (!password) {
+      setPassword('Mật khẩu là bắt buộc!');
+      return;
+    }
+
     setLoading(true);
     try {
-      await login({ email, password });
+      await login({ email: email.trim(), password });
       setLoading(false);
-      await Swal.fire({
+      Swal.fire({
         icon: 'success',
         title: 'Đăng nhập thành công',
         text: 'Đang chuyển hướng đến trang chủ...',
@@ -122,6 +131,7 @@ function LoginPage() {
               </label>
               <div className="relative">
                 <Input
+                  id="email"
                   type="text"
                   placeholder="Nhập email*"
                   value={email}

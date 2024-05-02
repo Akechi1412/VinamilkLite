@@ -10,6 +10,28 @@ export default {
         'vinamilk-blue': '#0213af',
         'vinamilk-blue-light': '#859BDC',
       },
+      keyframes: {
+        appear: {
+          '0%': { opacity: 0 },
+          '70%': { opacity: 0.3 },
+          '100%': { opacity: 1 },
+        },
+        appearFromLeft: {
+          '0%': { opacity: 0, transform: 'translate(-20px)' },
+          '70%': { opacity: 0.3 },
+          '100%': { opacity: 1, transform: 'translate(0)' },
+        },
+        appearFromRight: {
+          '0%': { opacity: 0, transform: 'translate(20px)' },
+          '70%': { opacity: 0.3 },
+          '100%': { opacity: 1, transform: 'translate(0)' },
+        },
+      },
+      animation: {
+        appear: 'appear .75s cubic-bezier(.47,0,.745,.715)',
+        'appear-from-left': 'appearFromLeft .75s cubic-bezier(.47,0,.745,.715)',
+        'appear-from-right': 'appearFromRight .75s cubic-bezier(.47,0,.745,.715)',
+      },
     },
     fontFamily: {
       inter: ['Inter', 'sans-serif'],
@@ -17,11 +39,6 @@ export default {
       'vsd-bold': ['VNM Sans Display Bold', 'sans-serif'],
       'vsd-regular': ['VNM Sans Display Regular', 'sans-serif'],
       'vs-std': ['VNM Sans Std', 'sans-serif'],
-    },
-    container: {
-      margin: '0 auto',
-      width: '100%',
-      maxWidth: '1440px',
     },
     screens: {
       '2xl': { max: '1535px' },

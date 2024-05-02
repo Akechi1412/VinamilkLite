@@ -9,7 +9,7 @@ function MainLayout({ children, hasTransitionHeader = false }) {
     if (!hasTransitionHeader) {
       setClassName(
         (className) =>
-          (className += ' before:block before:bg-transparent before:h-20 lg:before:hidden')
+          (className += ' before:block before:bg-transparent before:h-[72px] lg:before:hidden')
       );
     }
   }, [hasTransitionHeader]);

@@ -114,8 +114,15 @@ class Model
      */
     public function getById($id)
     {
-        return $this->db->table($this->tableName)
-            ->select($this->selectedFields)->where(['id' => $id])->execute()[0];
+        $result = $this->db->table($this->tableName)
+            ->select($this->selectedFields)
+            ->where(['id' => $id])->execute();
+
+        if (!empty($result)) {
+            return $result[0];
+        } else {
+            return [];
+        }
     }
 
     /**

@@ -7,7 +7,7 @@ function Button({ title, type = 'button', isDisable = false, handleClick }) {
         type={type}
         disabled
         onClick={handleClick}
-        className="border-[1px] transition-all duration-200 rounded-full text-paragraph min-w-12 inline-flex items-center outline-none justify-center px-[32px] py-[15px] min-h-[56px] bg-[rgba(29,27,32,0.12)] text-[rgb(153, 153, 153)] border-transparent w-full h-[60px] font-normal cursor-default opacity-50 bg-black-400"
+        className="border-[1px] transition-all duration-200 rounded-full text-paragraph min-w-12 inline-flex items-center outline-none justify-center px-[32px] py-[15px] min-h-[56px] bg-[rgba(29,27,32,0.12)] text-[rgb(153,153,153)] border-transparent w-full h-[60px] font-normal cursor-default opacity-50 bg-black-400"
       >
         <div className="flex items-center text-center text-[16px] leading-[24px]">{title}</div>
       </button>

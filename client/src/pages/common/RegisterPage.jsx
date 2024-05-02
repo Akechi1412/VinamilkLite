@@ -66,9 +66,9 @@ function RegisterPage() {
       setLoading(true);
       try {
         await authApi.register({
-          first_name: values.firstName,
-          last_name: values.lastName,
-          email: values.email,
+          first_name: values.firstName.trim(),
+          last_name: values.lastName.trim(),
+          email: values.email.trim(),
           password: values.password,
         });
 
@@ -179,7 +179,7 @@ function RegisterPage() {
     try {
       await authApi.verifyOtp({ otp: otpString });
       setLoading(false);
-      await Swal.fire({
+      Swal.fire({
         icon: 'success',
         title: 'Đăng ký thành công',
         text: 'Đang chuyển hướng đến trang đăng nhập...',

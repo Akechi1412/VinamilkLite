@@ -1,16 +1,30 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Logo from '../../assets/images/vinamilk-logo.svg';
-import WhiteLogo from '../../assets/images/vinamilk-white-logo.svg';
 import DefaultAvatar from '../../assets/images/default-avatar.jpg';
 import AccountIcon from '../../assets/images/user-account.svg';
 import OrderIcon from '../../assets/images/order.svg';
 import LogoutIcon from '../../assets/images/logout.svg';
 import LoginIcon from '../../assets/images/user-login.svg';
+import CloseIcon from '../../assets/images/close.svg';
+import ArrowRightIcon from '../../assets/images/arrow-right.svg';
+import ArrowBottomIcon from '../../assets/images/arrow-bottom.svg';
 import RegisterIcon from '../../assets/images/user-register.svg';
 import { useAuth } from '../../hooks';
+import { Overlay, SearchBar, Loading } from '../../components/common';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { optionApi } from '../../api';
 
 function Header({ hasTransiton = false }) {
+  const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState('');
+  const [whiteLogo, setWhiteLogo] = useState('');
+  const [menu, setMenu] = useState([]);
+  const navigate = useNavigate();
+  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [menuExpanded, setMenuExpanded] = useState(false);
+  const [subMenuExpanded, setSubMenuExpanded] = useState(false);
   const [className, setClassName] = useState(
     'h-[80px] lg:h-[72px] bg-transparent lg:bg-secondary border-0 lg:border-b text-secondary lg:text-primary'
   );
@@ -22,9 +36,40 @@ function Header({ hasTransiton = false }) {
     try {
       await logout();
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || 'Something went wrong!';
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: errorMessage,
+      });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const { data: optionData } = await optionApi.getOptions();
+        const optionArray = optionData.rows;
+        const options = {};
+        optionArray.forEach((option) => {
+          options[option.option_key] = option.option_value;
+        });
+        setMenu(JSON.parse(options['header-menu']));
+        setLogo(options['logo']);
+        setWhiteLogo(options['white-logo']);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        const errorMessage = error.response?.data?.message || 'Something went wrong!';
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: errorMessage,
+        });
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +88,7 @@ function Header({ hasTransiton = false }) {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     } else {
-      setClassName('h-[80px] lg:h-[72px] bg-secondary border-b text-primary');
+      setClassName('h-[72px] bg-secondary border-b text-primary');
     }
   }, [hasTransiton]);
 
@@ -54,52 +99,97 @@ function Header({ hasTransiton = false }) {
     })();
   }, []);
 
+  function handleSearchChange(keyword) {
+    setSearchKeyword(keyword);
+  }
+
+  function handleSearchSubmit() {
+    const keyword = searchKeyword.trim();
+    if (keyword === '') return;
+
+    navigate(`/search?q=${keyword}`);
+  }
+
   return (
     <header id="header" className="fixed lg:sticky top-0 left-0 w-full z-30">
       <div className={`relative flex items-center transition-all border-primary ${className}`}>
         <div className="container-sm px-5 lg:px-4 flex items-center justify-between text-lg font-vs-std transition-all">
-          <div className="flex">
-            <div className="cursor-pointer p-1 w-8 h-8 hidden lg:block">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                stroke="currentColor"
-                className="transition-all"
+          <div className="flex animate-appear-from-left">
+            {!menuExpanded ? (
+              <div
+                onClick={() => setMenuExpanded(true)}
+                className="cursor-pointer p-1 w-8 h-8 hidden lg:block"
               >
-                <title>Menu</title>
-                <line x1="2.25" y1="6.25" x2="21.75" y2="6.25" strokeWidth="1.5"></line>
-                <line x1="2.25" y1="11.25" x2="21.75" y2="11.25" strokeWidth="1.5"></line>
-                <line x1="2.25" y1="16.25" x2="21.75" y2="16.25" strokeWidth="1.5"></line>
-              </svg>
-            </div>
-            <a className="lg:hidden" href="/about-us">
-              Giới thiệu
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  className="transition-all"
+                >
+                  <title>Menu</title>
+                  <line x1="2.25" y1="6.25" x2="21.75" y2="6.25" strokeWidth="1.5"></line>
+                  <line x1="2.25" y1="11.25" x2="21.75" y2="11.25" strokeWidth="1.5"></line>
+                  <line x1="2.25" y1="16.25" x2="21.75" y2="16.25" strokeWidth="1.5"></line>
+                </svg>
+              </div>
+            ) : (
+              <div
+                onClick={() => setMenuExpanded(false)}
+                className="cursor-pointer p-1 w-8 h-8 hidden lg:block"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.7128 16.773L7.22748 8.28777C6.93757 7.99785 6.93757 7.51702 7.22748 7.22711C7.5174 6.93719 7.99823 6.93719 8.28814 7.22711L16.7734 15.7124C17.0633 16.0023 17.0633 16.4831 16.7734 16.773C16.4835 17.063 16.0027 17.063 15.7128 16.773Z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M7.22658 16.773C6.93666 16.4831 6.93666 16.0023 7.22658 15.7124L15.7119 7.22711C16.0018 6.93719 16.4826 6.93719 16.7725 7.22711C17.0624 7.51702 17.0624 7.99785 16.7725 8.28777L8.28724 16.773C7.99732 17.063 7.51649 17.063 7.22658 16.773Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </div>
+            )}
+
+            <a className="lg:hidden" href={menu[0]?.href}>
+              {menu[0]?.title}
             </a>
-            <a className="ml-5 lg:hidden" href="/collections/all-products">
-              Sản phẩm
+            <a className="ml-5 lg:hidden" href={menu[1]?.href}>
+              {menu[1]?.title}
             </a>
           </div>
-          <a className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" href="/">
+          <a
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-appear"
+            href="/"
+          >
             <img
               className="w-[122px] lg:w-[98px] h-[40px] md:h-[32px] object-fill lg:hidden"
-              src={hasTransiton ? (scrolled ? Logo : WhiteLogo) : Logo}
+              src={hasTransiton ? (scrolled ? logo : whiteLogo) : logo}
               alt="Vinamilk"
             />
             <img
               className="w-[122px] lg:w-[98px] h-[40px] md:h-[32px] object-fill hidden lg:block"
-              src={Logo}
+              src={logo}
               alt="Vinamilk"
             />
           </a>
-          <div className="flex">
-            <a className="px-3 lg:hidden" href="/news">
-              Tin tức
+          <div className="flex animate-appear-from-right">
+            <a className="px-3 lg:hidden" href={menu[2]?.href}>
+              {menu[2]?.title}
             </a>
-            <a className="px-3 lg:hidden" href="/contact">
-              Liên hệ
+            <a className="px-3 lg:hidden" href={menu[3]?.href}>
+              {menu[3]?.title}
             </a>
-            <div className="cursor-pointer flex items-center justify-center w-6 h-6 ml-3 mr-2">
+            <div
+              onClick={() => setSearchExpanded(true)}
+              className="cursor-pointer flex items-center justify-center w-6 h-6 ml-3 mr-2"
+            >
               <svg
                 width="24"
                 height="24"
@@ -180,8 +270,11 @@ function Header({ hasTransiton = false }) {
                           <span className="ml-3">Đơn hàng</span>
                         </a>
                       </li>
-                      <li onClick={handleLogout}>
-                        <div className="cursor-pointer flex items-center p-2 rounded-md hover:bg-tertiary">
+                      <li>
+                        <div
+                          onClick={handleLogout}
+                          className="cursor-pointer flex items-center p-2 rounded-md hover:bg-tertiary"
+                        >
                           <img
                             className="w-6 h-6 rounded-full object-cover"
                             src={LogoutIcon}
@@ -252,6 +345,143 @@ function Header({ hasTransiton = false }) {
           </div>
         </div>
       </div>
+      {searchExpanded && (
+        <Overlay handleClickOut={() => setSearchExpanded(false)}>
+          <div className="bg-secondary">
+            <div className="container h-[80px] lg:h-[72px] px-5 lg:px-4">
+              <div className="flex items-center justify-between h-full">
+                <div className="md:hidden inline-block">
+                  <img
+                    className="w-[122px] h-[40px] lg:w-[98px] md:h-[32px]"
+                    src={logo}
+                    alt="VinaMilk"
+                  />
+                </div>
+                <div className="md:flex-1">
+                  <SearchBar handleChange={handleSearchChange} handleSubmit={handleSearchSubmit} />
+                </div>
+                <button onClick={() => setSearchExpanded(false)} className="w-8 h-8 md:w-6 md-h-6">
+                  <img className="block w-full h-full object-fill" src={CloseIcon} alt="X" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </Overlay>
+      )}
+      {menuExpanded && (
+        <Overlay excludeHeader handleClickOut={() => setMenuExpanded(false)}>
+          <nav className="w-screen max-w-xl h-full bg-secondary overflow-y-auto">
+            <ul className="text-primary text-[18px]">
+              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
+                <a
+                  className="flex justify-between items-center font-vs-std py-5 px-4"
+                  href="/about-us"
+                >
+                  <span>Giới thiệu</span>
+                  <img src={ArrowRightIcon} alt="" />
+                </a>
+              </li>
+              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
+                <a
+                  className="flex justify-between items-center font-vs-std py-5 px-4"
+                  href="/collections/all-products"
+                >
+                  <span>Sản phẩm</span>
+                  <img src={ArrowRightIcon} alt="" />
+                </a>
+              </li>
+              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
+                <a className="flex justify-between items-center font-vs-std py-5 px-4" href="/news">
+                  <span>Tin tức</span>
+                  <img src={ArrowRightIcon} alt="" />
+                </a>
+              </li>
+              <li className="animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
+                <a
+                  className="flex justify-between items-center font-vs-std py-5 px-4"
+                  href="/contact"
+                >
+                  <span>Liên hệ</span>
+                  <img src={ArrowRightIcon} alt="" />
+                </a>
+              </li>
+              <li className="cursor-pointer animate-appear-from-left border-b border-dashed border-vinamilk-blue-light">
+                <div
+                  onClick={() => setSubMenuExpanded((state) => !state)}
+                  className="flex justify-between items-center font-vs-std py-5 px-4"
+                >
+                  <span>Tài khoản</span>
+                  <img src={subMenuExpanded ? ArrowBottomIcon : ArrowRightIcon} alt="" />
+                </div>
+                {subMenuExpanded && (
+                  <>
+                    {profile ? (
+                      <ul>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <div className="flex items-center font-vs-std pl-6 pr-4 py-4">
+                            <img
+                              className="w-6 h-6 rounded-full object-cover"
+                              src={profile.avatar || DefaultAvatar}
+                              alt="Avatar"
+                            />
+                            <span className="ml-3">Chào, {profile.first_name}</span>
+                          </div>
+                        </li>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <a
+                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                            href="/account"
+                          >
+                            <img className="w-6 h-6 mr-2" src={AccountIcon} alt="" />
+                            <span>Tài khoản</span>
+                          </a>
+                        </li>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <a
+                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                            href="/account/orders"
+                          >
+                            <img className="w-6 h-6 mr-2" src={OrderIcon} alt="" />
+                            <span>Đơn hàng</span>
+                          </a>
+                        </li>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <div
+                            onClick={handleLogout}
+                            className=" cursor-pointer flex items-center font-vs-std pl-6 pr-4 py-4"
+                          >
+                            <img className="w-6 h-6 mr-2" src={LogoutIcon} alt="" />
+                            <span>Đăng xuất</span>
+                          </div>
+                        </li>
+                      </ul>
+                    ) : (
+                      <ul>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <a className="flex items-center font-vs-std pl-6 pr-4 py-4" href="/login">
+                            <img className="w-6 h-6 mr-2" src={LoginIcon} alt="" />
+                            <span>Đăng nhập</span>
+                          </a>
+                        </li>
+                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                          <div
+                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                            href="/register"
+                          >
+                            <img className="w-6 h-6 mr-2" src={RegisterIcon} alt="" />
+                            <span>Đăng ký</span>
+                          </div>
+                        </li>
+                      </ul>
+                    )}
+                  </>
+                )}
+              </li>
+            </ul>
+          </nav>
+        </Overlay>
+      )}
+      {loading && <Loading fullScreen />}
     </header>
   );
 }

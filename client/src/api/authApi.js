@@ -19,6 +19,12 @@ const authApi = {
   refresh() {
     return axiosClient.post('/auth/refresh');
   },
+  updateProfile(data) {
+    return axiosClient.patch('/auth/profile', data);
+  },
+  changePassword(data) {
+    return axiosClient.patch('/auth/password', data);
+  },
 };
 
 export default authApi;

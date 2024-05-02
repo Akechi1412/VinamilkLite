@@ -5,3 +5,5 @@ export { default as collectionApi } from './collectionApi';
 export { default as orderApi } from './orderApi';
 export { default as contactApi } from './contactApi';
 export { default as postApi } from './postApi';
+export { default as optionApi } from './optionApi';
+export { default as firebaseApi } from './firebaseApi';

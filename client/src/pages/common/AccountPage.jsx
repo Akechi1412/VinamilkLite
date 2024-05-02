@@ -17,7 +17,7 @@ function AccountPage() {
       try {
         await refresh();
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         setLoading(false);
       }

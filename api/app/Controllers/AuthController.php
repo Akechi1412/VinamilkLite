@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         $userData = $this->request->body();
         $validationResult = $this->request->validate($userData, [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|password|min:8|max:20',
             'first_name' => 'required|alpha|min:2|max:30',
             'last_name' => 'required|alpha|min:2|max:30|'
@@ -387,6 +387,83 @@ class AuthController extends Controller
      */
     public function updateProfile()
     {
-        // todo
+        $userData = $this->request->body();
+        if (empty($userData)) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                'No data to update!'
+            );
+        }
+        $validationResult = $this->request->validate($userData, [
+            'avatar' => 'max:255',
+            'first_name' => 'alpha|min:2|max:30',
+            'last_name' => 'alpha|min:2|max:30',
+        ]);
+        if (!$validationResult) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                $validationResult
+            );
+        }
+
+        $datetime = date('Y-m-d H:i:s');
+        $userData['updated_at'] = $datetime;
+
+        $result = $this->userModel->update($userData, $GLOBALS['userId']);
+        if ($result === false) {
+            return $this->response->status(500)->json(
+                0,
+                [],
+                'Something was wrong!'
+            );
+        }
+
+        return $this->response->status(200)->json(
+            1,
+            [],
+            'Update profile successfully.'
+        );
+    }
+
+    /**
+     * Change password.
+     * 
+     * @return  string  json response
+     */
+    public function changePassword()
+    {
+        $userData = $this->request->body();
+        $validationResult = $this->request->validate($userData, [
+            'password' => 'required|password|min:8|max:20',
+        ]);
+        if (!$validationResult) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                $validationResult
+            );
+        }
+
+        unset($userData['current_password']);
+        $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
+        $datetime = date('Y-m-d H:i:s');
+        $userData['updated_at'] = $datetime;
+
+        $result = $this->userModel->update($userData, $GLOBALS['userId']);
+        if ($result === false) {
+            return $this->response->status(500)->json(
+                0,
+                [],
+                'Something was wrong!'
+            );
+        }
+
+        return $this->response->status(200)->json(
+            1,
+            [],
+            'Change password successfully.'
+        );
     }
 }
