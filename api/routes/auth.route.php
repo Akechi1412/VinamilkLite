@@ -24,7 +24,8 @@ $router->post('/auth/login', function () use ($authController) {
 $router->post('/auth/refresh', function () use ($authController) {
     echo $authController->refresh();
 });
-$router->post('/auth/resetPassword', function () use ($authController) {
+
+$router->post('/auth/reset-password', function () use ($authController) {
     echo $authController->resetPassword();
 });
 

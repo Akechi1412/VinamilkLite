@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks';
 import { Loading } from '../../components/common';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Input, Button } from '../../components/common';
 import eye from '../../assets/images/eye-solid.svg';
 import eyeslash from '../../assets/images/eye-slash-solid.svg';
@@ -162,7 +162,15 @@ function LoginPage() {
                 {passwordCheck && <p className="text-red-600 mt-1 font-inter">{passwordCheck}</p>}
               </div>
             </div>
-            <div className="flex items-center justify-center mt-[32px] md:justify-between">
+            <div className="text-right">
+              <Link
+                className="font-lora italic hover:underline text-primary text-[15px]"
+                to="/reset-password"
+              >
+                Quên mật khẩu
+              </Link>
+            </div>
+            <div className="flex items-center justify-center mt-5 md:justify-between">
               <Button
                 title="Đăng nhập"
                 type="submit"
@@ -176,11 +184,11 @@ function LoginPage() {
           <p className="transition-all font-lora md:text-[16px] text-vinamilk-blue font-semi-medium not-italic leading-[19px]">
             Bạn chưa có tài khoản?
           </p>
-          <a href="/register">
+          <Link to="/register">
             <p className="transition-all font-lora text-[16px] md-max:text-[14px] text-vinamilk-blue font-semi-medium italic ml-[2px] underline cursor-pointer">
               Đăng ký
             </p>
-          </a>
+          </Link>
         </div>
       </div>
       {loading && <Loading fullScreen />}

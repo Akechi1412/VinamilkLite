@@ -25,6 +25,9 @@ const authApi = {
   changePassword(data) {
     return axiosClient.patch('/auth/password', data);
   },
+  resetPassword(data) {
+    return axiosClient.post('/auth/reset-password', data);
+  },
 };
 
 export default authApi;

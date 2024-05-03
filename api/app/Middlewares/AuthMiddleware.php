@@ -48,6 +48,14 @@ class AuthMiddleware extends Middleware
                 }
             }
 
+            $banExpired = $userData['ban_expired'];
+            if ($banExpired !== null && strtotime($banExpired) > time()) {
+                $this->response->setCookie($this->accessTokenName, '', time() - 3600);
+                $this->statusCode = 401;
+                $this->message = 'Your account is banned, expiration time is ' . $banExpired . '!';
+                return false;
+            }
+
             if ($this->passwordChange) {
                 $bodyData = $this->request->body();
                 $currentPassword = isset($bodyData['current_password']) ? $bodyData['current_password'] : null;

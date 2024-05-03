@@ -129,7 +129,6 @@ class AuthController extends Controller
                 </div>
             </body>
             </html>';
-            $mail->isHTML(true);
             $mail->send();
 
             return true;
@@ -292,6 +291,16 @@ class AuthController extends Controller
                 'Email or password is incorrect!'
             );
         }
+
+        $banExpired = $data['ban_expired'];
+        if ($banExpired !== null && strtotime($banExpired) > time()) {
+            return $this->response->status(401)->json(
+                0,
+                [],
+                'Your account is banned, expiration time is ' . $banExpired . '!'
+            );
+        }
+
         $check = password_verify($userData['password'], $data['password']);
         if ($check) {
             $accessExpireIn = 60 * 60; // expire in 1 hour 
@@ -365,6 +374,18 @@ class AuthController extends Controller
             $data = $this->userModel->getById($userId);
             unset($data['id']);
             unset($data['password']);
+
+            $banExpired = $data['ban_expired'];
+            if ($banExpired !== null && strtotime($banExpired) > time()) {
+                $this->response->setCookie($this->accessTokenName, '', time() - 3600);
+                $this->response->setCookie($this->refreshTokenName, '', time() - 3600);
+
+                return $this->response->status(401)->json(
+                    0,
+                    [],
+                    'Your account is banned, expiration time is ' . $banExpired . '!'
+                );
+            }
 
             return $this->response->status(200)->json(
                 1,
@@ -467,21 +488,37 @@ class AuthController extends Controller
         );
     }
     /**
-    * Generate a random password.
-    * 
-    * @param   int  $length  The length of the password
-    * @return  string  The generated random password
-    */
-    public function generateRandomPassword() 
+     * Generate a random password.
+     * 
+     * @param   int  $length  The length of the password
+     * @return  string  The generated random password
+     */
+    private function generateRandomPassword($length = 10)
     {
-        $length = 10;
-        // Danh sách các ký tự có thể sử dụng để tạo mật khẩu
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}|:<>?-=[]\;,./';
+
+        $charArray = str_split($chars);
+
+        shuffle($charArray);
+
         $password = '';
-        $charactersLength = strlen($characters);
         for ($i = 0; $i < $length; $i++) {
-            $password .= $characters[rand(0, $charactersLength - 1)];
+            $password .= $charArray[array_rand($charArray)];
         }
+
+        if (!preg_match('/[A-Z]/', $password)) {
+            $password[rand(0, $length - 1)] = chr(rand(65, 90));
+        }
+        if (!preg_match('/[a-z]/', $password)) {
+            $password[rand(0, $length - 1)] = chr(rand(97, 122));
+        }
+        if (!preg_match('/\d/', $password)) {
+            $password[rand(0, $length - 1)] = chr(rand(48, 57));
+        }
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $password[rand(0, $length - 1)] = $charArray[array_rand($charArray)];
+        }
+
         return $password;
     }
     /**
@@ -491,91 +528,118 @@ class AuthController extends Controller
      */
     public function resetPassword()
     {
-    $email = $this->request->params('email');
-    // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu hay không
-    $user = $this->userModel->getByEmail($email);
-    if (!$user) {
-        return $this->response->status(400)->json(
-            0,
+        $resetPasswordData = $this->request->body();
+        $validationResult = $this->request->validate($resetPasswordData, [
+            'email' => 'required|email',
+        ]);
+        if (!$validationResult) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                $validationResult
+            );
+        }
+
+        $email = $resetPasswordData['email'];
+
+        $result = $this->userModel->getByEmail($email);
+        if (empty($result)) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                'Email does not exist!'
+            );
+        }
+
+        $newPassword = $this->generateRandomPassword();
+
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $this->userModel->updateByEmail(['password' => $hashedPassword], $email);
+
+        $success = $this->sendNewPasswordByEmail($email, $newPassword);
+        if (!$success) {
+            return $this->response->status(500)->json(
+                0,
+                [],
+                'Failed to send new password.'
+            );
+        }
+
+        return $this->response->status(200)->json(
+            1,
             [],
-            'Email not found.'
+            'New password sent successfully.'
         );
-    }
-
-    // Tạo mật khẩu mới
-    $newPassword = $this->generateRandomPassword(); // Hàm generateRandomPassword() là một hàm bạn cần tạo để tạo mật khẩu ngẫu nhiên
-
-    // Cập nhật mật khẩu mới trong cơ sở dữ liệu
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    $this->updatePasswordByEmail($email, $hashedPassword);
-
-    // Gửi email chứa mật khẩu mới
-    $success = $this->sendNewPasswordByEmail($email, $newPassword); // Hàm sendNewPasswordByEmail() là hàm bạn cần tạo để gửi email với mật khẩu mới
-    if (!$success) {
-        return $this->response->status(500)->json(
-            0,
-            [],
-            'Failed to send new password.'
-        );
-    }
-
-    return $this->response->status(200)->json(
-        1,
-        [],
-        'New password sent successfully.'
-    );
     }
     /**
- * Send new password by email.
- * 
- * @param   string  $email  Email address of the user
- * @param   string  $newPassword  New password to be sent
- * @return  bool  True if email sent successfully, false otherwise
- */
+     * Send new password by email.
+     * 
+     * @param   string  $email  Email address of the user
+     * @param   string  $newPassword  New password to be sent
+     * @return  bool  True if email sent successfully, false otherwise
+     */
     private function sendNewPasswordByEmail($email, $newPassword)
     {
-    try {
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['MAIL_USERNAME'];
-        $mail->Password = $_ENV['MAIL_APP_PASSWORD'];
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
-        $mail->setFrom($_ENV['MAIL_USERNAME'], 'Your Application Name');
-        $mail->addAddress($email);
-        $mail->isHTML(true);
-        $subject = 'Your New Password';
-        $subject_encoded = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-        $mail->Subject = $subject_encoded;
-        $mail->Body = '<p>Your new password is: ' . $newPassword . '</p>';
-        $mail->send();
+        try {
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['MAIL_USERNAME'];
+            $mail->Password = $_ENV['MAIL_APP_PASSWORD'];
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->setFrom($_ENV['MAIL_USERNAME'], 'Your Application Name');
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $subject = 'Vinamilk - Reset mật khẩu';
+            $subject_encoded = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+            $mail->Subject = $subject_encoded;
+            $mail->Body = '<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                    .email-container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        text-align: center;
+                    }
+                    .password {
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: #0213AF;
+                        margin: 20px 0;
+                    }
+                    .note {
+                        color: #999;
+                        margin-bottom: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <h1>Vinamilk xin chào,</h1>
+                    <p>Bạn đã yêu cầu cấp mật khẩu mới cho tài khoản của mình trên trang web của chúng tôi.</p>
+                    <p>Đây là mật khẩu mới của bạn:</p>
+                    <div class="password">' . $newPassword . '</div>
+                    <p class="note">Vui lòng đăng nhập và thay đổi mật khẩu sau khi đăng nhập thành công.</p>
+                    <p>Nếu bạn không yêu cầu mật khẩu mới, vui lòng bỏ qua email này.</p>
+                </div>
+            </body>
+            </html>
+            ';
+            $mail->send();
 
-        return true;
-    } catch (Exception $e) {
-        return false;
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
-    }
-    /**
-     * Update password by email.
-     * 
-     * @param   string  $email           Email address of the user
-     * @param   string  $hashedPassword  Hashed password to be updated
-     * @return  bool    True if password updated successfully, false otherwise
- */
-    public function updatePasswordByEmail($email, $hashedPassword)
-    {
-    try {
-       
-        $user = $this->userModel->getByEmail($email);
-        $result = $this->userModel->update(['password' => $hashedPassword], $user['id']);
-        return $result;
-
-       
-        return true;
-    } catch (Exception $e) {
-        return false;
-    }
-}
 }

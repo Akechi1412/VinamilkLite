@@ -14,6 +14,7 @@ import {
   ProductsPage,
   ProfilePage,
   RegisterPage,
+  ResetPasswordPage,
   SearchPage,
 } from './pages/common';
 import {
@@ -49,6 +50,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/account" element={<AccountPage />}>
           <Route index element={<ProfilePage />} />
           <Route path="orders" element={<OrdersPage />} />

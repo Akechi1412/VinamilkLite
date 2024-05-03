@@ -7,7 +7,7 @@ import { Input, Button, Loading } from '../../components/common';
 import { useRef, useState, useEffect } from 'react';
 import { authApi } from '../../api';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -420,13 +420,13 @@ function RegisterPage() {
                     <div className="ml-2 font-vs-std">
                       <p className="transition-all font-inter text-[16px] text-vinamilk-blue not-italic font-[450] leading-[19px]">
                         Bằng việc tạo một tài khoản, bạn đồng ý với Vinamilk
-                        <a className="inline italic underline font-vs-std" href="/">
+                        <Link className="inline italic underline font-vs-std" to="/">
                           Chính sách bảo mật
-                        </a>{' '}
+                        </Link>{' '}
                         và{' '}
-                        <a className="inline italic underline font-vs-std" href="/">
+                        <Link className="inline italic underline font-vs-std" to="/">
                           Điều khoản sử dụng
-                        </a>
+                        </Link>
                         .
                       </p>
                     </div>
@@ -443,11 +443,11 @@ function RegisterPage() {
                 <p className="transition-all font-vs-std lg:text-[16px] text-vinamilk-blue font-vinamilk-blue-light not-italic leading-[22.5px] lg:leading-[20px]">
                   Bạn đã có tài khoản?
                 </p>
-                <a href="/login">
+                <Link to="/login">
                   <p className="transition-all font-vs-std text-vinamilk-blue font-vinamilk-blue-light italic ml-[2px] underline cursor-pointer">
                     Đăng nhập
                   </p>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
