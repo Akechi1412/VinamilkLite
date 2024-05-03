@@ -466,4 +466,116 @@ class AuthController extends Controller
             'Change password successfully.'
         );
     }
+    /**
+    * Generate a random password.
+    * 
+    * @param   int  $length  The length of the password
+    * @return  string  The generated random password
+    */
+    public function generateRandomPassword() 
+    {
+        $length = 10;
+        // Danh sách các ký tự có thể sử dụng để tạo mật khẩu
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $password = '';
+        $charactersLength = strlen($characters);
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $password;
+    }
+    /**
+     * Reset password.
+     * 
+     * @return  string  json response
+     */
+    public function resetPassword()
+    {
+    $email = $this->request->params('email');
+    // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu hay không
+    $user = $this->userModel->getByEmail($email);
+    if (!$user) {
+        return $this->response->status(400)->json(
+            0,
+            [],
+            'Email not found.'
+        );
+    }
+
+    // Tạo mật khẩu mới
+    $newPassword = $this->generateRandomPassword(); // Hàm generateRandomPassword() là một hàm bạn cần tạo để tạo mật khẩu ngẫu nhiên
+
+    // Cập nhật mật khẩu mới trong cơ sở dữ liệu
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $this->updatePasswordByEmail($email, $hashedPassword);
+
+    // Gửi email chứa mật khẩu mới
+    $success = $this->sendNewPasswordByEmail($email, $newPassword); // Hàm sendNewPasswordByEmail() là hàm bạn cần tạo để gửi email với mật khẩu mới
+    if (!$success) {
+        return $this->response->status(500)->json(
+            0,
+            [],
+            'Failed to send new password.'
+        );
+    }
+
+    return $this->response->status(200)->json(
+        1,
+        [],
+        'New password sent successfully.'
+    );
+    }
+    /**
+ * Send new password by email.
+ * 
+ * @param   string  $email  Email address of the user
+ * @param   string  $newPassword  New password to be sent
+ * @return  bool  True if email sent successfully, false otherwise
+ */
+    private function sendNewPasswordByEmail($email, $newPassword)
+    {
+    try {
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['MAIL_USERNAME'];
+        $mail->Password = $_ENV['MAIL_APP_PASSWORD'];
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+        $mail->setFrom($_ENV['MAIL_USERNAME'], 'Your Application Name');
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+        $subject = 'Your New Password';
+        $subject_encoded = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+        $mail->Subject = $subject_encoded;
+        $mail->Body = '<p>Your new password is: ' . $newPassword . '</p>';
+        $mail->send();
+
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+    }
+    /**
+     * Update password by email.
+     * 
+     * @param   string  $email           Email address of the user
+     * @param   string  $hashedPassword  Hashed password to be updated
+     * @return  bool    True if password updated successfully, false otherwise
+ */
+    public function updatePasswordByEmail($email, $hashedPassword)
+    {
+    try {
+       
+        $user = $this->userModel->getByEmail($email);
+        $result = $this->userModel->update(['password' => $hashedPassword], $user['id']);
+        return $result;
+
+       
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
 }
