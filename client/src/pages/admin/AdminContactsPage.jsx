@@ -1,5 +1,11 @@
-function ContactsPage() {
-  return <div>ContactsPage</div>;
+import { AdminLayout } from '../../components/layout';
+
+function AdminContactsPage() {
+  return (
+    <AdminLayout>
+      <div>AdminContactsPage</div>
+    </AdminLayout>
+  );
 }
 
-export default ContactsPage;
+export default AdminContactsPage;

@@ -19,5 +19,5 @@ class User extends Model
      * @var array
      * 
      */
-    protected $selectedFields = ['id', 'email', 'password', 'first_name', 'last_name', 'role', 'avatar', 'role', 'ban_expired', 'created_at', 'updated_at'];
+    protected $selectedFields = ['id', 'email', 'first_name', 'last_name', 'role', 'avatar', 'ban_expired', 'created_at', 'updated_at'];
 }

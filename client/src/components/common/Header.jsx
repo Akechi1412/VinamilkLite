@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DefaultAvatar from '../../assets/images/default-avatar.jpg';
 import AccountIcon from '../../assets/images/user-account.svg';
+import DashboardIcon from '../../assets/images/dashboard.svg';
 import OrderIcon from '../../assets/images/order.svg';
 import LogoutIcon from '../../assets/images/logout.svg';
 import LoginIcon from '../../assets/images/user-login.svg';
@@ -244,32 +245,50 @@ function Header({ hasTransiton = false }) {
                       <span className="ml-3">Chào, {profile.first_name}</span>
                     </div>
                     <ul className="p-1">
-                      <li>
-                        <Link
-                          className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          to="/account"
-                        >
-                          <img
-                            className="w-6 h-6 rounded-full object-cover"
-                            src={AccountIcon}
-                            alt="Account"
-                          />
-                          <span className="ml-3">Tài khoản</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 rounded-md hover:bg-tertiary"
-                          to="/account/orders"
-                        >
-                          <img
-                            className="w-6 h-6 rounded-full object-cover"
-                            src={OrderIcon}
-                            alt="Orders"
-                          />
-                          <span className="ml-3">Đơn hàng</span>
-                        </Link>
-                      </li>
+                      {profile.role === 'admin' ? (
+                        <li>
+                          <Link
+                            className="flex items-center p-2 rounded-md hover:bg-tertiary"
+                            to="/admin"
+                          >
+                            <img
+                              className="w-6 h-6 rounded-full object-cover"
+                              src={DashboardIcon}
+                              alt="Dashboard"
+                            />
+                            <span className="ml-3">Dashboard</span>
+                          </Link>
+                        </li>
+                      ) : (
+                        <>
+                          <li>
+                            <Link
+                              className="flex items-center p-2 rounded-md hover:bg-tertiary"
+                              to="/account"
+                            >
+                              <img
+                                className="w-6 h-6 rounded-full object-cover"
+                                src={AccountIcon}
+                                alt="Account"
+                              />
+                              <span className="ml-3">Tài khoản</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="flex items-center p-2 rounded-md hover:bg-tertiary"
+                              to="/account/orders"
+                            >
+                              <img
+                                className="w-6 h-6 rounded-full object-cover"
+                                src={OrderIcon}
+                                alt="Orders"
+                              />
+                              <span className="ml-3">Đơn hàng</span>
+                            </Link>
+                          </li>
+                        </>
+                      )}
                       <li>
                         <div
                           onClick={handleLogout}

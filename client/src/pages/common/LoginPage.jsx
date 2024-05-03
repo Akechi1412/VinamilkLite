@@ -69,7 +69,7 @@ function LoginPage() {
       return;
     }
     if (!password) {
-      setPassword('Mật khẩu là bắt buộc!');
+      setPasswordCheck('Mật khẩu là bắt buộc!');
       return;
     }
 

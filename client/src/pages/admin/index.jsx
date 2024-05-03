@@ -5,6 +5,7 @@ export { default as AdminProductsPage } from './AdminProductsPage';
 export { default as AdminProductTypesPage } from './AdminProductTypesPage';
 export { default as AdminCollectionsPage } from './AdminCollectionsPage';
 export { default as AdminNewsPage } from './AdminNewsPage';
+export { default as AdminNewsCategoriesPage } from './AdminNewsCategoriesPage';
 export { default as AdminOrdersPage } from './AdminOrdersPage';
 export { default as AdminContactsPage } from './AdminContactsPage';
 export { default as AdminOptionsPage } from './AdminOptionsPage';

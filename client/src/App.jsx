@@ -31,6 +31,7 @@ import {
   AdminOrdersPage,
   AdminOptionsPage,
   AdminProfilePage,
+  AdminNewsCategoriesPage,
 } from './pages/admin';
 import AdminPage from './pages/admin/AdminPage';
 
@@ -64,6 +65,7 @@ function App() {
           <Route path="packing" element={<AdminPackingPage />} />
           <Route path="orders" element={<AdminOrdersPage />} />
           <Route path="news" element={<AdminNewsPage />} />
+          <Route path="news-categories" element={<AdminNewsCategoriesPage />} />
           <Route path="comments" element={<AdminCommentsPage />} />
           <Route path="contacts" element={<AdminContactsPage />} />
           <Route path="brands" element={<AdminBrandsPage />} />

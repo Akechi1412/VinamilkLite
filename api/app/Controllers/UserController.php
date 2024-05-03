@@ -142,8 +142,11 @@ class UserController extends Controller
             );
         }
 
-        if (!isset($userData['password'])) {
+        if (isset($userData['password'])) {
             $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
+        }
+        if (isset($userData['ban_expired'])) {
+            $userData['ban_expired'] = date('Y-m-d H:i:s', time() + $userData['ban_expired']);
         }
 
         $datetime = date('Y-m-d H:i:s');
@@ -190,6 +193,7 @@ class UserController extends Controller
         }
 
         $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
+        $userData['ban_expired'] = date('Y-m-d H:i:s', time() + $userData['ban_expired']);
 
         $datetime = date('Y-m-d H:i:s');
         $userData['updated_at'] = $datetime;
