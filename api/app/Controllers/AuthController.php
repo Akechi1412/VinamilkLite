@@ -35,8 +35,8 @@ class AuthController extends Controller
             'first_name' => 'required|alpha|min:2|max:30',
             'last_name' => 'required|alpha|min:2|max:30|'
         ]);
-         
-        if ($validationResult) {
+        
+        if ($validationResult !== true) {
             return $this->response->status(400)->json(
                 0,
                 [],

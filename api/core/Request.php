@@ -120,25 +120,29 @@ class Request
      * @param   array       $requestData
      * @return  bool|string true if all rules are passed, a error message otherwise
      */
-    public function validate(array $requestData,array $rules) {
-        
+    public function validate(array $requestData, array $rules) {
+        $errors = [];
+    
         foreach ($rules as $field => $rule) {
-            
-            if (strpos($rule, 'required') === false && !isset($requestData[$field])) {
+            // Kiểm tra xem trường có tồn tại trong dữ liệu không
+            if (!isset($requestData[$field])) {
+                // Nếu không, tiếp tục với trường tiếp theo
                 continue; 
             }
-
+    
             $ruleList = explode('|', $rule);
             foreach ($ruleList as $singleRule) {
                 $error = $this->applyRule($singleRule, $field, $requestData);
                 if ($error !== true) {
-                    return $error;
+                    // Thêm thông báo lỗi vào mảng $errors
+                    $errors[$field][] = $error;
                 }
             }
         }
-        return true;
+    
+        // Trả về mảng chứa tất cả các thông báo lỗi
+        return $errors;
     }
-
     private function applyRule($rule, $field, $requestData) {
         $value = $requestData[$field] ?? null;
 
