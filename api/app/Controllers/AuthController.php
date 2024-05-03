@@ -28,14 +28,15 @@ class AuthController extends Controller
      */
     public function register()
     {
-        $userData = $this->request->body();
+        $userData = $this->request->body();  
         $validationResult = $this->request->validate($userData, [
             'email' => 'required|email',
             'password' => 'required|password|min:8|max:20',
             'first_name' => 'required|alpha|min:2|max:30',
             'last_name' => 'required|alpha|min:2|max:30|'
         ]);
-        if (!$validationResult) {
+         
+        if ($validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -578,4 +579,6 @@ class AuthController extends Controller
         return false;
     }
 }
+
+
 }
