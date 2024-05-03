@@ -76,6 +76,7 @@ function RegisterPage() {
         setTimeLeft(60);
         setLoading(false);
       } catch (error) {
+        console.log(error);
         setLoading(false);
         const errorMessage = error.response?.data?.message || 'Something went wrong!';
         Swal.fire({
