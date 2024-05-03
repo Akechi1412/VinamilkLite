@@ -99,18 +99,18 @@ function ProfilePage() {
 
   const handleLastNameChange = (event) => {
     setLastName(event.target.value);
-    const LastName = event.target.value.trim();
+    const lastName = event.target.value.trim();
     const alphaRegex =
       /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/;
-    if (LastName === '') {
+    if (lastName === '') {
       setLastNameError('Họ bắt buộc!');
       return;
     }
-    if (LastName.length < 2 || LastName.length > 50) {
+    if (lastName.length < 2 || lastName.length > 50) {
       setLastNameError('Họ phải có độ dài từ 2 đến 30 ký tự!');
       return;
     }
-    if (!alphaRegex.test(LastName)) {
+    if (!alphaRegex.test(lastName)) {
       setLastNameError('Họ không được chứa số hoặc ký tự đặc biệt!');
       return;
     }

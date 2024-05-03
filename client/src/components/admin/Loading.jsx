@@ -10,7 +10,7 @@ function Loading({ fullScreen = false }) {
 
   return (
     <div className={className}>
-      <div className="border-4 border-white border-t-primary rounded-full w-[40px] h-[40px] animate-spin"></div>
+      <div className="border-4 border-white border-t-blue-500 rounded-full w-[40px] h-[40px] animate-spin"></div>
     </div>
   );
 }

@@ -52,7 +52,7 @@ function Header({ handleToggle, toggled }) {
   }, [location.pathname]);
 
   return (
-    <header className="fixed left-0 top-0 w-full h-[60px] shadow-md z-30">
+    <header className="sticky left-0 top-0 w-full h-[60px] shadow-md z-30">
       <div className="h-full container px-5 md:py-4">
         <div className="h-full flex items-center justify-between">
           <div className="flex items-center">

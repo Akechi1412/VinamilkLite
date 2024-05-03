@@ -1,9 +1,10 @@
-import { Loading } from '../../components/common';
+import { Loading } from '../../components/admin';
 import { EmptyLayout } from '../../components/layout';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { Button, Input } from '../../components/admin';
 
 function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -102,32 +103,21 @@ function AdminLoginPage() {
         <form action="">
           <div className="mt-4">
             <label className="block text-gray-700 font-medium mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
+            <Input placeholder="Nhập email" value={email} handleChange={handleEmailChange} />
             {emailCheck && <p className="text-red-600 mt-1 font-inter">{emailCheck}</p>}
           </div>
           <div className="mt-4">
             <label className="block text-gray-700 font-medium mb-2">Mật khẩu</label>
-            <input
-              type="password"
+            <Input
+              placeholder="Nhập mật khẩu"
               value={password}
-              onChange={handlePasswordChange}
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              handleChange={handlePasswordChange}
+              type="password"
             />
             {passwordCheck && <p className="text-red-600 mt-1 font-inter">{passwordCheck}</p>}
           </div>
           <div className="mt-6">
-            <button
-              onClick={handleLogin}
-              type="submit"
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              Đăng nhập
-            </button>
+            <Button title="Đăng nhập" type="submit" handleClick={handleLogin} />
           </div>
         </form>
       </div>

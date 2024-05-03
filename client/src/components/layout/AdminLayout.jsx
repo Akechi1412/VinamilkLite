@@ -16,10 +16,12 @@ function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen">
-      <Header toggled={toggled} handleToggle={handleToggle} />
       <div className="flex">
         <SideBar handleClose={handleClose} isExpand={expanded} />
-        <div className="flex-1 before:block before:h-[60px] overflow-x-hidden">{children}</div>
+        <div className="flex-1 overflow-x-hidden">
+          <Header toggled={toggled} handleToggle={handleToggle} />
+          {children}
+        </div>
       </div>
     </div>
   );
