@@ -86,7 +86,7 @@ class Model
 
             $countRows = $this->db->table($this->tableName)
                 ->count()->where($params)->limit($offset, $limit)->execute();
-            $totalRows = $countRows[0]['totalRows'];
+            $totalRows = !empty($countRows)  ?  $countRows[0]['totalRows'] : 0;
 
             return [
                 'rows' => $rows,

@@ -39,4 +39,16 @@ class Auth extends Model
             return [];
         }
     }
+
+    /**
+     * Update a user by email.
+     *
+     * @param   string  $email
+     * @return  mixed   Array of results if successful, false otherwise
+     */
+    public function updateByEmail(array $data, string $email)
+    {
+        return $this->db->table($this->tableName)
+            ->update($data)->where(['email' => $email])->execute();
+    }
 }
