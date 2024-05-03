@@ -14,3 +14,4 @@ export { default as OrdersPage } from './OrdersPage';
 export { default as NotFoundPage } from './NotFoundPage';
 export { default as SearchPage } from './SearchPage';
 export { default as AddressPage } from './AddressPage';
+export { default as ResetPasswordPage } from './ResetPasswordPage';
