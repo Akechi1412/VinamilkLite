@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { SideBar, Header } from '../admin';
+import { SideBar, Header, Footer } from '../admin';
 import { useState } from 'react';
 
 function AdminLayout({ children }) {
@@ -18,9 +18,10 @@ function AdminLayout({ children }) {
     <div className="min-h-screen">
       <div className="flex">
         <SideBar handleClose={handleClose} isExpand={expanded} />
-        <div className="flex-1 overflow-x-hidden">
+        <div className="min-h-screen flex-1 overflow-x-hidden flex flex-col">
           <Header toggled={toggled} handleToggle={handleToggle} />
-          {children}
+          <div className="flex-1">{children}</div>
+          <Footer />
         </div>
       </div>
     </div>

@@ -4,30 +4,30 @@ namespace App\Controllers;
 
 use Core\Controller;
 
-class UserController extends Controller
+class ProductController extends Controller
 {
-    private $userModel;
+    private $productModel;
 
     /**
-     * UserController constructor.
+     * ProductController constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->userModel = $this->model('user');
+        $this->productModel = $this->model('product');
     }
 
     /**
-     * Get users.
+     * Get products.
      *
      * @return  string  The JSON response
      */
-    public function getUsers()
+    public function getProducts()
     {
         $queryParams = $this->request->params();
-        $users = $this->userModel->getMultiple($queryParams);
+        $products = $this->productModel->getMultiple($queryParams);
 
-        if ($users === false) {
+        if ($products === false) {
             return $this->response->status(500)->json(
                 0,
                 [],
@@ -37,21 +37,21 @@ class UserController extends Controller
 
         return $this->response->status(200)->json(
             1,
-            $users,
+            $products,
         );
     }
 
     /**
-     * Get a user by ID.
+     * Get a product by ID.
      *
-     * @param    int         $id The ID of the user to retrieve
+     * @param    int         $id The ID of the product to retrieve
      * @return   string      The JSON response
      */
     public function getById($id)
     {
-        $user = $this->userModel->getById($id);
+        $product = $this->productModel->getById($id);
 
-        if ($user === false) {
+        if ($product === false) {
             return $this->response->status(500)->json(
                 0,
                 [],
@@ -61,24 +61,27 @@ class UserController extends Controller
 
         return $this->response->status(200)->json(
             1,
-            $user
+            $product
         );
     }
 
     /**
-     * Create a new user.
+     * Create a new product.
      *
      * @return  string  The JSON response
      */
     public function create()
     {
-        $userData = $this->request->body();
-        $validationResult = $this->request->validate($userData, [
-            'email' => 'required|email',
-            'password' => 'required|password|min:8|max:20',
-            'first_name' => 'required|alpha|min:2|max:30',
-            'last_name' => 'required|alpha|min:2|max:30|',
-            'role' => 'role',
+        $productData = $this->request->body();
+        $validationResult = $this->request->validate($productData, [
+            'name' => 'required|max:255',
+            'slug' => 'required|max:255',
+            'thumbnail' => 'min:1|max:255',
+            'hidden' => 'int',
+            'description' => '',
+            'price' => 'int|gte:0',
+            'sale_price' => 'int|gte:0',
+            'collection_id' => 'int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -88,23 +91,22 @@ class UserController extends Controller
             );
         }
 
-        $result = $this->userModel->getByEmail($userData['email']);
+        $result = $this->productModel->getBySlug($productData['slug']);
         if (!empty($result)) {
             return $this->response->status(400)->json(
                 0,
                 [],
-                'Email existed!'
+                "Product slug existed!"
             );
         }
 
-        $userData['id'] = uniqid('user');
-        $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
+        $productData['id'] = uniqid('product');
 
         $datetime = date('Y-m-d H:i:s');
-        $userData['created_at'] = $datetime;
-        $userData['updated_at'] = $datetime;
+        $productData['created_at'] = $datetime;
+        $productData['updated_at'] = $datetime;
 
-        $result = $this->userModel->create($userData);
+        $result = $this->productModel->create($productData);
         if ($result === false) {
             return $this->response->status(500)->json(
                 0,
@@ -116,32 +118,35 @@ class UserController extends Controller
         return $this->response->status(201)->json(
             1,
             [],
-            'User created successfully.'
+            'Product created successfully.'
         );
     }
 
     /**
-     * Update a user with some attributes.
+     * Update a product with some attributes.
      *
-     * @param    int        $id The ID of the user to update
+     * @param    int        $id The ID of the product to update
      * @return   string     The JSON response
      */
     public function update($id)
     {
-        $userData = $this->request->body();
-        if (empty($userData)) {
+        $productData = $this->request->body();
+        if (empty($productData)) {
             return $this->response->status(400)->json(
                 0,
                 [],
                 'No data to update!'
             );
         }
-        $validationResult = $this->request->validate($userData, [
-            'email' => 'email',
-            'password' => 'password|min:8|max:20',
-            'first_name' => 'alpha|min:2|max:30',
-            'last_name' => 'alpha|min:2|max:30|',
-            'role' => 'role'
+        $validationResult = $this->request->validate($productData, [
+            'name' => 'min:1|max:255',
+            'slug' => 'min:1|max:255',
+            'thumbnail' => 'min:1|max:255',
+            'hidden' => 'int',
+            'description' => '',
+            'price' => 'int|gte:0',
+            'sale_price' => 'int|gte:0',
+            'collection_id' => 'int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -151,17 +156,10 @@ class UserController extends Controller
             );
         }
 
-        if (isset($userData['password'])) {
-            $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
-        }
-        if (isset($userData['ban_expired'])) {
-            $userData['ban_expired'] = date('Y-m-d H:i:s', time() + $userData['ban_expired']);
-        }
-
         $datetime = date('Y-m-d H:i:s');
-        $userData['updated_at'] = $datetime;
+        $productData['updated_at'] = $datetime;
 
-        $result = $this->userModel->update($userData, $id);
+        $result = $this->productModel->update($productData, $id);
         if ($result === false) {
             return $this->response->status(500)->json(
                 0,
@@ -173,25 +171,28 @@ class UserController extends Controller
         return $this->response->status(200)->json(
             1,
             [],
-            'User updated successfully.'
+            'Product updated successfully.'
         );
     }
 
     /**
-     * Update a user with all attributes.
+     * Update a product with all attributes.
      *
-     * @param    int        $id The ID of the user to update
+     * @param    int        $id The ID of the product to update
      * @return   string     The JSON response
      */
     public function updateAll($id)
     {
-        $userData = $this->request->body();
-        $validationResult = $this->request->validate($userData, [
-            'email' => 'required|email',
-            'password' => 'required|password|min:8|max:20',
-            'first_name' => 'required|alpha|min:2|max:30',
-            'last_name' => 'required|alpha|min:2|max:30|',
-            'role' => 'role'
+        $productData = $this->request->body();
+        $validationResult = $this->request->validate($productData, [
+            'name' => 'required|max:255',
+            'slug' => 'required|max:255',
+            'thumbnail' => 'required|max:255',
+            'hidden' => 'required|int',
+            'description' => 'required',
+            'price' => 'required|int|gte:0',
+            'sale_price' => 'required|int|gte:0',
+            'collection_id' => 'required|int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -201,13 +202,10 @@ class UserController extends Controller
             );
         }
 
-        $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
-        $userData['ban_expired'] = date('Y-m-d H:i:s', time() + $userData['ban_expired']);
-
         $datetime = date('Y-m-d H:i:s');
-        $userData['updated_at'] = $datetime;
+        $productData['updated_at'] = $datetime;
 
-        $result = $this->userModel->updateAll($userData, $id);
+        $result = $this->productModel->updateAll($productData, $id);
         if ($result === false) {
             return $this->response->status(500)->json(
                 0,
@@ -219,19 +217,19 @@ class UserController extends Controller
         return $this->response->status(200)->json(
             1,
             [],
-            'User updated successfully.'
+            'Product updated successfully.'
         );
     }
 
     /**
-     * Delete a user.
+     * Delete a product.
      *
-     * @param    int        $id The ID of the user to delete
+     * @param    int        $id The ID of the product to delete
      * @return   string     The JSON response
      */
     public function delete($id)
     {
-        $result = $this->userModel->delete($id);
+        $result = $this->productModel->delete($id);
 
         if ($result === false) {
             return $this->response->status(500)->json(
@@ -244,7 +242,7 @@ class UserController extends Controller
         return $this->response->status(200)->json(
             1,
             [],
-            'User deleted successfully.'
+            'Product deleted successfully.'
         );
     }
 }

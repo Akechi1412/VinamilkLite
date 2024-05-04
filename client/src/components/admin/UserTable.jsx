@@ -220,6 +220,7 @@ function UserTable({ userRows, handleMutate }) {
       setLoading(true);
       try {
         await userApi.delete(id);
+        handleMutate();
         setActionsExpandedId(null);
         setLoading(false);
         Swal.fire({
