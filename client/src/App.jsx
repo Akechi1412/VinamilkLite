@@ -11,6 +11,7 @@ import {
   NewsPage,
   NotFoundPage,
   OrdersPage,
+  ProductDetailPage,
   ProductsPage,
   ProfilePage,
   RegisterPage,
@@ -43,7 +44,7 @@ function App() {
         <Route path="/news" element={<NewsPage />} />
         <Route path="/collections/all-products" element={<ProductsPage />} />
         <Route path="/collections/:slug" element={<CollectionPage />} />
-        <Route path="/products/:slug" element={<ProductsPage />} />
+        <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

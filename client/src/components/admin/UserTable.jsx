@@ -444,7 +444,10 @@ function UserTable({ userRows, handleMutate }) {
               <div className="mt-4">
                 <label className="block text-gray-700 font-medium mb-2">Ảnh đại diện</label>
                 <div className="h-[150px] px-10">
-                  <ImageSelector handleSelect={(file) => setFile(file)} />
+                  <ImageSelector
+                    handleSelect={(file) => setFile(file)}
+                    initialImage={userEdit.avatar || ''}
+                  />
                 </div>
               </div>
               <div className="mt-4">

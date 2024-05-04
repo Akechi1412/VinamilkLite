@@ -180,18 +180,19 @@ function AdminUsersPage() {
           </p>
           <ReactPaginate
             activeClassName={'border-none bg-blue-500 text-white'}
-            breakClassName={'break-me '}
+            breakClassName={'text-gray-500'}
             breakLabel={'...'}
             containerClassName={'flex items-center'}
-            disabledClassName={'border-none bg-[#e4e4e4] cursor-default'}
+            disabledLinkClassName={'cursor-default'}
+            disabledClassName={'border-none bg-[#e5e5e5] text-gray-400'}
             marginPagesDisplayed={2}
-            nextClassName={'border border-ghost mx-2 rounded'}
+            nextClassName={'border border-ghost mx-2 rounded text-gray-900'}
             nextLabel={'›'}
             onPageChange={handlePageChange}
             pageCount={totalPages}
-            pageClassName={'rounded border border-ghost mx-2'}
+            pageClassName={'rounded border border-ghost mx-2 text-gray-900'}
             pageRangeDisplayed={3}
-            previousClassName={'border border-ghost mx-2 rounded'}
+            previousClassName={'border border-ghost mx-2 rounded text-gray-900'}
             previousLabel={'‹'}
             previousLinkClassName={'block p-2'}
             nextLinkClassName={'block p-2'}

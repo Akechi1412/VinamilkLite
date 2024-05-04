@@ -13,10 +13,6 @@ $router->patch('/users/:id', function ($params) use ($userController) {
     echo $userController->update($params['id']);
 })->addMiddleware(new AuthMiddleware(true));
 
-$router->put('/users/:id', function ($params) use ($userController) {
-    echo $userController->updateAll($params['id']);
-})->addMiddleware(new AuthMiddleware(true));
-
 $router->get('/users', function () use ($userController) {
     echo $userController->getUsers();
 })->addMiddleware(new AuthMiddleware(true));

@@ -4,30 +4,30 @@ namespace App\Controllers;
 
 use Core\Controller;
 
-class CollectionController extends Controller
+class NewsCategoryController extends Controller
 {
-    private $collectionModel;
+    private $newsCatgoryModel;
 
     /**
-     * CollectionController constructor.
+     * NewsCatgoryController constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->collectionModel = $this->model('collection');
+        $this->newsCatgoryModel = $this->model('newsCategory');
     }
 
     /**
-     * Get collections.
+     * Get news catgories.
      *
      * @return  string  The JSON response
      */
-    public function getCollections()
+    public function getNewsCatgories()
     {
         $queryParams = $this->request->params();
-        $collections = $this->collectionModel->getMultiple($queryParams);
+        $newCategories = $this->newsCatgoryModel->getMultiple($queryParams);
 
-        if ($collections === false) {
+        if ($newCategories === false) {
             return $this->response->status(500)->json(
                 0,
                 [],
@@ -37,21 +37,21 @@ class CollectionController extends Controller
 
         return $this->response->status(200)->json(
             1,
-            $collections,
+            $newCategories,
         );
     }
 
     /**
-     * Get a collection by ID.
+     * Get a news catgorie by ID.
      *
-     * @param    int         $id The ID of the collection to retrieve
+     * @param    int         $id The ID of the news catgorie to retrieve
      * @return   string      The JSON response
      */
     public function getById($id)
     {
-        $collection = $this->collectionModel->getById($id);
+        $newscategory = $this->newsCatgoryModel->getById($id);
 
-        if ($collection === false) {
+        if ($newscategory === false) {
             return $this->response->status(500)->json(
                 0,
                 [],
@@ -61,23 +61,22 @@ class CollectionController extends Controller
 
         return $this->response->status(200)->json(
             1,
-            $collection
+            $newscategory
         );
     }
 
     /**
-     * Create a new collection.
+     * Create a new news catgorie.
      *
      * @return  string  The JSON response
      */
     public function create()
     {
-        $collectionData = $this->request->body();
-        $validationResult = $this->request->validate($collectionData, [
+        $newsCatgoryData = $this->request->body();
+        $validationResult = $this->request->validate($newsCatgoryData, [
             'name' => 'required|max:255',
-            'slug' => 'required|slug|max:255',
-            'image' => 'max:255',
-            'colection_order' => 'int'
+            'slug' => 'required|max:255',
+            'cate_order' => 'int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -87,7 +86,7 @@ class CollectionController extends Controller
             );
         }
 
-        $result = $this->collectionModel->getBySlug($collectionData['slug']);
+        $result = $this->newsCatgoryModel->getBySlug($newsCatgoryData['slug']);
         if (!empty($result)) {
             return $this->response->status(400)->json(
                 0,
@@ -97,10 +96,10 @@ class CollectionController extends Controller
         }
 
         $datetime = date('Y-m-d H:i:s');
-        $collectionData['created_at'] = $datetime;
-        $collectionData['updated_at'] = $datetime;
+        $newsCatgoryData['created_at'] = $datetime;
+        $newsCatgoryData['updated_at'] = $datetime;
 
-        $result = $this->collectionModel->create($collectionData);
+        $result = $this->newsCatgoryModel->create($newsCatgoryData);
         if ($result === false) {
             return $this->response->status(500)->json(
                 0,
@@ -112,31 +111,30 @@ class CollectionController extends Controller
         return $this->response->status(201)->json(
             1,
             [],
-            'Collection created successfully.'
+            'News Catgorie created successfully.'
         );
     }
 
     /**
-     * Update a collection with some attributes.
+     * Update a news catgorie with some attributes.
      *
-     * @param    int        $id The ID of the collection to update
+     * @param    int        $id The ID of the news catgorie to update
      * @return   string     The JSON response
      */
     public function update($id)
     {
-        $collectionData = $this->request->body();
-        if (empty($collectionData)) {
+        $newsCatgoryData = $this->request->body();
+        if (empty($newsCatgoryData)) {
             return $this->response->status(400)->json(
                 0,
                 [],
                 'No data to update!'
             );
         }
-        $validationResult = $this->request->validate($collectionData, [
-            'name' => 'required|max:255',
-            'slug' => 'required|slug|max:255',
-            'image' => 'max:255',
-            'colection_order' => 'int'
+        $validationResult = $this->request->validate($newsCatgoryData, [
+            'name' => 'min:1|max:255',
+            'slug' => 'min:1|max:255',
+            'cate_order' => 'int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -147,9 +145,9 @@ class CollectionController extends Controller
         }
 
         $datetime = date('Y-m-d H:i:s');
-        $collectionData['updated_at'] = $datetime;
+        $newsCatgoryData['updated_at'] = $datetime;
 
-        $result = $this->collectionModel->update($collectionData, $id);
+        $result = $this->newsCatgoryModel->update($newsCatgoryData, $id);
         if ($result === false) {
             return $this->response->status(500)->json(
                 0,
@@ -161,19 +159,19 @@ class CollectionController extends Controller
         return $this->response->status(200)->json(
             1,
             [],
-            'Collection updated successfully.'
+            'News Catgorie updated successfully.'
         );
     }
 
     /**
-     * Delete a collection.
+     * Delete a news catgorie.
      *
-     * @param    int        $id The ID of the collection to delete
+     * @param    int        $id The ID of the news catgorie to delete
      * @return   string     The JSON response
      */
     public function delete($id)
     {
-        $result = $this->collectionModel->delete($id);
+        $result = $this->newsCatgoryModel->delete($id);
 
         if ($result === false) {
             return $this->response->status(500)->json(
@@ -186,7 +184,7 @@ class CollectionController extends Controller
         return $this->response->status(200)->json(
             1,
             [],
-            'Collection deleted successfully.'
+            'News Catgorie deleted successfully.'
         );
     }
 }

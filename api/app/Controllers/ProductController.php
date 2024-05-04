@@ -176,52 +176,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Update a product with all attributes.
-     *
-     * @param    int        $id The ID of the product to update
-     * @return   string     The JSON response
-     */
-    public function updateAll($id)
-    {
-        $productData = $this->request->body();
-        $validationResult = $this->request->validate($productData, [
-            'name' => 'required|max:255',
-            'slug' => 'required|max:255',
-            'thumbnail' => 'required|max:255',
-            'hidden' => 'required|int',
-            'description' => 'required',
-            'price' => 'required|int|gte:0',
-            'sale_price' => 'required|int|gte:0',
-            'collection_id' => 'required|int'
-        ]);
-        if ($validationResult !== true) {
-            return $this->response->status(400)->json(
-                0,
-                [],
-                $validationResult
-            );
-        }
-
-        $datetime = date('Y-m-d H:i:s');
-        $productData['updated_at'] = $datetime;
-
-        $result = $this->productModel->updateAll($productData, $id);
-        if ($result === false) {
-            return $this->response->status(500)->json(
-                0,
-                [],
-                'Something was wrong!'
-            );
-        }
-
-        return $this->response->status(200)->json(
-            1,
-            [],
-            'Product updated successfully.'
-        );
-    }
-
-    /**
      * Delete a product.
      *
      * @param    int        $id The ID of the product to delete

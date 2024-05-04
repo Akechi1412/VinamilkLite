@@ -1,29 +1,24 @@
-import { AdminLayout } from '../../components/layout';
-import { newsCategoryApi, firebaseApi, newsApi } from '../../api';
+import PropTypes from 'prop-types';
+import DefaultNews from '../../assets/images/default.jpg';
+import EllipsisIcon from '../../assets/images/ellipsis.svg';
 import { useEffect, useState } from 'react';
-import { Button, ImageSelector, Input, NewsTable } from '../../components/admin';
-import { Loading, SearchBar } from '../../components/admin';
-import { Overlay } from '../../components/common';
 import Swal from 'sweetalert2';
-import CloseIcon from '../../assets/images/close-dark.svg';
+import { firebaseApi, newsApi } from '../../api';
+import { Button, ImageSelector, Input, Loading } from '../admin';
+import { Overlay } from '../../components/common';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import ReactPaginate from 'react-paginate';
-import { debounce } from 'lodash';
+import CloseIcon from '../../assets/images/close-dark.svg';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function AdminNewsPage() {
+function NewsTable({ newsRows, handleMutate, newsCategoryList }) {
   const [loading, setLoading] = useState(false);
-  const [newsRows, setNewsRows] = useState([]);
-  const [newsCategoryList, setNewsCategoryList] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalRows, setTotalRows] = useState(0);
+  const [actionsExpandedId, setActionsExpandedId] = useState(null);
+  const [newsEdit, setNewsEdit] = useState(null);
   const [file, setFile] = useState(null);
   const [content, setContent] = useState('');
+
   const modules = {
     toolbar: {
       container: [
@@ -38,28 +33,6 @@ function AdminNewsPage() {
       ],
     },
   };
-  const mutateNews = debounce(async () => {
-    setLoading(true);
-    try {
-      let paramString = `_page=${currentPage}`;
-      if (searchValue.trim()) {
-        paramString += `&name_like=${searchValue.trim()}`;
-      }
-      const { data: newsData } = await newsApi.getNews(paramString);
-      setNewsRows(newsData.rows);
-      setTotalPages(newsData.pagination?.totalPages || 0);
-      setTotalRows(newsData.pagination?.totalRows || 0);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      const errorMessage = error.response?.data?.message || 'Something went wrong!';
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: errorMessage,
-      });
-    }
-  }, 500);
 
   const formik = useFormik({
     initialValues: {
@@ -96,7 +69,7 @@ function AdminNewsPage() {
           category_id: values.categoryId || undefined,
         });
         setLoading(false);
-        mutateNews();
+        handleMutate();
         Swal.fire({
           icon: 'success',
           title: 'Thêm tin tức thành công!',
@@ -117,17 +90,28 @@ function AdminNewsPage() {
     },
   });
 
-  useEffect(() => {
-    (async () => {
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa sản phẩm này',
+      text: 'Bạn sẽ không thể hoàn tác lại',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ok, xóa đi',
+      cancelButtonText: 'Hủy',
+    });
+    if (result.isConfirmed) {
       setLoading(true);
       try {
-        const { data: newsData } = await newsApi.getNews(`_page=${currentPage}`);
-        setNewsRows(newsData.rows);
-        setTotalPages(newsData.pagination?.totalPages || 0);
-        setTotalRows(newsData.pagination?.totalRows || 0);
-        const { data: newsCategoryData } = await newsCategoryApi.getCategories();
-        setNewsCategoryList(newsCategoryData.rows);
+        await newsApi.delete(id);
+        setActionsExpandedId(null);
+        handleMutate();
         setLoading(false);
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công',
+        });
       } catch (error) {
         setLoading(false);
         const errorMessage = error.response?.data?.message || 'Something went wrong!';
@@ -137,79 +121,115 @@ function AdminNewsPage() {
           text: errorMessage,
         });
       }
-    })();
-  }, []);
-
-  const handlePageChange = (event) => {
-    setCurrentPage(event.selected + 1);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
+    }
   };
 
   useEffect(() => {
-    mutateNews();
-    return mutateNews.cancel;
-  }, [currentPage, searchValue]);
+    if (!newsEdit) return;
+
+    formik.setValues({
+      title: newsEdit.title || '',
+      slug: newsEdit.slug || '',
+      status: newsEdit.status || 'hidden',
+      categoryId: newsEdit.category_id || '',
+    });
+  }, [newsEdit]);
 
   return (
-    <AdminLayout>
-      <div className="container px-5 md:px-4 mb-8 md:mb-5">
-        <div className="my-5 flex items-center space-x-4 sm:flex-col sm:items-start sm:space-x-0 sm:space-y-4">
-          <div className="w-[80px">
-            <Button handleClick={() => setShowAddForm(true)} title="Thêm" />
-          </div>
-          <div className="w-[320px] sm:w-full">
-            <SearchBar
-              placeholder="Tìm theo tiêu đề..."
-              value={searchValue}
-              handleChange={(event) => setSearchValue(event.target.value)}
-              handleClear={() => setSearchValue('')}
-            />
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <NewsTable
-            newsRows={newsRows}
-            handleMutate={mutateNews}
-            newsCategoryList={newsCategoryList}
-          />
-        </div>
-        <div className="mt-6 flex items-end justify-between md:flex-col lg:space-y-4">
-          <p>
-            Đang hiển thị {newsRows.length} trên tổng số {totalRows}
-          </p>
-          <ReactPaginate
-            activeClassName={'border-none bg-blue-500 text-white'}
-            breakClassName={'text-gray-500'}
-            breakLabel={'...'}
-            containerClassName={'flex items-center'}
-            disabledLinkClassName={'cursor-default'}
-            disabledClassName={'border-none bg-[#e5e5e5] cursor-default text-gray-400'}
-            marginPagesDisplayed={2}
-            nextClassName={'border border-ghost mx-2 rounded text-gray-900'}
-            nextLabel={'›'}
-            onPageChange={handlePageChange}
-            pageCount={totalPages}
-            pageClassName={'rounded border border-ghost mx-2 text-gray-900'}
-            pageRangeDisplayed={3}
-            previousClassName={'border border-ghost mx-2 rounded text-gray-900'}
-            previousLabel={'‹'}
-            previousLinkClassName={'block p-2'}
-            nextLinkClassName={'block p-2'}
-            pageLinkClassName={'block p-2 border rounded'}
-          />
-        </div>
-      </div>
-      {showAddForm && (
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">ID</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">
+              Category ID
+            </th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Tiêu đề</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Slug</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Thumbnail</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">
+              Trạng thái
+            </th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Tác giả</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Ngày tạo</th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">
+              Ngày cập nhật
+            </th>
+            <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {newsRows.map((news) => (
+            <tr key={news.id}>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{news.id}</td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {news.category_id || 'Chưa có'}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{news.title}</td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{news.slug}</td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                <img
+                  className="w-12 h-12 object-cover"
+                  src={news.thumbnail || DefaultNews}
+                  alt=""
+                />
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {news.status === 'hidden' && 'Ẩn'}
+                {news.status === 'published' && 'Công khai'}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {news.author_id}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {news.created_at}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {news.updated_at}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                <div className="h-full relative flex justify-center items-center">
+                  <div
+                    onClick={() => setActionsExpandedId((id) => (news.id === id ? null : news.id))}
+                    className="p-2 cursor-pointer"
+                  >
+                    <img className="w-4 h-4" src={EllipsisIcon} alt="..." />
+                  </div>
+                  {actionsExpandedId === news.id && (
+                    <div className="absolute z-[1] bottom-0 -translate-x-full left-0 min-w-[80px] rounded-md shadow-md bg-secondary py-2">
+                      <ul className="overflow-y-auto">
+                        <li>
+                          <button
+                            onClick={() => setNewsEdit(news)}
+                            className="w-full text-left text-[13px] py-1 px-3 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                          >
+                            Sửa
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleDelete(news.id)}
+                            className="w-full text-left text-[13px] py-1 px-3 text-gray-600 hover:text-red-500 hover:bg-gray-50"
+                          >
+                            Xóa
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {newsEdit && (
         <Overlay handleClickOut={() => {}}>
           <div className="ml-auto bg-secondary min-h-full w-[800px] max-w-full p-6 md:p-4">
             <div className="flex items-center justify-between">
               <h4 className="text-2xl font-semibold">Thêm tin tức</h4>
               <img
-                onClick={() => setShowAddForm(false)}
+                onClick={() => setNewsEdit(null)}
                 className="cursor-pointer w-5 h-5 object-cover"
                 src={CloseIcon}
                 alt="X"
@@ -250,7 +270,10 @@ function AdminNewsPage() {
               <div className="mt-4">
                 <label className="block text-gray-700 font-medium mb-2">Thumbnail tin tức</label>
                 <div className="h-[150px] px-10">
-                  <ImageSelector handleSelect={(file) => setFile(file)} />
+                  <ImageSelector
+                    handleSelect={(file) => setFile(file)}
+                    initialImage={newsEdit.thumbnail || ''}
+                  />
                 </div>
               </div>
               <div className="mt-4">
@@ -320,8 +343,14 @@ function AdminNewsPage() {
         </Overlay>
       )}
       {loading && <Loading fullScreen />}
-    </AdminLayout>
+    </>
   );
 }
 
-export default AdminNewsPage;
+NewsTable.propTypes = {
+  newsRows: PropTypes.array.isRequired,
+  handleMutate: PropTypes.func.isRequired,
+  newsCategoryList: PropTypes.array.isRequired,
+};
+
+export default NewsTable;

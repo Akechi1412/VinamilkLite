@@ -11,3 +11,5 @@ export { default as CollectionMobile } from './CollectionMobile';
 export { default as TextArea } from './TextArea';
 export { default as AboutSection } from './AboutSection';
 export { default as Tab } from './Tab';
+export { default as ProductList } from './ProductList';
+export { default as ProductItem } from './ProductItem';

@@ -9,3 +9,4 @@ export { default as SearchBar } from './SearchBar';
 export { default as ImageSelector } from './ImageSelector';
 export { default as ProductTable } from './ProductTable';
 export { default as Footer } from './Footer';
+export { default as NewsTable } from './NewsTable';

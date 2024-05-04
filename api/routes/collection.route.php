@@ -13,10 +13,6 @@ $router->patch('/collections/:id', function ($params) use ($collectionController
     echo $collectionController->update($params['id']);
 })->addMiddleware(new AuthMiddleware(true));
 
-$router->put('/collections/:id', function ($params) use ($collectionController) {
-    echo $collectionController->updateAll($params['id']);
-})->addMiddleware(new AuthMiddleware(true));
-
 $router->get('/collections', function () use ($collectionController) {
     echo $collectionController->getCollections();
 });

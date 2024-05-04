@@ -13,10 +13,6 @@ $router->patch('/products/:id', function ($params) use ($productController) {
     echo $productController->update($params['id']);
 })->addMiddleware(new AuthMiddleware(true));
 
-$router->put('/products/:id', function ($params) use ($productController) {
-    echo $productController->updateAll($params['id']);
-})->addMiddleware(new AuthMiddleware(true));
-
 $router->get('/products', function () use ($productController) {
     echo $productController->getProducts();
 });

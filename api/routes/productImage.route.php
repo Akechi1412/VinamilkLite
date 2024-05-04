@@ -9,10 +9,6 @@ $router->post('/product-images', function () use ($productImageController) {
     echo $productImageController->create();
 })->addMiddleware(new AuthMiddleware(true));
 
-$router->patch('/product-images/:id', function ($params) use ($productImageController) {
-    echo $productImageController->update($params['id']);
-})->addMiddleware(new AuthMiddleware(true));
-
 $router->get('/product-images', function () use ($productImageController) {
     echo $productImageController->getProductImages();
 });

@@ -43,11 +43,11 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
       collectionId: '',
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required('Tên là bắt buộc').max(30, 'Tên có nhiều nhất 255 ký tự'),
+      name: Yup.string().required('Tên là bắt buộc').max(255, 'Tên có nhiều nhất 255 ký tự'),
       slug: Yup.string()
-        .required('Họ là bắt buộc')
+        .required('Slug là bắt buộc')
         .matches(/^[a-zA-Z0-9-]+$/, 'Slug chỉ bao gồm các ký tự a-z, A-Z, 0-9 và dấu gạch ngang')
-        .max(255, 'Slug có nhiều nhất 30 ký tự'),
+        .max(255, 'Slug có nhiều nhất 255 ký tự'),
       price: Yup.number().integer('Giá phải là số nguyên').min(0, 'Giá không được nhỏ hơn 0'),
       salePrice: Yup.number()
         .integer('Giá sale phải là số nguyên')
@@ -352,7 +352,10 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
             </div>
             <div className="my-4">
               <div className="h-[150px] w-[300px] mx-auto">
-                <ImageSelector handleSelect={(file) => setImageFile(file)} />
+                <ImageSelector
+                  handleSelect={(file) => setImageFile(file)}
+                  initialImage={productEdit.thumbnail || ''}
+                />
               </div>
               <div className="mx-auto w-[120px] mt-3">
                 <Button handleClick={() => handleSaveImage()} title="Lưu ảnh" />

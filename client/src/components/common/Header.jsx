@@ -210,7 +210,7 @@ function Header({ hasTransiton = false }) {
               </svg>
             </div>
             <div className="relative flex items-center justify-center w-6 h-6 mx-2 lg:hidden group/item">
-              <Link to="/account">
+              <Link to={profile?.role === 'admin' ? '/admin/profile' : '/account'}>
                 <svg
                   width="24"
                   height="24"
@@ -427,24 +427,38 @@ function Header({ hasTransiton = false }) {
                             <span className="ml-3">Chào, {profile.first_name}</span>
                           </div>
                         </li>
-                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <Link
-                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
-                            to="/account"
-                          >
-                            <img className="w-6 h-6 mr-2" src={AccountIcon} alt="" />
-                            <span>Tài khoản</span>
-                          </Link>
-                        </li>
-                        <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
-                          <Link
-                            className="flex items-center font-vs-std pl-6 pr-4 py-4"
-                            to="/account/orders"
-                          >
-                            <img className="w-6 h-6 mr-2" src={OrderIcon} alt="" />
-                            <span>Đơn hàng</span>
-                          </Link>
-                        </li>
+                        {profile.role === 'admin' ? (
+                          <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                            <Link
+                              className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                              to="/admin"
+                            >
+                              <img className="w-6 h-6 mr-2" src={DashboardIcon} alt="" />
+                              <span>Dashboard</span>
+                            </Link>
+                          </li>
+                        ) : (
+                          <>
+                            <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                              <Link
+                                className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                                to="/account"
+                              >
+                                <img className="w-6 h-6 mr-2" src={AccountIcon} alt="" />
+                                <span>Tài khoản</span>
+                              </Link>
+                            </li>
+                            <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
+                              <Link
+                                className="flex items-center font-vs-std pl-6 pr-4 py-4"
+                                to="/account/orders"
+                              >
+                                <img className="w-6 h-6 mr-2" src={OrderIcon} alt="" />
+                                <span>Đơn hàng</span>
+                              </Link>
+                            </li>
+                          </>
+                        )}
                         <li className="animate-appear-from-left border-t border-dashed border-vinamilk-blue-light">
                           <div
                             onClick={handleLogout}

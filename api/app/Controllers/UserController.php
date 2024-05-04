@@ -178,52 +178,6 @@ class UserController extends Controller
     }
 
     /**
-     * Update a user with all attributes.
-     *
-     * @param    int        $id The ID of the user to update
-     * @return   string     The JSON response
-     */
-    public function updateAll($id)
-    {
-        $userData = $this->request->body();
-        $validationResult = $this->request->validate($userData, [
-            'email' => 'required|email',
-            'password' => 'required|password|min:8|max:20',
-            'first_name' => 'required|alpha|min:2|max:30',
-            'last_name' => 'required|alpha|min:2|max:30|',
-            'role' => 'role'
-        ]);
-        if ($validationResult !== true) {
-            return $this->response->status(400)->json(
-                0,
-                [],
-                $validationResult
-            );
-        }
-
-        $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
-        $userData['ban_expired'] = date('Y-m-d H:i:s', time() + $userData['ban_expired']);
-
-        $datetime = date('Y-m-d H:i:s');
-        $userData['updated_at'] = $datetime;
-
-        $result = $this->userModel->updateAll($userData, $id);
-        if ($result === false) {
-            return $this->response->status(500)->json(
-                0,
-                [],
-                'Something was wrong!'
-            );
-        }
-
-        return $this->response->status(200)->json(
-            1,
-            [],
-            'User updated successfully.'
-        );
-    }
-
-    /**
      * Delete a user.
      *
      * @param    int        $id The ID of the user to delete
