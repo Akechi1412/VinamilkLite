@@ -51,9 +51,3 @@
     scrollbar-width: none; /* Firefox */
   }
 }
-
-.ql-editor {
-  min-height: 200px;
-  font-size: 16px;
-  font-family: Inter, sans-serif;
-}

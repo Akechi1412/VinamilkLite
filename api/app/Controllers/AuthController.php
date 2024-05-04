@@ -35,20 +35,11 @@ class AuthController extends Controller
             'first_name' => 'required|alpha|min:2|max:30',
             'last_name' => 'required|alpha|min:2|max:30|'
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
                 $validationResult
-            );
-        }
-
-        $result = $this->userModel->getByEmail($userData['email']);
-        if (!empty($result)) {
-            return $this->response->status(400)->json(
-                0,
-                [],
-                'Email existed!'
             );
         }
 
@@ -191,7 +182,7 @@ class AuthController extends Controller
         $validationResult = $this->request->validate($optData, [
             'otp' => 'required|otp',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -284,7 +275,7 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|password',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -430,7 +421,7 @@ class AuthController extends Controller
             'first_name' => 'alpha|min:2|max:30',
             'last_name' => 'alpha|min:2|max:30',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -468,7 +459,7 @@ class AuthController extends Controller
         $validationResult = $this->request->validate($userData, [
             'password' => 'required|password|min:8|max:20',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -541,7 +532,7 @@ class AuthController extends Controller
         $validationResult = $this->request->validate($resetPasswordData, [
             'email' => 'required|email',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],

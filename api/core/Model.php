@@ -85,7 +85,7 @@ class Model
                 ->orderBy($sortFields)->limit($offset, $limit)->execute();
 
             $countRows = $this->db->table($this->tableName)
-                ->count()->where($params)->execute();
+                ->count()->where($params)->limit($offset, $limit)->execute();
             $totalRows = !empty($countRows)  ?  $countRows[0]['totalRows'] : 0;
 
             return [

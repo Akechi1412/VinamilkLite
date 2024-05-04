@@ -200,7 +200,7 @@ function AdminUsersPage() {
         </div>
       </div>
       {showAddForm && (
-        <Overlay handleClickOut={() => {}}>
+        <Overlay handleClickOut={() => setShowAddForm(false)}>
           <div className="ml-auto bg-secondary min-h-full w-[600px] max-w-full p-6 md:p-4">
             <div className="flex items-center justify-between">
               <h4 className="text-2xl font-semibold">Thêm người dùng</h4>

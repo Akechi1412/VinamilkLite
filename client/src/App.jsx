@@ -22,8 +22,11 @@ import {
   AdminLoginPage,
   AdminUsersPage,
   AdminProductsPage,
+  AdminProductTypesPage,
   AdminCollectionsPage,
+  AdminBrandsPage,
   AdminCommentsPage,
+  AdminPackingPage,
   AdminNewsPage,
   AdminContactsPage,
   AdminOrdersPage,
@@ -59,12 +62,15 @@ function App() {
           <Route index element={<AdminDashboardPage />} />
           <Route path="users" element={<AdminUsersPage />} />
           <Route path="products" element={<AdminProductsPage />} />
+          <Route path="product-types" element={<AdminProductTypesPage />} />
           <Route path="collections" element={<AdminCollectionsPage />} />
+          <Route path="packing" element={<AdminPackingPage />} />
           <Route path="orders" element={<AdminOrdersPage />} />
           <Route path="news" element={<AdminNewsPage />} />
           <Route path="news-categories" element={<AdminNewsCategoriesPage />} />
           <Route path="comments" element={<AdminCommentsPage />} />
           <Route path="contacts" element={<AdminContactsPage />} />
+          <Route path="brands" element={<AdminBrandsPage />} />
           <Route path="options" element={<AdminOptionsPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>

@@ -7,4 +7,3 @@ export { default as contactApi } from './contactApi';
 export { default as postApi } from './postApi';
 export { default as optionApi } from './optionApi';
 export { default as firebaseApi } from './firebaseApi';
-export { default as productImageApi } from './productImageApi';

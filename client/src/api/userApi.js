@@ -11,7 +11,7 @@ const userApi = {
     return axiosClient.patch(`/users/${id}`, data);
   },
   delete(id) {
-    return axiosClient.delete(`/users/${id}`);
+    return axiosClient.patch(`/users/${id}`);
   },
 };
 

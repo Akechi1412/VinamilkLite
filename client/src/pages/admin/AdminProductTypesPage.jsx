@@ -1,11 +1,11 @@
 import { AdminLayout } from '../../components/layout';
 
-function AdminProductsPage() {
+function AdminProductTypesPage() {
   return (
     <AdminLayout>
-      <div>AdminProductsPage</div>
+      <div>AdminProductTypesPage</div>
     </AdminLayout>
   );
 }
 
-export default AdminProductsPage;
+export default AdminProductTypesPage;

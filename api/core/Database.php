@@ -50,35 +50,7 @@ class Database
     }
 
     /**
-     * Concatenate an sql string to the existing sql string.
-     *
-     * @param   string      $sql The sql query
-     * @return  Database    The current Database instance
-     */
-    public function concatSql(string $sql)
-    {
-        if (empty($sql)) {
-            throw new Exception('SQL query cannot be empty!');
-        }
-
-        $this->sql .= $sql;
-        return $this;
-    }
-
-    /**
-     * Set the custom statement query.
-     *
-     * @param   string      $statement
-     * @return  Database    The current Database instance
-     */
-    public function statement(string $statement = 'select')
-    {
-        $this->statement = $statement;
-        return $this;
-    }
-
-    /**
-     * Set the params for custom sql to execute sql query.
+     * Set the params for custom sql to excute sql query.
      *
      * @param   array      $params
      * @return  Database    The current Database instance

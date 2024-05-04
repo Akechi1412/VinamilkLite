@@ -80,20 +80,11 @@ class UserController extends Controller
             'last_name' => 'required|alpha|min:2|max:30|',
             'role' => 'role',
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
                 $validationResult
-            );
-        }
-
-        $result = $this->userModel->getByEmail($userData['email']);
-        if (!empty($result)) {
-            return $this->response->status(400)->json(
-                0,
-                [],
-                'Email existed!'
             );
         }
 
@@ -143,7 +134,7 @@ class UserController extends Controller
             'last_name' => 'alpha|min:2|max:30|',
             'role' => 'role'
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -193,7 +184,7 @@ class UserController extends Controller
             'last_name' => 'required|alpha|min:2|max:30|',
             'role' => 'role'
         ]);
-        if ($validationResult !== true) {
+        if (!$validationResult) {
             return $this->response->status(400)->json(
                 0,
                 [],
