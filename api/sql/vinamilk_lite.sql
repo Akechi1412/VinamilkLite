@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2024 at 02:23 PM
+-- Generation Time: May 04, 2024 at 03:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,11 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `vinamilk_lite`
 --
-
 DROP DATABASE IF EXISTS `vinamilk_lite`;
 CREATE DATABASE `vinamilk_lite`;
 USE `vinamilk_lite`;
-
 -- --------------------------------------------------------
 
 --
@@ -41,32 +39,6 @@ CREATE TABLE `addresses` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `brands`
---
-
-CREATE TABLE `brands` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `brands`
---
-
-INSERT INTO `brands` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Kem Vinamilk', '2024-04-26 08:28:34', '2024-04-26 08:28:34'),
-(2, 'Sữa tươi Vinamilk 100%', '2024-04-26 08:28:34', '2024-04-26 08:28:34'),
-(3, 'Vinamilk Green Farm', '2024-04-26 08:30:03', '2024-04-26 08:30:03'),
-(4, 'Susu', '2024-04-26 08:30:03', '2024-04-26 08:30:03'),
-(5, 'Sữa chua ăn phổ thông', '2024-04-26 08:32:16', '2024-04-26 08:32:16'),
-(6, 'Sữa chua ăn cao cấp', '2024-04-26 08:32:16', '2024-04-26 08:32:16'),
-(7, 'Sữa dinh dưỡng Vinamilk', '2024-04-26 08:35:07', '2024-04-26 08:35:07');
 
 -- --------------------------------------------------------
 
@@ -134,7 +106,8 @@ CREATE TABLE `contacts` (
 --
 
 INSERT INTO `contacts` (`id`, `full_name`, `email`, `content`, `solved`, `created_at`, `updated_at`) VALUES
-(1, 'Nguyễn Trần Hoài Phong', 'nguyenphong.tranhoai@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-01 10:11:40', '2024-05-01 10:11:40');
+(1, 'Nguyễn Trần Hoài Phong', 'nguyenphong.tranhoai@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-01 10:11:40', '2024-05-01 10:11:40'),
+(2, 'Nguyễn Văn A', 'nguyenvana@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-04 20:21:21', '2024-05-04 20:21:21');
 
 -- --------------------------------------------------------
 
@@ -892,8 +865,6 @@ INSERT INTO `news` (`id`, `title`, `slug`, `content`, `category_id`, `thumbnail`
 ('news662bc17a88b2d', 'Hành trình “không tưởng\" đoạt hattrick 3 giải thưởng danh giá quốc tế của sữa hút chân không', 'chung-nhan-giai-thuong-vinamilk-green-farm', NULL, 1, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/Picture1.jpg?v=1702972160', 'published', 'user660760c2688ef', '2023-12-19 21:59:20', '2023-12-19 21:59:20'),
 ('news662bc1e42703c', 'Vì sao Vinamilk đầu tư khủng cho chiến lược phát triển bền vững?', 'vinamilk-green-farm-phat-trien-ben-vung', NULL, 5, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/Picture1_367d8cc2-69e1-4de5-a0cd-5a540fa81a0e.jpg?v=1702973097', 'published', 'user660760c2688ef', '2023-12-19 21:59:20', '2023-12-19 21:59:20'),
 ('news662bc342bd3e2', 'Vinamilk: sức mạnh chuyển đổi xanh từ hơn 10.000 lao động', 'vinamilk-suc-manh-chuyen-doi-xanh-tu-hon-10000-lao-dong', NULL, 5, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/1A.jpg?v=1703825556', 'published', 'user660760c2688ef', '2023-12-29 22:04:49', '2023-12-29 22:04:49'),
-('news662bc3f57cc7b', 'Vinamilk tiếp tục hoàn thiện bộ sưu tập “Vị ngon thượng hạng” với 11 sản phẩm mới được ghi danh vào bảng xếp hạng Superior Taste Award', 'vinamilk-tiep-tuc-hoan-thien-bo-suu-tap-vi-ngon-thuong-hang-voi-11-san-pham-moi-duoc-ghi-danh-vao-bang-xep-hang-superior-taste-award', NULL, 1, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/Hinh_2.png?v=1708428545', 'published', 'user660760c2688ef', '2024-02-20 22:04:49', '2024-02-20 22:04:49'),
-('news662bc485153a0', 'Thể lệ chương trình khuyến mại khi mua hàng sữa bột dinh dưỡng Yokogold, Colosgold, Pedia Kenji', 'the-le-chuong-trinh-khuyen-mai-khi-mua-hang-sua-bot-dinh-duong-yokogold-colosgold-pedia-kenji', NULL, 2, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/Adapt_Banner_Hoat_Nao_1920x1080_181f8d30-bdb0-40b3-bd8d-b55e9b0f4cf9.jpg?v=1709801399', 'published', 'user660760c2688ef', '2024-03-07 22:12:30', '2024-03-07 22:12:30'),
 ('news662bc50845ec7', 'Vinamilk 28 năm liên tiếp giữ danh hiệu hàng Việt Nam chất lượng cao', 'vinamilk-28-nam-lien-tiep-giu-danh-hieu-hang-viet-nam-chat-luong-cao', NULL, 1, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/ong-le-hoang-minh-giam-doc-dieu-hanh-san-xuat-kiem-truong-du-an-net-zero-vinamilk-don-nhan-danh-hieu-hvnclc-2024_new.jpg?v=1710749736', 'published', 'user660760c2688ef', '2024-03-18 22:12:30', '2024-03-18 22:12:30');
 
 -- --------------------------------------------------------
@@ -985,7 +956,8 @@ CREATE TABLE `orders` (
 CREATE TABLE `order_items` (
   `order_id` varchar(25) NOT NULL,
   `product_id` varchar(25) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1043,11 +1015,9 @@ CREATE TABLE `products` (
   `thumbnail` varchar(255) DEFAULT NULL,
   `hidden` tinyint(4) DEFAULT 0,
   `description` text DEFAULT NULL,
-  `benefit` text DEFAULT NULL,
-  `ingredient` text DEFAULT NULL,
-  `user_manual` text DEFAULT NULL,
-  `brand_id` int(11) DEFAULT NULL,
-  `product_type_id` int(11) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `sale_price` int(11) DEFAULT NULL,
+  `collection_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1056,19 +1026,19 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `slug`, `thumbnail`, `hidden`, `description`, `benefit`, `ingredient`, `user_manual`, `brand_id`, `product_type_id`, `created_at`, `updated_at`) VALUES
-('product662b0052ecf78', 'Kem Vinamilk Đậu Xanh', 'kem-vinamilk-dau-xanh', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/VNM_DX_450_1.png?v=1712568315&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 1, 1, '2024-04-26 18:33:22', '2024-04-26 18:33:22'),
-('product662b91c49aa73', 'Kem Vinamilk Vani', 'kem-vinamilk-vani', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/VNM_VANI_450_1.png?v=1712568242&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 1, 1, '2024-04-26 18:33:22', '2024-04-26 18:33:22'),
-('product662b954faaa91', 'Sữa Tươi Tiệt Trùng Vinamilk 100% Dâu', 'sua-tuoi-tiet-trung-huong-dau', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_DAU_180_3.png?v=1700456099&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 2, 2, '2024-04-26 18:46:55', '2024-04-26 18:46:55'),
-('product662b9588e18b5', 'Sữa Tươi Tiệt Trùng Vinamilk 100% Ít Béo Không Đường', 'sua-tuoi-it-beo-tiet-trung-khong-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_IB_180_3.png?v=1698802623&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 2, 2, '2024-04-26 18:46:55', '2024-04-26 18:46:55'),
-('product662b9ad41d432', 'Sữa Tươi Thanh Trùng Vinamilk Green Farm Rất Ít Đường', 'sua-tuoi-thanh-trung-vinamilk-green-farm-rat-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_GF_RID_1L_5_a497075b-293a-4443-88b2-d009d8c84010.png?v=1702452441&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 3, 3, '2024-04-26 19:07:45', '2024-04-26 19:07:45'),
-('product662b9b3083b89', 'Sữa Tươi Thanh Trùng Nguyên Chất Vinamilk Green Farm Không Đường', 'sua-tuoi-thanh-trung-nguyen-chat-vinamilk-green-farm-khong-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_GF_TT_1L_5.png?v=1702454151&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 3, 3, '2024-04-26 19:07:45', '2024-04-26 19:07:45'),
-('product662b9dbb77c61', 'Sữa Chua Uống Vinamilk SuSu Việt Quất Chuối Chai', 'sua-chua-uong-susu-chai-viet-quat-chuoi', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SUSUVI_TQU_TCHU_I_3.png?v=1699597767&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 4, 4, '2024-04-26 19:27:30', '2024-04-26 19:27:30'),
-('product662b9deea4b88', 'Sữa Chua Uống Vinamilk SuSu Táo Nho Chai', 'sua-chua-uong-susu-chai-vi-tao-nho', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SUSUTAONHO_2.png?v=1699597436&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 4, 4, '2024-04-26 19:27:30', '2024-04-26 19:27:30'),
-('product662ba06f1b521', 'Sữa Chua Ăn Star Có Đường', 'sua-chua-star-co-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SCA_TRANG_STAR_2.png?v=1701227594&width=600&height=600&crop=center', 0, NULL, NULL, NULL, NULL, 5, 5, '2024-04-26 19:39:06', '2024-04-26 19:39:06'),
-('product662ba0d755ff6', 'Sữa Chua Ăn Vinamilk Lựu Đỏ Ít Đường', 'sua-chua-vinamilk-vi-luu-do-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SCA_LD_1.png?v=1703435881&width=1200&height=1200&crop=center', 0, NULL, NULL, NULL, NULL, 6, 5, '2024-04-26 19:39:06', '2024-04-26 19:39:06'),
-('product662ba316524ce', 'Sữa Bịch Dinh Dưỡng Vinamilk Socola', 'sua-dinh-duong-socola', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_SCL_220_1.png?v=1698811984&width=1200&height=1200&crop=center', 0, NULL, NULL, NULL, NULL, 7, 6, '2024-04-26 19:50:26', '2024-04-26 19:50:26'),
-('product662ba3593005a', 'Sữa Bịch Dinh Dưỡng Vinamilk Ít Đường', 'sua-dinh-duong-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_ID_220_1.png?v=1698821472&width=1200&height=1200&crop=center', 0, NULL, NULL, NULL, NULL, 7, 6, '2024-04-26 19:50:26', '2024-04-26 19:50:26');
+INSERT INTO `products` (`id`, `name`, `slug`, `thumbnail`, `hidden`, `description`, `price`, `sale_price`, `collection_id`, `created_at`, `updated_at`) VALUES
+('product662b91c49aa73', 'Kem Vinamilk Vani', 'kem-vinamilk-vani', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/VNM_VANI_450_1.png?v=1712568242&width=600&height=600&crop=center', 0, '<p><strong><u>Đây là mô tả sản phẩm</u></strong></p>', 0, 0, 1, '2024-04-26 18:33:22', '2024-05-04 20:30:53'),
+('product662b954faaa91', 'Sữa Tươi Tiệt Trùng Vinamilk 100% Dâu', 'sua-tuoi-tiet-trung-huong-dau', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_DAU_180_3.png?v=1700456099&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 18:46:55', '2024-04-26 18:46:55'),
+('product662b9588e18b5', 'Sữa Tươi Tiệt Trùng Vinamilk 100% Ít Béo Không Đường', 'sua-tuoi-it-beo-tiet-trung-khong-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_IB_180_3.png?v=1698802623&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 18:46:55', '2024-04-26 18:46:55'),
+('product662b9ad41d432', 'Sữa Tươi Thanh Trùng Vinamilk Green Farm Rất Ít Đường', 'sua-tuoi-thanh-trung-vinamilk-green-farm-rat-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_GF_RID_1L_5_a497075b-293a-4443-88b2-d009d8c84010.png?v=1702452441&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:07:45', '2024-04-26 19:07:45'),
+('product662b9b3083b89', 'Sữa Tươi Thanh Trùng Nguyên Chất Vinamilk Green Farm Không Đường', 'sua-tuoi-thanh-trung-nguyen-chat-vinamilk-green-farm-khong-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_GF_TT_1L_5.png?v=1702454151&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:07:45', '2024-04-26 19:07:45'),
+('product662b9dbb77c61', 'Sữa Chua Uống Vinamilk SuSu Việt Quất Chuối Chai', 'sua-chua-uong-susu-chai-viet-quat-chuoi', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SUSUVI_TQU_TCHU_I_3.png?v=1699597767&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:27:30', '2024-04-26 19:27:30'),
+('product662b9deea4b88', 'Sữa Chua Uống Vinamilk SuSu Táo Nho Chai', 'sua-chua-uong-susu-chai-vi-tao-nho', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SUSUTAONHO_2.png?v=1699597436&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:27:30', '2024-04-26 19:27:30'),
+('product662ba06f1b521', 'Sữa Chua Ăn Star Có Đường', 'sua-chua-star-co-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SCA_TRANG_STAR_2.png?v=1701227594&width=600&height=600&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:39:06', '2024-04-26 19:39:06'),
+('product662ba0d755ff6', 'Sữa Chua Ăn Vinamilk Lựu Đỏ Ít Đường', 'sua-chua-vinamilk-vi-luu-do-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SCA_LD_1.png?v=1703435881&width=1200&height=1200&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:39:06', '2024-04-26 19:39:06'),
+('product662ba316524ce', 'Sữa Bịch Dinh Dưỡng Vinamilk Socola', 'sua-dinh-duong-socola', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_SCL_220_1.png?v=1698811984&width=1200&height=1200&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:50:26', '2024-04-26 19:50:26'),
+('product662ba3593005a', 'Sữa Bịch Dinh Dưỡng Vinamilk Ít Đường', 'sua-dinh-duong-it-duong', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_ID_220_1.png?v=1698821472&width=1200&height=1200&crop=center', 0, NULL, 0, 0, NULL, '2024-04-26 19:50:26', '2024-04-26 19:50:26'),
+('product66357ddf5074f', 'sdfsadf', 'sdfsadf', '', 1, '', 10000, 1000, NULL, '2024-05-04 07:14:23', '2024-05-04 19:07:19');
 
 -- --------------------------------------------------------
 
@@ -1087,7 +1057,6 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `src`) VALUES
-(1, 'product662b0052ecf78', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/G_Rightfontcopy_ea6f0340-e178-4d97-9c06-2a920024a869.png?v=1712568315&width=600&height=600&crop=center'),
 (2, 'product662b91c49aa73', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/G_Rightfontcopy_0153d033-dbdd-4447-9f26-0d166b92d16c.png?v=1712568242&width=600&height=600&crop=center'),
 (3, 'product662b954faaa91', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_DAU_180_1.png?v=1698739983&width=1200&height=1200&crop=center'),
 (4, 'product662b9588e18b5', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/FM100_DAU_180_2.png?v=1700456099&width=600&height=600&crop=center'),
@@ -1117,78 +1086,6 @@ INSERT INTO `product_images` (`id`, `product_id`, `src`) VALUES
 (28, 'product662ba316524ce', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_SCL_220_4.png?v=1700622567&width=600&height=600&crop=center'),
 (29, 'product662ba3593005a', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_ID_220_2.png?v=1700622400&width=600&height=600&crop=center'),
 (30, 'product662ba3593005a', 'https://cdn.shopify.com/s/files/1/0761/8769/7443/files/SSDFindo_ID_220_4.png?v=1700622400&width=600&height=600&crop=center');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_packing`
---
-
-CREATE TABLE `product_packing` (
-  `product_id` varchar(25) NOT NULL,
-  `packing_id` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `sale_price` decimal(10,2) DEFAULT NULL,
-  `quantity_available` int(11) DEFAULT NULL,
-  `quantity_sold` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_packing`
---
-
-INSERT INTO `product_packing` (`product_id`, `packing_id`, `price`, `sale_price`, `quantity_available`, `quantity_sold`) VALUES
-('product662b0052ecf78', 5, 48365.00, 41594.00, NULL, NULL),
-('product662b0052ecf78', 6, 193460.00, 166376.00, NULL, NULL),
-('product662b91c49aa73', 5, 48365.00, 41594.00, NULL, NULL),
-('product662b91c49aa73', 6, 193460.00, 166376.00, NULL, NULL),
-('product662b954faaa91', 4, 393456.00, 361979.00, NULL, NULL),
-('product662b954faaa91', 7, 32788.00, 30164.00, NULL, NULL),
-('product662b9588e18b5', 4, 393456.00, 354110.00, NULL, NULL),
-('product662b9588e18b5', 7, 32788.00, 29509.00, NULL, NULL),
-('product662b9ad41d432', 1, 49896.00, 39917.00, NULL, NULL),
-('product662b9ad41d432', 2, 598752.00, 479002.00, NULL, NULL),
-('product662b9b3083b89', 1, 49896.00, 39917.00, NULL, NULL),
-('product662b9b3083b89', 2, 598752.00, 479002.00, NULL, NULL),
-('product662b9dbb77c61', 3, 23976.00, 21099.00, NULL, NULL),
-('product662b9dbb77c61', 4, 191808.00, 168791.00, NULL, NULL),
-('product662b9deea4b88', 3, 23976.00, 21099.00, NULL, NULL),
-('product662b9deea4b88', 4, 191808.00, 168791.00, NULL, NULL),
-('product662ba06f1b521', 4, 258672.00, NULL, NULL, NULL),
-('product662ba06f1b521', 8, 21556.00, NULL, NULL, NULL),
-('product662ba0d755ff6', 4, 200112.00, 170095.00, NULL, NULL),
-('product662ba0d755ff6', 8, 33352.00, 28349.00, NULL, NULL),
-('product662ba316524ce', 4, 363408.00, 334335.00, NULL, NULL),
-('product662ba316524ce', 9, 7571.00, 6965.00, NULL, NULL),
-('product662ba3593005a', 4, 363408.00, 334335.00, NULL, NULL),
-('product662ba3593005a', 9, 7571.00, 6965.00, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_types`
---
-
-CREATE TABLE `product_types` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `collection_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `product_types`
---
-
-INSERT INTO `product_types` (`id`, `name`, `description`, `collection_id`, `created_at`, `updated_at`) VALUES
-(1, 'Kem Vinamilk', 'Lớp kem xốp mịn, mùi vị thơm béo của sữa hòa quyện với 10 vị kem đậm đà chính là cầu nối những buổi sum họp gia đình, giúp cuộc trò chuyện càng thêm sôi động, gia đình càng thêm gắn kết.', 7, '2024-04-26 07:26:19', '2024-04-26 07:26:19'),
-(2, 'Sữa tươi Vinamilk 100%', 'Từ sữa bò nguyên chất 100%, vị ngon nguyên chất 100%.', 1, '2024-04-26 07:26:19', '2024-04-26 07:26:19'),
-(3, 'Sữa tươi thanh trùng Green Farm', 'Mịn màng – mê mãi, từ trang trại đến bàn ăn trong vòng 24 tiếng, Green Farm Thanh Trùng đầy đặn mượt mà, mang hương vị thổ nhưỡng của những cánh đồng sinh thái. Tận hưởng ly sữa mát lành hay tạo nên những kết hợp đắm say từ lớp nền sánh ngậy: ngọt ngào cookies bơ, béo bùi latte nóng, đậm đà ca cao thơm.', 1, '2024-04-26 07:40:12', '2024-04-26 07:40:12'),
-(4, 'Susu chai', 'Cao lớn khỏe mạnh - Mắt sáng tinh anh.', 5, '2024-04-26 07:40:12', '2024-04-26 07:40:12'),
-(5, 'Sữa chua ăn Vinamilk', 'Sữa chua ăn Vinamilk: Khỏe tiêu hóa, Khỏe đề kháng.', 6, '2024-04-26 07:47:07', '2024-04-26 07:47:07'),
-(6, 'Sữa dinh dưỡng Vinamilk', 'Sữa dinh dưỡng Vinamilk đáng giá đồng tiền: Ngon - Khỏe - Hời. Cung cấp Vitamin A, Vitamin D3, Chất Xơ giúp cho Mắt sáng, Bụng êm, Xương khỏe.', 1, '2024-04-26 07:47:07', '2024-04-26 07:47:07');
 
 -- --------------------------------------------------------
 
@@ -1295,7 +1192,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `avatar`, `role`, `ban_expired`, `created_at`, `updated_at`) VALUES
 ('user660760c2688ef', 'Name', 'No', 'admin123@gmail.com', '$2y$10$EZECSZmquLHGM38jbpl5N.zUu.2V3bZsIAf2AY4nvCebbIVyOePja', 'https://firebasestorage.googleapis.com/v0/b/vinamilk-lite-cf427.appspot.com/o/users%2F1714624870055_222.jpg?alt=media&amp;token=abd0aae7-192a-4dff-b8c2-f9d4434b31f4', 'admin', NULL, '2024-04-26 03:59:58', '2024-05-02 13:36:32'),
-('user660760f561bd0', 'Cường', 'Lê Mạnh', 'cuongle2001@gmai.com', '$2y$10$fmMSH4OP5wWh7RJCN20UKeYNmqpAgTYqoohp4IYY/3.F6j1o6MVvS', NULL, 'subscriber', NULL, '2024-04-26 03:59:58', '2024-04-26 03:59:58');
+('user660760f561bd0', 'Cường', 'Lê Mạnh', 'cuongle2001@gmai.com', '$2y$10$fmMSH4OP5wWh7RJCN20UKeYNmqpAgTYqoohp4IYY/3.F6j1o6MVvS', 'https://firebasestorage.googleapis.com/v0/b/vinamilk-lite-cf427.appspot.com/o/users%2F1714828987101_2906533.ico?alt=media&amp;token=d8d7f6d9-c168-4d2b-894d-2c41b1d0c91d', 'subscriber', '2024-05-04 20:51:54', '2024-04-26 03:59:58', '2024-05-04 20:41:54');
 
 -- --------------------------------------------------------
 
@@ -11916,12 +11813,6 @@ ALTER TABLE `addresses`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `brands`
---
-ALTER TABLE `brands`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `collections`
 --
 ALTER TABLE `collections`
@@ -12000,8 +11891,7 @@ ALTER TABLE `payments`
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `SLUG` (`slug`),
-  ADD KEY `brand_id` (`brand_id`),
-  ADD KEY `product_type_id` (`product_type_id`);
+  ADD KEY `collection_id` (`collection_id`);
 
 --
 -- Indexes for table `product_images`
@@ -12009,20 +11899,6 @@ ALTER TABLE `products`
 ALTER TABLE `product_images`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`);
-
---
--- Indexes for table `product_packing`
---
-ALTER TABLE `product_packing`
-  ADD PRIMARY KEY (`product_id`,`packing_id`),
-  ADD KEY `packing_id` (`packing_id`);
-
---
--- Indexes for table `product_types`
---
-ALTER TABLE `product_types`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `collection_id` (`collection_id`);
 
 --
 -- Indexes for table `provinces`
@@ -12054,12 +11930,6 @@ ALTER TABLE `addresses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `brands`
---
-ALTER TABLE `brands`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
 -- AUTO_INCREMENT for table `collections`
 --
 ALTER TABLE `collections`
@@ -12075,7 +11945,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `districts`
@@ -12099,13 +11969,7 @@ ALTER TABLE `packing`
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
---
--- AUTO_INCREMENT for table `product_types`
---
-ALTER TABLE `product_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `provinces`
@@ -12161,27 +12025,13 @@ ALTER TABLE `payments`
 -- Constraints for table `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`product_type_id`) REFERENCES `product_types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `product_images`
 --
 ALTER TABLE `product_images`
   ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `product_packing`
---
-ALTER TABLE `product_packing`
-  ADD CONSTRAINT `product_packing_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_packing_ibfk_2` FOREIGN KEY (`packing_id`) REFERENCES `packing` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `product_types`
---
-ALTER TABLE `product_types`
-  ADD CONSTRAINT `product_types_ibfk_1` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
