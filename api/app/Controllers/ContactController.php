@@ -78,7 +78,7 @@ class ContactController extends Controller
             'email' => 'required|email',
             'content' => 'required|max:10000',
         ]);
-        if (!$validationResult) {
+        if ($validationResult !== true) {
             return $this->response->status(400)->json(
                 0,
                 [],

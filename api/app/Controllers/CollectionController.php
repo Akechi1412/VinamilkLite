@@ -79,7 +79,7 @@ class CollectionController extends Controller
             'image' => 'max:255',
             'colection_order' => 'int'
         ]);
-        if (!$validationResult) {
+        if ($validationResult !== true) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -129,7 +129,7 @@ class CollectionController extends Controller
             'image' => 'max:255',
             'colection_order' => 'int'
         ]);
-        if (!$validationResult) {
+        if ($validationResult !== true) {
             return $this->response->status(400)->json(
                 0,
                 [],
@@ -171,7 +171,7 @@ class CollectionController extends Controller
             'image' => 'max:255',
             'colection_order' => 'int'
         ]);
-        if (!$validationResult) {
+        if ($validationResult !== true) {
             return $this->response->status(400)->json(
                 0,
                 [],
