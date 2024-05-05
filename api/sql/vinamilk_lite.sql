@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2024 at 03:43 PM
+-- Generation Time: May 05, 2024 at 01:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -51,7 +51,7 @@ CREATE TABLE `collections` (
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `collection_order` int(11) DEFAULT NULL,
+  `collection_order` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -61,13 +61,14 @@ CREATE TABLE `collections` (
 --
 
 INSERT INTO `collections` (`id`, `name`, `slug`, `image`, `collection_order`, `created_at`, `updated_at`) VALUES
-(1, 'Sữa tươi & Sữa dinh dưỡng', 'sua-tuoi-va-sua-dinh-duong', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F8b46ad2e7ff84d8f9f7176019446eba5?format=webp&width=2000', 6, '2024-04-26 07:16:40', '2024-04-26 07:16:40'),
-(2, 'Sữa cho mẹ mang thai & bé', 'sua-cho-me-mang-thai-va-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F42a528850641476b901e83b846c9572f?format=webp&width=2000', 5, '2024-04-26 07:18:55', '2024-04-26 07:18:55'),
-(3, 'Ăn dặm cho bé', 'an-dam-cho-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ffbbf4f61b5894990aa8a9c06dacc4723?format=webp&width=2000', 4, '2024-04-26 07:18:55', '2024-04-26 07:18:55'),
+(1, 'Sữa tươi & Sữa dinh dưỡng', 'sua-tuoi-va-sua-dinh-duong', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F8b46ad2e7ff84d8f9f7176019446eba5?format=webp&width=2000', 1, '2024-04-26 07:16:40', '2024-05-05 14:00:19'),
+(2, 'Sữa cho mẹ mang thai & bé', 'sua-cho-me-mang-thai-va-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F42a528850641476b901e83b846c9572f?format=webp&width=2000', 0, '2024-04-26 07:18:55', '2024-05-05 14:00:19'),
+(3, 'Ăn dặm cho bé', 'an-dam-cho-be', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ffbbf4f61b5894990aa8a9c06dacc4723?format=webp&width=2000', 2, '2024-04-26 07:18:55', '2024-04-26 07:18:55'),
 (4, 'Sữa cho người cao tuổi', 'sua-cho-nguoi-cao-tuoi', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F2a8c67ff23214936be1b46c61dfe1bac?format=webp&width=2000', 3, '2024-04-26 07:21:59', '2024-04-26 07:21:59'),
-(5, 'Sữa chua uống & Sữa trái cây', 'sua-chua-va-sua-trai-cay', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F2a8c67ff23214936be1b46c61dfe1bac?format=webp&width=2000', 2, '2024-04-26 07:21:59', '2024-04-26 07:21:59'),
-(6, 'Sữa chua ăn', 'sua-chua-an', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F2ede1400f91143c19e8dcc80d56da923?format=webp&width=2000', 1, '2024-04-26 07:24:06', '2024-04-26 07:24:06'),
-(7, 'Kem & Nước giải khát', 'kem-va-nuoc-giai-khat', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ffb3f72b143594f9ba4009ec05b5ed97e?format=webp&width=2000', 0, '2024-04-26 07:24:06', '2024-04-26 07:24:06');
+(5, 'Sữa chua uống &amp; Sữa trái cây', 'sua-chua-va-sua-trai-cay', 'https://firebasestorage.googleapis.com/v0/b/vinamilk-lite-cf427.appspot.com/o/collections%2F1714893489783_assets_9733048479d348d496c9d93dbf664b26_059b5438c9e54f2597a254ab3c4b355b.webp?alt=media&amp;token=35b68100-c2e1-4c70-a35f-b3cb594c9879', 4, '2024-04-26 07:21:59', '2024-05-05 14:18:12'),
+(6, 'Sữa chua ăn', 'sua-chua-an', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2F2ede1400f91143c19e8dcc80d56da923?format=webp&width=2000', 5, '2024-04-26 07:24:06', '2024-04-26 07:24:06'),
+(7, 'Kem & Nước giải khát', 'kem-va-nuoc-giai-khat', 'https://cdn.builder.io/api/v1/image/assets%2F9733048479d348d496c9d93dbf664b26%2Ffb3f72b143594f9ba4009ec05b5ed97e?format=webp&width=2000', 6, '2024-04-26 07:24:06', '2024-04-26 07:24:06'),
+(8, 'Đường &amp; Phô mai', 'duong-va-pho-mai', 'https://firebasestorage.googleapis.com/v0/b/vinamilk-lite-cf427.appspot.com/o/collections%2F1714894038262_assets_9733048479d348d496c9d93dbf664b26_fe62da75a54e4405a1b1009fd3c09cb2.webp?alt=media&amp;token=6c55f0be-9584-4616-b30e-065eadf80926', 7, '2024-05-05 14:27:19', '2024-05-05 14:27:19');
 
 -- --------------------------------------------------------
 
@@ -106,8 +107,8 @@ CREATE TABLE `contacts` (
 --
 
 INSERT INTO `contacts` (`id`, `full_name`, `email`, `content`, `solved`, `created_at`, `updated_at`) VALUES
-(1, 'Nguyễn Trần Hoài Phong', 'nguyenphong.tranhoai@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-01 10:11:40', '2024-05-01 10:11:40'),
-(2, 'Nguyễn Văn A', 'nguyenvana@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-04 20:21:21', '2024-05-04 20:21:21');
+(2, 'Nguyễn Văn A', 'nguyenvana@gmail.com', 'Đây là nội dung liên hệ', 0, '2024-05-04 20:21:21', '2024-05-05 18:18:23'),
+(3, 'Nguyễn Trần Hoài Phong', 'phongheiji@gmail.com', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 1, '2024-05-05 18:04:25', '2024-05-05 18:24:28');
 
 -- --------------------------------------------------------
 
@@ -856,8 +857,8 @@ CREATE TABLE `news` (
 --
 
 INSERT INTO `news` (`id`, `title`, `slug`, `content`, `category_id`, `thumbnail`, `status`, `author_id`, `created_at`, `updated_at`) VALUES
-('news662bbf1299731', 'Quỹ sữa vươn cao việt nam và vinamilk trao sữa đến trẻ em nhân dịp năm học mới', 'quy-sua-vuon-cao-viet-nam-va-vinamilk-trao-sua-den-tre-em-nhan-dip-nam-hoc-moi', NULL, 6, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/1694058909-47be735734f10ff43167a0ead10600c51eaa7230ace563f8f810ac22d5d7c235.png?v=1695292989', 'published', 'user660760c2688ef', '2023-09-07 21:43:57', '2023-09-07 21:43:57'),
-('news662bbf2c7598f', 'Phát triển bền vững – “hộ chiếu” và “thỏi nam châm” cho sản phẩm vinamilk xuất ngoại', 'phat-trien-ben-vung-ho-chieu-va-thoi-nam-cham-cho-san-pham-vinamilk-xuat-ngoai', NULL, 5, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/1694406506-28a5c9b21f6b5971f125375248360544ec09b37f52fb1c432b9e0d438d74b734.png?v=1695292989', 'published', 'user660760c2688ef', '2023-09-11 21:43:57', '2023-09-11 21:43:57'),
+('news662bbf1299731', 'Quỹ sữa vươn cao việt nam và vinamilk trao sữa đến trẻ em nhân dịp năm học mới', 'quy-sua-vuon-cao-viet-nam-va-vinamilk-trao-sua-den-tre-em-nhan-dip-nam-hoc-moi', '<p><a rel=\"noopener noreferrer\" target=\"_blank\">đây là liên kết</a></p>', 6, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/1694058909-47be735734f10ff43167a0ead10600c51eaa7230ace563f8f810ac22d5d7c235.png?v=1695292989', 'published', 'user660760c2688ef', '2023-09-07 21:43:57', '2024-05-05 16:38:41'),
+('news662bbf2c7598f', 'Phát triển bền vững – “hộ chiếu” và “thỏi nam châm” cho sản phẩm vinamilk xuất ngoại', 'phat-trien-ben-vung-ho-chieu-va-thoi-nam-cham-cho-san-pham-vinamilk-xuat-ngoai', '<h1><strong>Đây là tin nội dung tin tức</strong></h1><p><em>safadfsaf<u>sdfsdf</u><s><u>sfdsfssdfsfs </u></s></em></p><blockquote><em><s><u>sdfsafs</u></s></em></blockquote><pre class=\"ql-syntax\">sdfsfsadf\r\ngdsg\r\n</pre><ol><li>sdf</li></ol><ul><li>sdfsdf</li></ul><p class=\"ql-indent-1\">dfsafsaf</p><p class=\"ql-indent-1\"><a rel=\"noopener noreferrer\" target=\"_blank\">f8</a><img alt=\"wHRtZrNCJIrjAAAAABJRU5ErkJggg==\" /></p>', 5, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/1694406506-28a5c9b21f6b5971f125375248360544ec09b37f52fb1c432b9e0d438d74b734.png?v=1695292989', 'published', 'user660760c2688ef', '2023-09-11 21:43:57', '2024-05-05 15:51:03'),
 ('news662bbf585827d', 'Vinamilk là doanh nghiệp duy nhất nhận được 2 giải thưởng quan trọng tại Human Act Prize', 'vinamilk-la-doanh-nghiep-duy-nhat-nhan-duoc-2-giai-thuong-quan-trong-tai-human-act-prize', NULL, 1, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/ba-nguyen-thi-minh-tam-giam-doc-chi-nhanh-vinamilk-ha-noi-ngoai-cung-ben-trai-nhan-giai-human-act-prize-cho-chuong-trinh-hanh-dong-vinamilk-pathways-to-dairy-net-zero-2050.jpg?v=1702644052', 'published', 'user660760c2688ef', '2023-12-15 21:50:36', '2023-12-15 21:50:36'),
 ('news662bbfd5c8c92', 'Dinh dưỡng - yếu tố quan trọng trong điều trị các bệnh lý liên quan đến tiêu hóa', 'dinh-duong-yeu-to-quan-trong-trong-dieu-tri-cac-benh-ly-lien-quan-den-tieu-hoa', NULL, 4, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/ts-bs-luu-ngan-tam-chu-tich-vietspen-chia-se-tai-hoi-nghi-khoa-hoc-toan-quoc-chuyen-nganh-nuoi-duong-nguoi-benh-qua-duong-tieu-hoa-va-duong-tinh-mach-lan-thu-3.jpg?v=1702890601', 'published', 'user660760c2688ef', '2023-12-18 21:50:36', '2023-12-18 21:50:36'),
 ('news662bc0663e0ed', 'Tất tần tật những điều đặc biệt về sữa hút chân không Vinamilk Green Farm', 'dac-diem-sua-tuoi-hut-chan-khong-vinamilk-green-farm', NULL, 3, 'https://cdn.shopify.com/s/files/1/0761/8769/7443/articles/Picture2.jpg?v=1702957801', 'published', 'user660760c2688ef', '2023-12-19 21:54:48', '2023-12-19 21:54:48'),
@@ -877,7 +878,7 @@ CREATE TABLE `news_categories` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
-  `cate_order` int(11) DEFAULT NULL,
+  `cate_order` float DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -887,11 +888,11 @@ CREATE TABLE `news_categories` (
 --
 
 INSERT INTO `news_categories` (`id`, `name`, `slug`, `cate_order`, `created_at`, `updated_at`) VALUES
-(1, 'Thành tựu và giải thưởng', 'thanh-tuu-va-giai-thuong', 4, '2024-04-26 21:14:55', '2024-04-26 21:14:55'),
-(2, 'Chương trình khuyến mãi', 'chuong-trinh-khuyen-mai', 3, '2024-04-26 21:14:55', '2024-04-26 21:14:55'),
-(3, 'Sản phẩm và công nghệ', 'san-pham-va-cong-nghe', 2, '2024-04-26 21:27:46', '2024-04-26 21:27:46'),
-(4, 'Sức khỏe và dinh dưỡng', 'suc-khoe-va-dinh-duong', 1, '2024-04-26 21:27:46', '2024-04-26 21:27:46'),
-(5, 'Chiến lược kinh doanh và phát triển', 'chien-luoc-kinh-doanh-va-phat-trien', 0, '2024-04-26 21:28:43', '2024-04-26 21:28:43'),
+(1, 'Thành tựu và giải thưởng', 'thanh-tuu-va-giai-thuong', 1, '2024-04-26 21:14:55', '2024-05-05 15:05:10'),
+(2, 'Chương trình khuyến mãi', 'chuong-trinh-khuyen-mai', 0, '2024-04-26 21:14:55', '2024-05-05 15:05:09'),
+(3, 'Sản phẩm và công nghệ', 'san-pham-va-cong-nghe', 4, '2024-04-26 21:27:46', '2024-05-05 15:05:11'),
+(4, 'Sức khỏe và dinh dưỡng', 'suc-khoe-va-dinh-duong', 3, '2024-04-26 21:27:46', '2024-05-05 15:05:11'),
+(5, 'Chiến lược kinh doanh và phát triển', 'chien-luoc-kinh-doanh-va-phat-trien', 2, '2024-04-26 21:28:43', '2024-05-05 15:05:10'),
 (6, 'Hoạt động từ thiện và xã hội', 'hoat-dong-tu-thien-va-xa-hoi', 5, '2024-04-26 21:33:19', '2024-04-26 21:33:19');
 
 -- --------------------------------------------------------
@@ -11933,7 +11934,7 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `collections`
 --
 ALTER TABLE `collections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -11945,7 +11946,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `districts`
@@ -11957,7 +11958,7 @@ ALTER TABLE `districts`
 -- AUTO_INCREMENT for table `news_categories`
 --
 ALTER TABLE `news_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `packing`
