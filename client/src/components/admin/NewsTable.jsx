@@ -174,7 +174,7 @@ function NewsTable({ newsRows, handleMutate, newsCategoryList }) {
                 {news.id}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
-                {news.category_id || 'Chưa có'}
+                <p className="text-center">{news.category_id || 'Chưa có'}</p>
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
                 <div className="line-clamp-2">{news.title}</div>

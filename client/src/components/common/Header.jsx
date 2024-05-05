@@ -11,7 +11,7 @@ import ArrowRightIcon from '../../assets/images/arrow-right.svg';
 import ArrowBottomIcon from '../../assets/images/arrow-bottom.svg';
 import RegisterIcon from '../../assets/images/user-register.svg';
 import { useAuth } from '../../hooks';
-import { Overlay, SearchBar, Loading } from '../../components/common';
+import { Overlay, SearchBar, Loading, Cart } from '../../components/common';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { optionApi } from '../../api';
@@ -29,9 +29,15 @@ function Header({ hasTransiton = false }) {
   const [className, setClassName] = useState(
     'h-[80px] lg:h-[72px] bg-transparent lg:bg-secondary border-0 lg:border-b text-secondary lg:text-primary'
   );
-
   const [scrolled, setScrolled] = useState(false);
   const { profile, refresh, logout } = useAuth();
+  const [tabVisible, setTabVisible] = useState(false);
+  const handleCheckout = (items) => {
+    console.log('Thanh toán:', items);
+  };
+  const toggleTabVisibility = () => {
+    setTabVisible(!tabVisible);
+  };
 
   const handleLogout = async () => {
     try {
@@ -108,7 +114,7 @@ function Header({ hasTransiton = false }) {
     const keyword = searchKeyword.trim();
     if (keyword === '') return;
 
-    navigate(`/search?q=${keyword}`);
+    navigate(`/search?q=${keyword.replace(/\s+/g, '+')}`);
   }
 
   return (
@@ -338,7 +344,10 @@ function Header({ hasTransiton = false }) {
                 )}
               </div>
             </div>
-            <div className="cursor-pointer flex items-center justify-center w-6 h-6 mx-2">
+            <div
+              onClick={toggleTabVisibility}
+              className="cursor-pointer flex items-center justify-center w-6 h-6 mx-2"
+            >
               <svg
                 width="24"
                 height="24"
@@ -497,6 +506,40 @@ function Header({ hasTransiton = false }) {
             </ul>
           </nav>
         </Overlay>
+      )}
+      {tabVisible && (
+        <div className="fixed top-0 right-0 bottom-0 left-0 z-50" onClick={toggleTabVisibility}>
+          <div
+            className="fixed top-0 right-0 bottom-0 left-0 bg-black bg-opacity-50"
+            onClick={(e) => {
+              toggleTabVisibility();
+              e.stopPropagation();
+            }}
+          >
+            <div
+              className="fixed top-0 right-0 bottom-0 w-[600px] bg-secondary z-50 flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-primary flex-1 flex-center px-5">
+                <h3 className="py-2 font-vs-std font-semibold text-[2rem] sm:text-[1.7rem] border-b border-primary flex items-center justify-between">
+                  Giỏ hàng
+                  <button
+                    className="mt-4 mr-4 bg-transparent text-blue-500 font-bold text-lg cursor-pointer"
+                    onClick={toggleTabVisibility}
+                  >
+                    X
+                  </button>
+                </h3>
+                <Cart handleCheckout={handleCheckout} cartItems={[]} removeFromCart={() => {}} />
+                <div className="flex justify-end">
+                  <button className="bg-[#0213af] text-white px-4 py-2 rounded text-sm">
+                    Xem đơn hàng
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
       {loading && <Loading fullScreen />}
     </header>

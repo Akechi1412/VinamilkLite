@@ -3,7 +3,7 @@ import { AdminLayout } from '../../components/layout';
 function AdminProfilePage() {
   return (
     <AdminLayout>
-      <div>AdminProfilePage</div>
+      <div></div>
     </AdminLayout>
   );
 }

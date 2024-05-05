@@ -274,7 +274,7 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
                 {product.id}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
-                {product.collection_id || 'Chưa có'}
+                <p className="text-center">{product.collection_id || 'Chưa có'}</p>
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
                 <p className="line-clamp-2">{product.name}</p>
@@ -294,10 +294,10 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
                 {product.hidden === 0 ? 'Không' : 'Có'}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
-                {product.price || 0}
+                <p className="text-center"> {product.price || 0}</p>
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
-                {product.sale_price || 0}
+                <p className="text-center">{product.sale_price || 0}</p>
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.created_at}

@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { productApi, productImageApi } from '../../api';
 import { Button, Loading } from '../../components/common';
+import parse from 'html-react-parser';
 
 function ProductDetailPage() {
   const { slug } = useParams();
@@ -27,6 +28,7 @@ function ProductDetailPage() {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       try {
         const { data: productData } = await productApi.getProducts(`slug=${slug}`);
         setLoading(false);
@@ -60,26 +62,30 @@ function ProductDetailPage() {
   return (
     <MainLayout>
       <div className="container px-10 py-10">
-        <div className="flex flex-col">
+        <div className="flex lg:flex-col">
           <div className="slider-container overflow-hidden w-1/2 lg:w-full">
-            <Slider asNavFor={nav2} ref={(slider) => (sliderRef1 = slider)}>
+            <Slider className="!px-10" asNavFor={nav2} ref={(slider) => (sliderRef1 = slider)}>
               {productImages.map((image) => (
-                <div className="border border-vinamilk-blue rounded-lg" key={image.id}>
-                  <img src={image.src} alt={product.name} />
+                <div className="border border-vinamilk-blue rounded-lg !h-[400px]" key={image.id}>
+                  <img
+                    className="!w-full !h-full !object-cover"
+                    src={image.src}
+                    alt={product.name}
+                  />
                 </div>
               ))}
             </Slider>
             <Slider
+              className="!px-10 lg:hidden"
               asNavFor={nav1}
               ref={(slider) => (sliderRef2 = slider)}
               slidesToShow={5}
               swipeToSlide={true}
               focusOnSelect={true}
-              className="lg:hidden"
             >
               {productImages.map((image) => (
                 <div
-                  className="w-[60px] aspect-square border border-vinamilk-blue-light rounded-lg mr-5"
+                  className="!w-[100px] !aspect-square border border-vinamilk-blue-light rounded-lg"
                   key={image.id}
                 >
                   <img src={image.src} alt={product.name} />
@@ -91,7 +97,7 @@ function ProductDetailPage() {
             <h1 className="text-[5rem] font-[700] uppercase text-primary leading-[1] font-vsd-bold text-center">
               {product?.name}
             </h1>
-            <div className="mt-4">{product?.description}</div>
+            <div className="mt-4 text-primary">{parse(product?.description || '')}</div>
             <div className="flex flex-col items-center">
               {product?.sale_price !== null ? (
                 <p className="font-inter text-[32px] mt-auto flex space-x-2">

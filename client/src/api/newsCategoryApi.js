@@ -4,6 +4,9 @@ const newsCategoryApi = {
   getCategories(paramString = '') {
     return axiosClient.get(`/news-categories?${paramString}`);
   },
+  getById(id) {
+    return axiosClient.get(`/news-categories/${id}`);
+  },
   create(data) {
     return axiosClient.post('/news-categories', data);
   },

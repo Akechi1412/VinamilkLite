@@ -112,7 +112,7 @@ function CollectionTable({ collectionRows, handleMutate }) {
 
   return (
     <>
-      <table>
+      <table className="min-w-full">
         <thead>
           <tr>
             <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">ID</th>
@@ -142,7 +142,7 @@ function CollectionTable({ collectionRows, handleMutate }) {
                 {collection.slug}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
-                {collection.collection_order}
+                <p className="text-center">{collection.collection_order}</p>
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
                 <div className="flex justify-center">

@@ -7,6 +7,7 @@ import {
   ContactPage,
   HomePage,
   LoginPage,
+  NewsDetailPage,
   NewsPage,
   NotFoundPage,
   OrdersPage,
@@ -40,7 +41,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about-us" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/news" element={<NewsPage />} />
+        <Route path="/news-categories/:slug" element={<NewsPage />} />
+        <Route path="/news/:slug" element={<NewsDetailPage />} />
         <Route path="/collections/:slug" element={<ProductsPage />} />
         <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />

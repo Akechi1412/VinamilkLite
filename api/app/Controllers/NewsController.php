@@ -130,7 +130,6 @@ class newsController extends Controller
     public function update($id)
     {
         $newsData = $this->request->body();
-        var_dump(($newsData));
         if (empty($newsData)) {
             return $this->response->status(400)->json(
                 0,

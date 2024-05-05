@@ -21,11 +21,16 @@ function ProductsPage() {
   const [collection, setCollection] = useState(null);
 
   const mutateProducts = async () => {
-    setLoading(true);
     try {
-      const { data: productData } = await productApi.getProducts(
-        `_page=${currentPage}&_per_page=12`
-      );
+      let paramString = '';
+      if (collection) {
+        navigate(`/collections/${collection.slug}`);
+        paramString = `_page=${currentPage}&_per_page=12&collection_id=${collection.id}&hidden_ne=1`;
+      } else {
+        navigate('/collections/all-products');
+        paramString = `_page=${currentPage}&_per_page=12&hidden_ne=1`;
+      }
+      const { data: productData } = await productApi.getProducts(paramString);
       setProductList(productData.rows);
       setTotalPages(productData.pagination?.totalPages || 0);
       setTotalRows(productData.pagination?.totalRows || 0);
@@ -132,27 +137,8 @@ function ProductsPage() {
   }, [slug]);
 
   useEffect(() => {
-    (async () => {
-      let paramString = '';
-      if (collection) {
-        navigate(`/collections/${collection.slug}`);
-        paramString = `_page=${currentPage}&_per_page=12&collection_id=${collection.id}&hidden_ne=1`;
-      } else {
-        navigate('/collections/all-products');
-        paramString = `_page=${currentPage}&_per_page=12&hidden_ne=1`;
-      }
-      const { data: productData } = await productApi.getProducts(paramString);
-      setProductList(productData.rows);
-      setTotalPages(productData.pagination?.totalPages || 0);
-      setTotalRows(productData.pagination?.totalRows || 0);
-      setLoading(false);
-    })();
-  }, [collection]);
-
-  useEffect(() => {
     mutateProducts();
-    return mutateProducts.cancel;
-  }, [currentPage]);
+  }, [currentPage, collection]);
 
   return (
     <MainLayout>

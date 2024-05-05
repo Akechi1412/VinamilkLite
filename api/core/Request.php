@@ -33,10 +33,10 @@ class Request
     {
         $data = json_decode(file_get_contents('php://input'), true);
         if ($key != '') {
-            return isset($data[$key]) ? $this->purify($data[$key]) : [];
+            return isset($data[$key]) ? $data[$key] : [];
         }
 
-        return $this->purify($data);
+        return $data;
     }
 
     /**
@@ -132,9 +132,14 @@ class Request
             if (!isset($requestData[$field])) {
                 if (in_array('required', $ruleList)) {
                     return "The $field field is required.";
-                } else continue;
+                }
+                continue;
             }
-
+            if (trim($requestData[$field] === '')) {
+                if (!in_array('required', $ruleList)) {
+                    continue;
+                }
+            }
 
             foreach ($ruleList as $singleRule) {
                 $error = $this->applyRule($singleRule, $field, $requestData);
@@ -215,7 +220,7 @@ class Request
      * @param   string|string[]   $data
      * @return  string|string[]
      */
-    private function sanitize($data)
+    public function sanitize($data)
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
@@ -237,10 +242,9 @@ class Request
      * @param   string|string[]   $data
      * @return  string|string[]
      */
-    private function purify($data)
+    public function purify($data)
     {
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
         $config->set('HTML.Allowed', '
             div[style|class], 
             span[style|class], 
@@ -262,7 +266,6 @@ class Request
             em,
             strong,
         ');
-
         $config->set('CSS.AllowedProperties', 'font-weight, font-style, text-decoration, text-align, list-style-type, indent');
         $config->set('URI.AllowedSchemes', array('data' => true));
         $def = $config->getHTMLDefinition(true);

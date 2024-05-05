@@ -55,14 +55,15 @@ To start the project, you need to install the necessary software and follow the 
 
 3. Import SQL
 
-   Import SQL file from directory api/sql.
+   Import file vinamilk_lite from directory `api/sql`.
 
 4. Configure API environment variables
 
-   Create a `.env` file in the api directory to configure the connection to MYSQL based on the `.env.example` file.
+   Create a `.env` file in the `api` directory to configure the connection to MySQL and set up the mailer based on the `.env.example` file.
 
 5. Start API server
 
+   Move the `api` directory to a path accessible from the Apache server.
    Start Apache server and MySQL server and access the corresponding url to ensure the API server is working.
 
 6. Install NPM packages
@@ -85,6 +86,18 @@ To start the project, you need to install the necessary software and follow the 
 ```sh
    npm run dev
 ```
+
+9. Getting started
+
+Login with subscriber/member:
+
+- email: cuongle2001@gmail.com
+- password: User123@
+
+Login with admin:
+
+- email: admin123@gmail.com
+- password: Admin123#
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

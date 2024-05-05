@@ -13,3 +13,6 @@ export { default as AboutSection } from './AboutSection';
 export { default as Tab } from './Tab';
 export { default as ProductList } from './ProductList';
 export { default as ProductItem } from './ProductItem';
+export { default as NewsList } from './NewsList';
+export { default as NewsItem } from './NewsItem';
+export { default as Cart } from './Cart';
