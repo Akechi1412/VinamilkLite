@@ -237,9 +237,15 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
     })();
   }, [productIdImages]);
 
+  useEffect(() => {
+    if (productEdit && productEdit.description) {
+      setDescription(productEdit.description);
+    }
+  }, [productEdit]);
+
   return (
     <>
-      <table>
+      <table className="min-w-full">
         <thead>
           <tr>
             <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">ID</th>
@@ -264,15 +270,22 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
         <tbody>
           {productRows.map((product) => (
             <tr key={product.id}>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{product.id}</td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
+                {product.id}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.collection_id || 'Chưa có'}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{product.name}</td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{product.slug}</td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                <p className="line-clamp-2">{product.name}</p>
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+                {' '}
+                <p className="line-clamp-2">{product.slug}</p>
+              </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
                 <img
-                  className="w-12 h-12 object-cover"
+                  className="w-14 h-14 md:w-12 md:h-12 object-cover"
                   src={product.thumbnail || DefaultProduct}
                   alt=""
                 />
@@ -280,16 +293,16 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
                 {product.hidden === 0 ? 'Không' : 'Có'}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.price || 0}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.sale_price || 0}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.created_at}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {product.updated_at}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
@@ -352,10 +365,7 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
             </div>
             <div className="my-4">
               <div className="h-[150px] w-[300px] mx-auto">
-                <ImageSelector
-                  handleSelect={(file) => setImageFile(file)}
-                  initialImage={productEdit.thumbnail || ''}
-                />
+                <ImageSelector handleSelect={(file) => setImageFile(file)} />
               </div>
               <div className="mx-auto w-[120px] mt-3">
                 <Button handleClick={() => handleSaveImage()} title="Lưu ảnh" />
@@ -442,7 +452,10 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
               <div className="mt-4">
                 <label className="block text-gray-700 font-medium mb-2">Thumbnail sản phẩm</label>
                 <div className="h-[150px] px-10">
-                  <ImageSelector handleSelect={(file) => setFile(file)} />
+                  <ImageSelector
+                    handleSelect={(file) => setFile(file)}
+                    initialImage={productEdit?.thumbnail || ''}
+                  />
                 </div>
               </div>
               <div className="mt-4">
@@ -499,7 +512,7 @@ function ProductTable({ productRows, handleMutate, collectionList }) {
                   </label>
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="mt-4">
                 <p className="text-gray-700 font-medium mb-2">Mô tả sản phẩm</p>
                 <ReactQuill
                   theme="snow"

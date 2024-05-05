@@ -4,7 +4,6 @@ import {
   AccountPage,
   AddressPage,
   CheckoutPage,
-  CollectionPage,
   ContactPage,
   HomePage,
   LoginPage,
@@ -42,8 +41,7 @@ function App() {
         <Route path="/about-us" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/news" element={<NewsPage />} />
-        <Route path="/collections/all-products" element={<ProductsPage />} />
-        <Route path="/collections/:slug" element={<CollectionPage />} />
+        <Route path="/collections/:slug" element={<ProductsPage />} />
         <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/login" element={<LoginPage />} />

@@ -123,10 +123,6 @@ function AdminProductsPage() {
     (async () => {
       setLoading(true);
       try {
-        const { data: productData } = await productApi.getProducts(`_page=${currentPage}`);
-        setProductRows(productData.rows);
-        setTotalPages(productData.pagination?.totalPages || 0);
-        setTotalRows(productData.pagination?.totalRows || 0);
         const { data: collectionData } = await collectionApi.getCollections();
         setCollectionlist(collectionData.rows);
         setLoading(false);
@@ -309,7 +305,7 @@ function AdminProductsPage() {
                   </label>
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="mt-4">
                 <p className="text-gray-700 font-medium mb-2">Mô tả sản phẩm</p>
                 <ReactQuill
                   theme="snow"

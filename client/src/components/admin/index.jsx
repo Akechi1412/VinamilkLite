@@ -10,3 +10,7 @@ export { default as ImageSelector } from './ImageSelector';
 export { default as ProductTable } from './ProductTable';
 export { default as Footer } from './Footer';
 export { default as NewsTable } from './NewsTable';
+export { default as CollectionTable } from './CollectionTable';
+export { default as DraggableOrder } from './DraggableOrder';
+export { default as NewsCategoryTable } from './NewsCategoryTable';
+export { default as ContactTable } from './ContactTable';

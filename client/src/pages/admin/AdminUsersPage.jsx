@@ -134,27 +134,6 @@ function AdminUsersPage() {
     return mutateUsers.cancel;
   }, [currentPage, searchValue]);
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const { data: userData } = await userApi.getUsers(`_page=${currentPage}`);
-        setUserRows(userData.rows);
-        setTotalPages(userData.pagination?.totalPages || 0);
-        setTotalRows(userData.pagination?.totalRows || 0);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        const errorMessage = error.response?.data?.message || 'Something went wrong!';
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: errorMessage,
-        });
-      }
-    })();
-  }, []);
-
   return (
     <AdminLayout>
       <div className="container px-5 md:px-4">

@@ -33,7 +33,7 @@ function AdminNewsPage() {
         [{ list: 'ordered' }, { list: 'bullet' }],
         [{ indent: '-1' }, { indent: '+1' }],
         [{ align: [] }],
-        ['link', 'image', 'video'],
+        ['link', 'image'],
         ['clean'],
       ],
     },
@@ -43,7 +43,7 @@ function AdminNewsPage() {
     try {
       let paramString = `_page=${currentPage}`;
       if (searchValue.trim()) {
-        paramString += `&name_like=${searchValue.trim()}`;
+        paramString += `&title_like=${searchValue.trim()}`;
       }
       const { data: newsData } = await newsApi.getNews(paramString);
       setNewsRows(newsData.rows);
@@ -121,10 +121,6 @@ function AdminNewsPage() {
     (async () => {
       setLoading(true);
       try {
-        const { data: newsData } = await newsApi.getNews(`_page=${currentPage}`);
-        setNewsRows(newsData.rows);
-        setTotalPages(newsData.pagination?.totalPages || 0);
-        setTotalRows(newsData.pagination?.totalRows || 0);
         const { data: newsCategoryData } = await newsCategoryApi.getCategories();
         setNewsCategoryList(newsCategoryData.rows);
         setLoading(false);
@@ -205,7 +201,7 @@ function AdminNewsPage() {
       </div>
       {showAddForm && (
         <Overlay handleClickOut={() => {}}>
-          <div className="ml-auto bg-secondary min-h-full w-[800px] max-w-full p-6 md:p-4">
+          <div className="ml-auto bg-secondary min-h-full w-[1000px] max-w-full p-6 md:p-4">
             <div className="flex items-center justify-between">
               <h4 className="text-2xl font-semibold">Thêm tin tức</h4>
               <img
@@ -281,7 +277,7 @@ function AdminNewsPage() {
                   </label>
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="mt-4">
                 <p className="text-gray-700 font-medium mb-2">Nội dung</p>
                 <ReactQuill
                   theme="snow"

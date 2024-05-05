@@ -10,8 +10,14 @@ const contactApi = {
   getById(id) {
     return axiosClient.get(`/contacts/${id}`);
   },
-  response(id) {
-    return axiosClient.patch(`/contacts/${id}`);
+  response(id, data) {
+    return axiosClient.patch(`/contacts/response/${id}`, data);
+  },
+  update(id, data) {
+    return axiosClient.patch(`/contacts/${id}`, data);
+  },
+  delete(id) {
+    return axiosClient.delete(`/contacts/${id}`);
   },
 };
 

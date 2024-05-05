@@ -77,7 +77,7 @@ class CollectionController extends Controller
             'name' => 'required|max:255',
             'slug' => 'required|slug|max:255',
             'image' => 'max:255',
-            'colection_order' => 'int'
+            'collection_order' => 'required|int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(
@@ -133,10 +133,10 @@ class CollectionController extends Controller
             );
         }
         $validationResult = $this->request->validate($collectionData, [
-            'name' => 'required|max:255',
-            'slug' => 'required|slug|max:255',
+            'name' => 'min:1|max:255',
+            'slug' => 'slug|min:1|max:255',
             'image' => 'max:255',
-            'colection_order' => 'int'
+            'collection_order' => 'int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(

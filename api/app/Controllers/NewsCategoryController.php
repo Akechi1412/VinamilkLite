@@ -76,7 +76,7 @@ class NewsCategoryController extends Controller
         $validationResult = $this->request->validate($newsCatgoryData, [
             'name' => 'required|max:255',
             'slug' => 'required|max:255',
-            'cate_order' => 'int'
+            'cate_order' => 'required|int'
         ]);
         if ($validationResult !== true) {
             return $this->response->status(400)->json(

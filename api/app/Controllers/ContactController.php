@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class ContactController extends Controller
 {
@@ -107,13 +109,108 @@ class ContactController extends Controller
     }
 
     /**
+     * Update a contact with some attributes.
+     *
+     * @param    int        $id The ID of the contact to update
+     * @return   string     The JSON response
+     */
+    public function update($id)
+    {
+        $contactData = $this->request->body();
+        if (empty($contactData)) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                'No data to update!'
+            );
+        }
+        $validationResult = $this->request->validate($contactData, [
+            'solved' => 'int',
+        ]);
+        if ($validationResult !== true) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                $validationResult
+            );
+        }
+
+        $datetime = date('Y-m-d H:i:s');
+        $contactData['updated_at'] = $datetime;
+
+        $result = $this->contactModel->update($contactData, $id);
+        if ($result === false) {
+            return $this->response->status(500)->json(
+                0,
+                [],
+                'Something was wrong!'
+            );
+        }
+
+        return $this->response->status(200)->json(
+            1,
+            [],
+            'Contact updated successfully.'
+        );
+    }
+
+    /**
      * Response contact by email.
      *
      * @return  string  The JSON response
      */
-    public function response()
+    public function response($id)
     {
-        // todo
+        $contactData = $this->request->body();
+        $validationResult = $this->request->validate($contactData, [
+            'subject' => 'required',
+            'body' => 'required',
+        ]);
+        if ($validationResult !== true) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                $validationResult
+            );
+        }
+
+        $data = $this->contactModel->getById($id);
+
+        if (empty($data)) {
+            return $this->response->status(400)->json(
+                0,
+                [],
+                'Contact does not not exist to response!'
+            );
+        }
+
+        try {
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['MAIL_USERNAME'];
+            $mail->Password = $_ENV['MAIL_APP_PASSWORD'];
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->setFrom($_ENV['MAIL_USERNAME'], $_ENV['MAIL_PASSWORD']);
+            $mail->addAddress($data['email']);
+            $mail->isHTML(true);
+            $subject_encoded = '=?UTF-8?B?' . base64_encode($contactData['subject']) . '?=';
+            $mail->Subject = $subject_encoded;
+            $mail->Body = $contactData['body'];
+            $mail->send();
+        } catch (Exception $error) {
+            throw $error;
+        }
+
+        $this->contactModel->update(['solved' => 1], $id);
+
+        return $this->response->status(200)->json(
+            1,
+            [],
+            'Send response successfully'
+        );
     }
 
     /**

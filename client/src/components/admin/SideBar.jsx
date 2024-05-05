@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { optionApi } from '../../api';
 import Swal from 'sweetalert2';
-import { Loading } from '../common';
+import { Loading } from '../admin';
 import { Link } from 'react-router-dom';
 import ArrowLeftIcon from '../../assets/images/arrow-sm-left.svg';
 

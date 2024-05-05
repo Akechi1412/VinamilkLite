@@ -254,7 +254,7 @@ function UserTable({ userRows, handleMutate }) {
 
   return (
     <>
-      <table>
+      <table className="min-w-full">
         <thead>
           <tr>
             <th className="bg-gray-50 text-gray-800 py-2 px-3 font-[400] text-nowrap">ID</th>
@@ -278,27 +278,37 @@ function UserTable({ userRows, handleMutate }) {
         <tbody>
           {userRows.map((user) => (
             <tr key={user.id}>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{user.id}</td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
+                {user.id}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {user.last_name}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {user.first_name}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">{user.email}</td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
+                {user.email}
+              </td>
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {user.role === 'admin' ? 'Quản trị viên' : 'Thành viên'}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
-                <img className="w-12 h-12 object-cover" src={user.avatar || DefaultAvatar} alt="" />
+                <div className="flex justify-center">
+                  <img
+                    className="w-14 h-14 md:w-12 md:h-12 object-cover"
+                    src={user.avatar || DefaultAvatar}
+                    alt=""
+                  />
+                </div>
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {getStatus(user.ban_expired)}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {user.created_at}
               </td>
-              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">
+              <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100 whitespace-nowrap">
                 {user.updated_at}
               </td>
               <td className="py-2 px-3 border-b text-gray-600 border-b-gray-100">

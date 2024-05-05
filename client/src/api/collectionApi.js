@@ -7,13 +7,13 @@ const collectionApi = {
   getById(id) {
     return axiosClient.get(`/collections/${id}`);
   },
-  createCollection() {
-    return axiosClient.post('/collections');
+  create(data) {
+    return axiosClient.post('/collections', data);
   },
-  updateCollection(id, data) {
+  update(id, data) {
     return axiosClient.patch(`/collections/${id}`, data);
   },
-  deleteCollection(id) {
+  delete(id) {
     return axiosClient.delete(`/collections/${id}`);
   },
 };

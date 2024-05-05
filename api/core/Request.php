@@ -122,11 +122,89 @@ class Request
      */
     public function validate(array $requestData, array $rules)
     {
-        if (empty($rules)) {
-            throw new Exception('Cannot validate with empty rules!');
+        if (array_diff_key($requestData, $rules)) {
+            return 'Some fields are incorrect';
         }
 
+        foreach ($rules as $field => $rule) {
+            $ruleList = explode('|', $rule);
 
+            if (!isset($requestData[$field])) {
+                if (in_array('required', $ruleList)) {
+                    return "The $field field is required.";
+                } else continue;
+            }
+
+
+            foreach ($ruleList as $singleRule) {
+                $error = $this->applyRule($singleRule, $field, $requestData);
+                if ($error !== true) {
+                    return $error;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private function applyRule($rule, $field, $requestData)
+    {
+        $value = $requestData[$field] ?? null;
+
+        if ($rule === 'required') {
+            if ($value === null || $value === '') {
+                return "The $field field is required.";
+            }
+        } elseif ($rule === 'email') {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                return "The $field field must be a valid email address.";
+            }
+        } elseif ($rule === 'password') {
+            if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/', $value)) {
+                return "The $field field must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+            }
+        } elseif ($rule === 'alpha') {
+            if (!preg_match('/^[\p{L}\s]+$/u', $value)) {
+                return "The $field field must contain only alphabetic characters.";
+            }
+        } elseif (strpos($rule, 'min:') === 0) {
+            $minLength = (int) substr($rule, 4);
+            if (mb_strlen($value) < $minLength) {
+                return "The $field field must be at least $minLength characters long.";
+            }
+        } elseif (strpos($rule, 'max:') === 0) {
+            $maxLength = (int) substr($rule, 4);
+            if (mb_strlen($value) > $maxLength) {
+                return "The $field field may not be greater than $maxLength characters.";
+            }
+        } elseif ($rule === 'int') {
+            if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+                return "The $field field must be an integer.";
+            }
+        } elseif ($rule === 'float') {
+            if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
+                return "The $field field must be an float.";
+            }
+        } elseif ($rule === 'slug') {
+            if (!preg_match('/^[a-zA-Z0-9-]+$/', $value)) {
+                return "The $field field must be a valid slug.";
+            }
+        } elseif ($rule === 'role') {
+            $allowedRoles = ['subscriber', 'admin'];
+            if (!in_array($value, $allowedRoles)) {
+                return "The $field field must be either 'subscriber' or 'admin'.";
+            }
+        } elseif ($rule === 'news_status') {
+            $allowedStatus = ['hidden', 'published'];
+            if (!in_array($value, $allowedStatus)) {
+                return "The $field field must be either 'hidden' or 'published'.";
+            }
+        } elseif (strpos($rule, 'gte:') === 0) {
+            $minValue = (int) substr($rule, 4);
+            if ($value < $minValue) {
+                return "The value of $field field may not be greater than $minValue.";
+            }
+        }
 
         return true;
     }
@@ -162,8 +240,35 @@ class Request
     private function purify($data)
     {
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('Attr.AllowedFrameTargets', ['_blank']);
-        $config->set('AutoFormat.RemoveEmpty', true);
+        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+        $config->set('HTML.Allowed', '
+            div[style|class], 
+            span[style|class], 
+            p[style|class], 
+            br, 
+            ul, 
+            ol, 
+            li, 
+            h1, 
+            h2, 
+            blockquote, 
+            pre, 
+            a[href|target|rel], 
+            img[src|alt|width|height], 
+            b, 
+            i, 
+            u, 
+            s,
+            em,
+            strong,
+        ');
+
+        $config->set('CSS.AllowedProperties', 'font-weight, font-style, text-decoration, text-align, list-style-type, indent');
+        $config->set('URI.AllowedSchemes', array('data' => true));
+        $def = $config->getHTMLDefinition(true);
+        $def->addAttribute('a', 'href', 'URI');
+        $def->addAttribute('a', 'rel', 'Text');
+        $def->addAttribute('a', 'target', 'Text');
         $purifier = new HTMLPurifier($config);
 
         if (is_array($data)) {
