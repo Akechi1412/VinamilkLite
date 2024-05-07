@@ -47,7 +47,7 @@ function SearchPage() {
     <MainLayout>
       <div className="container">
         <div className="text-[2rem] text-primary text-center font-vs-std mt-[80px] mb-[40px] font-[600]">
-          Kết quả tìm kết cho: {`"${keyword}"`}
+          Kết quả tìm kiếm cho: {`"${keyword}"`}
         </div>
         <div className="flex space-x-3 my-6 justify-center">
           <Tab
