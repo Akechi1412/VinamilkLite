@@ -6,10 +6,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { productApi, productImageApi } from '../../api';
-import { Button, Loading } from '../../components/common';
+import { Button, Cart, Loading, Overlay } from '../../components/common';
 import parse from 'html-react-parser';
+import { useCart } from '../../hooks';
 
 function ProductDetailPage() {
+  const { addToCart, getQuantityFromCart, increaseQuantity } = useCart();
   const { slug } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -20,6 +22,18 @@ function ProductDetailPage() {
   let sliderRef1 = useRef(null);
   let sliderRef2 = useRef(null);
   const [count, setCount] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showCart, setShowCart] = useState(false);
+
+  const handleAdd = () => {
+    if (getQuantityFromCart(product.id) > 0) {
+      increaseQuantity(product.id, count);
+    } else {
+      addToCart(product, count);
+    }
+    setCount(1);
+    setShowCart(true);
+  };
 
   useEffect(() => {
     setNav1(sliderRef1);
@@ -61,54 +75,78 @@ function ProductDetailPage() {
 
   return (
     <MainLayout>
-      <div className="container px-10 py-10">
-        <div className="flex lg:flex-col">
-          <div className="slider-container overflow-hidden w-1/2 lg:w-full">
-            <Slider className="!px-10" asNavFor={nav2} ref={(slider) => (sliderRef1 = slider)}>
-              {productImages.map((image) => (
-                <div className="border border-vinamilk-blue rounded-lg !h-[400px]" key={image.id}>
-                  <img
-                    className="!w-full !h-full !object-cover"
-                    src={image.src}
-                    alt={product.name}
-                  />
-                </div>
-              ))}
-            </Slider>
-            <Slider
-              className="!px-10 lg:hidden"
-              asNavFor={nav1}
-              ref={(slider) => (sliderRef2 = slider)}
-              slidesToShow={5}
-              swipeToSlide={true}
-              focusOnSelect={true}
-            >
-              {productImages.map((image) => (
-                <div
-                  className="!w-[100px] !aspect-square border border-vinamilk-blue-light rounded-lg"
-                  key={image.id}
-                >
-                  <img src={image.src} alt={product.name} />
-                </div>
-              ))}
-            </Slider>
+      <div className="container-sm px-5">
+        <div className="flex lg:flex-col pb-12">
+          <div className="slider-container overflow-hidden w-1/2 lg:w-full pt-4 pr-4 border-r lg:border-0 border-primary">
+            <div style={{ width: '100%', aspectRatio: '1/1', padding: '0 24px' }}>
+              <Slider
+                asNavFor={nav2}
+                ref={(slider) => (sliderRef1 = slider)}
+                beforeChange={(oldIndex, newIndex) => setCurrentIndex(newIndex)}
+              >
+                {productImages.map((image) => (
+                  <div key={image.id}>
+                    <img
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      src={image.src}
+                      alt={product.name}
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+            <div>
+              <Slider
+                asNavFor={nav1}
+                ref={(slider) => (sliderRef2 = slider)}
+                slidesToShow={5}
+                swipeToSlide={true}
+                focusOnSelect={true}
+                className="-mt-12"
+              >
+                {productImages.map((image, index) => (
+                  <div
+                    className={`border rounded-lg !w-[70px] md:!w-[56px] ${
+                      currentIndex === index ? 'border-primary' : 'border-tertiary'
+                    }`}
+                    key={image.id}
+                  >
+                    <img
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      src={image.src}
+                      alt={product.name}
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
           </div>
-          <div className="w-1/2 lg:w-full flex-1 p-6">
-            <h1 className="text-[5rem] font-[700] uppercase text-primary leading-[1] font-vsd-bold text-center">
+          <div className="w-1/2 lg:w-full flex-1 pl-4 border-l lg:border-0 border-primary pt-12">
+            <h1 className="text-[5rem] font-[700] uppercase text-primary leading-[1] font-vsd-bold text-center lg:text-[3.5rem] sm:text-[2rem]">
               {product?.name}
             </h1>
-            <div className="mt-4 text-primary">{parse(product?.description || '')}</div>
-            <div className="flex flex-col items-center">
-              {product?.sale_price !== null ? (
-                <p className="font-inter text-[32px] mt-auto flex space-x-2">
-                  <span className="line-through text-[#999]">{product?.price * count}₫</span>
-                  <span className="text-primary">{product?.sale_price * count}₫</span>
+            {product?.description && (
+              <div className="mt-4 text-primary font-lora text-center p-1">
+                {parse(product?.description)}
+              </div>
+            )}
+            <div className="flex flex-col items-center mt-4 sm:flex-row">
+              {product?.sale_price ? (
+                <p className="flex-1 font-inter text-[28px] sm:text-[20px] mt-auto flex space-x-2 sm:space-x-0 items-baseline sm:flex-col sm:space-y-1 sm:mt-0">
+                  <span className="text-[18px] sm:text-[20px] line-through text-[#999]">
+                    {(product?.price * count).toLocaleString()}₫
+                  </span>
+                  <span className="text-primary">
+                    {(product?.sale_price * count).toLocaleString()}₫
+                  </span>
                 </p>
               ) : (
-                <p className="font-light text-[32px] text-primary">{product?.price * count}</p>
+                <p className="flex-1 font-inter text-[28px] sm:text-[20px] text-primary">
+                  {(product?.price * count).toLocaleString()}₫
+                </p>
               )}
-              <div className="flex items-center space-x-3">
-                <div className="w-[140px]">
+              <div className="flex flex-1 items-center space-x-3 mt-3 sm:flex-col sm:space-x-0 sm:space-y-2">
+                <div className="w-[140px] sm:w-[170px]">
                   <button className="w-full flex items-center px-8 py-3 text-[20px] rounded-full border border-primary text-primary">
                     <span
                       onClick={() =>
@@ -117,9 +155,9 @@ function ProductDetailPage() {
                           return count - 1;
                         })
                       }
-                      className={'flex-1' + (count === 1 ? ' text-gray-400' : '')}
+                      className={'flex-1' + (count === 1 ? ' text-gray-400 cursor-default' : '')}
                     >
-                      -
+                      –
                     </span>
                     <span className="flex-1">{count}</span>
                     <span
@@ -133,13 +171,18 @@ function ProductDetailPage() {
                   </button>
                 </div>
                 <div className="w-[170px]">
-                  <Button title="Thêm vào giỏ" />
+                  <Button title="Thêm vào giỏ" handleClick={handleAdd} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {showCart && (
+        <Overlay handleClickOut={() => setShowCart(false)}>
+          <Cart handleClose={() => setShowCart(false)} />
+        </Overlay>
+      )}
       {loading && <Loading fullScreen />}
     </MainLayout>
   );

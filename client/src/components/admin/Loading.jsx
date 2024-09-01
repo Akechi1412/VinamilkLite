@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 function Loading({ fullScreen = false }) {
   let className = 'flex justify-center items-center';
   if (fullScreen) {
-    className += ' fixed top-0 left-0 w-screen h-screen z-[999]';
+    className += ' fixed top-0 left-0 w-screen h-screen z-[999] bg-secondary';
   } else {
     className += ' w-full h-full';
   }

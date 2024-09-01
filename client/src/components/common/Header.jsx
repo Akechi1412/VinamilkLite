@@ -10,13 +10,14 @@ import CloseIcon from '../../assets/images/close.svg';
 import ArrowRightIcon from '../../assets/images/arrow-right.svg';
 import ArrowBottomIcon from '../../assets/images/arrow-bottom.svg';
 import RegisterIcon from '../../assets/images/user-register.svg';
-import { useAuth } from '../../hooks';
+import { useAuth, useCart } from '../../hooks';
 import { Overlay, SearchBar, Loading, Cart } from '../../components/common';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { optionApi } from '../../api';
 
 function Header({ hasTransiton = false }) {
+  const { calTotalQuantity } = useCart();
   const [loading, setLoading] = useState(false);
   const [logo, setLogo] = useState('');
   const [whiteLogo, setWhiteLogo] = useState('');
@@ -31,13 +32,7 @@ function Header({ hasTransiton = false }) {
   );
   const [scrolled, setScrolled] = useState(false);
   const { profile, refresh, logout } = useAuth();
-  const [tabVisible, setTabVisible] = useState(false);
-  const handleCheckout = (items) => {
-    console.log('Thanh toán:', items);
-  };
-  const toggleTabVisibility = () => {
-    setTabVisible(!tabVisible);
-  };
+  const [showCart, setShowCart] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -345,8 +340,8 @@ function Header({ hasTransiton = false }) {
               </div>
             </div>
             <div
-              onClick={toggleTabVisibility}
-              className="cursor-pointer flex items-center justify-center w-6 h-6 mx-2"
+              onClick={() => setShowCart(true)}
+              className="cursor-pointer flex items-center justify-center w-6 h-6 mx-2 relative"
             >
               <svg
                 width="24"
@@ -369,6 +364,9 @@ function Header({ hasTransiton = false }) {
                   fill="currentColor"
                 ></path>
               </svg>
+              <span className="text-secondary text-sm px-1 rounded-full bg-[#3459FF] absolute -top-1 left-4">
+                {calTotalQuantity() < 100 ? calTotalQuantity() : '99+'}
+              </span>
             </div>
           </div>
         </div>
@@ -507,39 +505,10 @@ function Header({ hasTransiton = false }) {
           </nav>
         </Overlay>
       )}
-      {tabVisible && (
-        <div className="fixed top-0 right-0 bottom-0 left-0 z-50" onClick={toggleTabVisibility}>
-          <div
-            className="fixed top-0 right-0 bottom-0 left-0 bg-black bg-opacity-50"
-            onClick={(e) => {
-              toggleTabVisibility();
-              e.stopPropagation();
-            }}
-          >
-            <div
-              className="fixed top-0 right-0 bottom-0 w-[600px] bg-secondary z-50 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="text-primary flex-1 flex-center px-5">
-                <h3 className="py-2 font-vs-std font-semibold text-[2rem] sm:text-[1.7rem] border-b border-primary flex items-center justify-between">
-                  Giỏ hàng
-                  <button
-                    className="mt-4 mr-4 bg-transparent text-blue-500 font-bold text-lg cursor-pointer"
-                    onClick={toggleTabVisibility}
-                  >
-                    X
-                  </button>
-                </h3>
-                <Cart handleCheckout={handleCheckout} cartItems={[]} removeFromCart={() => {}} />
-                <div className="flex justify-end">
-                  <button className="bg-[#0213af] text-white px-4 py-2 rounded text-sm">
-                    Xem đơn hàng
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {showCart && (
+        <Overlay handleClickOut={() => setShowCart(false)}>
+          <Cart handleClose={() => setShowCart(false)} />
+        </Overlay>
       )}
       {loading && <Loading fullScreen />}
     </header>
