@@ -8,6 +8,8 @@ import {
 import { useEffect, useState } from 'react';
 import { collectionApi, optionApi } from '../../api';
 import Swal from 'sweetalert2';
+import { useInView } from 'react-intersection-observer';
+import CountUp from 'react-countup';
 
 function HomePage() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +17,7 @@ function HomePage() {
   const [identityContent, setIdentityContent] = useState('');
   const [identityImage, setIdentityImage] = useState('');
   const [collectionList, setColllectionList] = useState([]);
+  const { ref, inView } = useInView({ threshold: 0.5 });
 
   useEffect(() => {
     (async () => {
@@ -73,34 +76,71 @@ function HomePage() {
             </h2>
             <div className="flex flex-wrap">
               <div className="w-1/4 md:w-1/2 flex flex-col px-6 md:px-4 md:pt-4 text-primary text-center">
-                <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1]">
-                  <span>50</span>
-                  <span>+</span>
+                <div
+                  ref={ref}
+                  className={`transition-opacity duration-500 ${
+                    inView ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  {inView && (
+                    <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1]">
+                      <CountUp start={1} end={50} duration={2} />
+                      <span>+</span>
+                    </div>
+                  )}
                 </div>
+
                 <p className="font-lora leading-[20px]">
                   Nhà máy, trang trại và đơn vị kinh doanh khắp cả nước
                 </p>
               </div>
               <div className="w-1/4 md:w-1/2 flex flex-col px-6 md:px-4 md:pt-4 text-primary text-center">
-                <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1]">
-                  <span>60</span>
+                <div
+                  ref={ref}
+                  className={`transition-opacity duration-500 ${
+                    inView ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  {inView && (
+                    <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1]">
+                      <CountUp start={1} end={60} duration={2} />
+                    </div>
+                  )}
                 </div>
                 <p className="font-lora leading-[20px]">
                   Có mặt tại 60 quốc gia trên toàn thế giới
                 </p>
               </div>
               <div className="w-1/4 md:w-1/2 flex flex-col px-6 md:px-4 md:pt-4 text-primary text-center">
-                <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase flex flex-col leading-[1]">
-                  <span>500</span>
-                  <span className="text-[3rem] lg:text-[2.8rem] md:text-[2.5rem]">triệu</span>
+                <div
+                  ref={ref}
+                  className={`transition-opacity duration-500 ${
+                    inView ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  {inView && (
+                    <div className="h-[128px] lg:h-[38px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1] flex flex-col items-center">
+                      <CountUp start={1} end={500} duration={2} />
+                      <span className="text-[3rem] lg:text-[2.8rem] md:text-[2.5rem] mt-2">
+                        triệu
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <p className="font-lora leading-[20px]">Trẻ em được nuôi dưỡng bằng cả tấm lòng</p>
               </div>
               <div className="w-1/4 md:w-1/2 flex flex-col px-6 md:px-4 md:pt-4 text-primary text-center">
-                <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1] flex justify-center">
-                  <span className="relative after:absolute after:right-[-20px] md:after:right-[-15px] after:top-[10px] after:content-['st'] after:text-[1.875rem] after:md:text-[1.25rem]">
-                    1
-                  </span>
+                <div
+                  ref={ref}
+                  className={`transition-opacity duration-500 ${
+                    inView ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <div className="h-[128px] lg:h-[108px] md:h-[92px] mb-3 md:mb-0 text-[5rem] lg:text-[4rem] md:text-[3rem] font-vsd-bold uppercase leading-[1]">
+                    <span className="relative after:absolute after:right-[-20px] md:after:right-[-15px] after:top-[10px] after:content-['st'] after:text-[1.875rem] after:md:text-[1.25rem]">
+                      1
+                    </span>
+                  </div>
                 </div>
                 <p className="font-lora leading-[20px]">
                   Nhà máy net-zero bền vững đầu tiên của Châu Á
