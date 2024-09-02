@@ -109,6 +109,7 @@ function NewsPage() {
 
     (async () => {
       try {
+        setNewsList([]);
         const { data } = await newsCategoryApi.getCategories(`slug=${slug}`);
         const category = data.rows?.[0];
         if (category) {

@@ -59,8 +59,10 @@ function Cart({ handleClose }) {
                     <div className="border border-primary rounded-[6px] text-primary flex items-center h-8 leading-[1] w-fit">
                       <button
                         onClick={() => decreaseQuantity(item.id)}
-                        className={`ml-1 px-3 py-1 rounded-md hover:bg-tertiary${
-                          getQuantityFromCart(item.id) > 1 ? '' : ' text-gray-400 cursor-default'
+                        className={`ml-1 px-3 py-1 rounded-md${
+                          getQuantityFromCart(item.id) > 1
+                            ? ' hover:bg-tertiary'
+                            : ' text-gray-400 cursor-default'
                         }`}
                       >
                         –
