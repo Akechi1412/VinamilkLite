@@ -320,7 +320,6 @@ class AuthController extends Controller
             $refeshToken = generateJwtToken($data['id'], $_ENV['REFRESH_SECRET_KEY'], $refreshExpireIn);
             $this->response->setCookie($this->refreshTokenName, $refeshToken, time() + $refreshExpireIn);
 
-            unset($data['id']);
             unset($data['password']);
 
             return $this->response->status(200)->json(
@@ -381,7 +380,6 @@ class AuthController extends Controller
             $this->response->setCookie($this->accessTokenName, $accessToken, time() + $accessExpireIn);
 
             $data = $this->userModel->getById($userId);
-            unset($data['id']);
             unset($data['password']);
 
             $banExpired = $data['ban_expired'];

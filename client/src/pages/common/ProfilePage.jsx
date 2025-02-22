@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useReducer } from 'react';
 import { AccountLayout } from '../../components/layout';
 import { Tab, Input, Button, Loading } from '../../components/common';
 import DefaultAvatar from '../../assets/images/default-avatar.jpg';
@@ -7,19 +7,32 @@ import Swal from 'sweetalert2';
 import { firebaseApi } from '../../api';
 import eye from '../../assets/images/eye-solid.svg';
 import eyeslash from '../../assets/images/eye-slash-solid.svg';
+import {
+  profileActionTypes,
+  profileInitialState,
+  profileFormReducer,
+} from '../../reducers/profileFormReducer';
+import {
+  passwordActionTypes,
+  passwordInitialState,
+  passwordFormReducer,
+} from '../../reducers/passwordFormReducer';
 
 function ProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
   const { profile, updateProfile, changePassword } = useAuth();
-  const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
-  const [previewUrl, setPreviewUrl] = useState('');
-  const [disabled1, setDisabled1] = useState(true);
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [firstNameError, setFirstNameError] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
+  const [profileState, profileDispatch] = useReducer(profileFormReducer, profileInitialState);
+  const { file, imageUrl, previewUrl, email, firstName, lastName, firstNameError, lastNameError } =
+    profileState;
+  const [passwordState, passwordDispatch] = useReducer(passwordFormReducer, passwordInitialState);
+  const {
+    currentPassword,
+    password,
+    confirmPassword,
+    currentPasswordError,
+    passwordError,
+    confirmPasswordError,
+  } = passwordState;
   const [loading, setLoading] = useState(false);
   const eyeiconRef = useRef(null);
   const eyeicon1Ref = useRef(null);
@@ -27,23 +40,20 @@ function ProfilePage() {
   const currentPasswordRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [currentPasswordError, setCurrentPasswordError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [mounted, setMounted] = useState(false);
-  const [disabled2, setDisabled2] = useState(true);
+  const [disabled, setDisabled] = useState(true);
 
   const handleAvatarChange = (event) => {
     if (!event.target.files || event.target.files.length === 0) {
-      setFile(undefined);
+      profileDispatch({ type: profileActionTypes.SET_FILE });
       return;
     }
 
-    setFile(event.target.files[0]);
-    setPreviewUrl(URL.createObjectURL(event.target.files[0]));
+    const file = event.target.files[0];
+    profileDispatch({ type: profileActionTypes.SET_FILE, payload: file });
+    profileDispatch({
+      type: profileActionTypes.SET_PREVIEW_URL,
+      payload: URL.createObjectURL(file),
+    });
   };
 
   const handleDeleteAvatar = async () => {
@@ -67,9 +77,7 @@ function ProfilePage() {
       cancelButtonText: 'Hủy',
     });
     if (result.isConfirmed) {
-      setFile(null);
-      setPreviewUrl('');
-      setImageUrl('');
+      profileDispatch({ type: profileActionTypes.DELETE_IMAGE });
       Swal.fire({
         title: 'Đã xóa',
         icon: 'success',
@@ -78,43 +86,55 @@ function ProfilePage() {
   };
 
   const handleFirstNameChange = (event) => {
-    setFirstName(event.target.value);
+    profileDispatch({ type: profileActionTypes.SET_FIRST_NAME, payload: event.target.value });
     const firstName = event.target.value.trim();
     const alphaRegex =
       /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/;
     if (firstName === '') {
-      setFirstNameError('Tên bắt buộc!');
+      profileDispatch({ type: profileActionTypes.SET_FIRST_NAME_ERROR, payload: 'Tên bắt buộc!' });
       return;
     }
     if (firstName.length < 2 || firstName.length > 50) {
-      setFirstNameError('Tên phải có độ dài từ 2 đến 30 ký tự!');
+      profileDispatch({
+        type: profileActionTypes.SET_FIRST_NAME_ERROR,
+        payload: 'Tên phải có độ dài từ 2 đến 30 ký tự!',
+      });
       return;
     }
     if (!alphaRegex.test(firstName)) {
-      setFirstNameError('Tên không được chứa số hoặc ký tự đặc biệt!');
+      profileDispatch({
+        type: profileActionTypes.SET_FIRST_NAME_ERROR,
+        payload: 'Tên không được chứa số hoặc ký tự đặc biệt!',
+      });
       return;
     }
-    setFirstNameError('');
+    profileDispatch({ type: profileActionTypes.SET_FIRST_NAME_ERROR, payload: '' });
   };
 
   const handleLastNameChange = (event) => {
-    setLastName(event.target.value);
+    profileDispatch({ type: profileActionTypes.SET_LAST_NAME, payload: event.target.value });
     const lastName = event.target.value.trim();
     const alphaRegex =
       /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/;
     if (lastName === '') {
-      setLastNameError('Họ bắt buộc!');
+      profileDispatch({ type: profileActionTypes.SET_LAST_NAME_ERROR, payload: 'Họ bắt buộc!' });
       return;
     }
     if (lastName.length < 2 || lastName.length > 50) {
-      setLastNameError('Họ phải có độ dài từ 2 đến 30 ký tự!');
+      profileDispatch({
+        type: profileActionTypes.SET_LAST_NAME_ERROR,
+        payload: 'Họ phải có độ dài từ 2 đến 30 ký tự!',
+      });
       return;
     }
     if (!alphaRegex.test(lastName)) {
-      setLastNameError('Họ không được chứa số hoặc ký tự đặc biệt!');
+      profileDispatch({
+        type: profileActionTypes.SET_LAST_NAME_ERROR,
+        payload: 'Họ không được chứa số hoặc ký tự đặc biệt!',
+      });
       return;
     }
-    setLastNameError('');
+    profileDispatch({ type: profileActionTypes.SET_LAST_NAME_ERROR, payload: '' });
   };
 
   const handleUpdateProfile = async (event) => {
@@ -197,48 +217,83 @@ function ProfilePage() {
   };
 
   const handleCurrentPasswordChange = (event) => {
-    setCurrentPassword(event.target.value);
+    passwordDispatch({
+      type: passwordActionTypes.SET_CURRENT_PASSWORD,
+      payload: event.target.value,
+    });
     const currentPassword = event.target.value;
     if (currentPassword === '') {
-      setCurrentPasswordError('Mật khẩu hiện tại là bắt buộc!');
+      passwordDispatch({
+        type: passwordActionTypes.SET_CURRENT_PASSWORD_ERROR,
+        payload: 'Mật khẩu hiện tại là bắt buộc!',
+      });
       return;
     }
-    setCurrentPasswordError('');
+    passwordDispatch({
+      type: passwordActionTypes.SET_CURRENT_PASSWORD_ERROR,
+      payload: '',
+    });
   };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
     const password = event.target.value;
+    passwordDispatch({
+      type: passwordActionTypes.SET_PASSWORD,
+      payload: password,
+    });
     if (password === '') {
-      setPasswordError('Mật khẩu mới là bắt buộc!');
+      passwordDispatch({
+        type: passwordActionTypes.SET_PASSWORD_ERROR,
+        payload: 'Mật khẩu mới là bắt buộc!',
+      });
       return;
     }
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
     if (!passwordRegex.test(password)) {
-      setPasswordError(
-        'Mật khẩu phải có ít nhất 8 ký tự, có ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường, 1 số và 1 ký tự đặc biệt!'
-      );
+      passwordDispatch({
+        type: passwordActionTypes.SET_PASSWORD_ERROR,
+        payload:
+          'Mật khẩu phải có ít nhất 8 ký tự, có ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường, 1 số và 1 ký tự đặc biệt!',
+      });
       return;
     }
     if (password.length > 20) {
-      setPasswordError('Mật khẩu có tối đa 20 ký tự!');
+      passwordDispatch({
+        type: passwordActionTypes.SET_PASSWORD_ERROR,
+        payload: 'Mật khẩu có tối đa 20 ký tự!',
+      });
       return;
     }
-    setPasswordError('');
+    passwordDispatch({
+      type: passwordActionTypes.SET_PASSWORD_ERROR,
+      payload: '',
+    });
   };
 
   const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
     const confirmPassword = event.target.value;
+    passwordDispatch({
+      type: passwordActionTypes.SET_CONFIRM_PASSWORD,
+      payload: confirmPassword,
+    });
     if (confirmPassword === '') {
-      setConfirmPasswordError('Mật khẩu xác nhận là bắt buộc!');
+      passwordDispatch({
+        type: passwordActionTypes.SET_CONFIRM_PASSWORD_ERROR,
+        payload: 'Mật khẩu xác nhận là bắt buộc!',
+      });
       return;
     }
     if (confirmPassword !== password) {
-      setConfirmPasswordError('Mật khẩu nhập lại không khớp!');
+      passwordDispatch({
+        type: passwordActionTypes.SET_CONFIRM_PASSWORD_ERROR,
+        payload: 'Mật khẩu nhập lại không khớp!',
+      });
       return;
     }
-    setConfirmPasswordError('');
+    passwordDispatch({
+      type: passwordActionTypes.SET_CONFIRM_PASSWORD_ERROR,
+      payload: '',
+    });
   };
 
   const handleChangePassword = async (event) => {
@@ -267,30 +322,27 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    setImageUrl(profile?.avatar || '');
-    setEmail(profile.email || '');
-    setFirstName(profile.first_name);
-    setLastName(profile.last_name);
+    profileDispatch({ type: profileActionTypes.SET_PROFILE, payload: profile });
   }, [profile]);
 
   useEffect(() => {
     if (firstNameError || lastNameError) {
-      setDisabled1(true);
+      setDisabled(true);
       return;
     }
     if (previewUrl || imageUrl !== profile.avatar) {
-      setDisabled1(false);
+      setDisabled(false);
       return;
     }
     if (profile.first_name !== firstName.trim()) {
-      setDisabled1(false);
+      setDisabled(false);
       return;
     }
     if (profile.last_name !== lastName.trim()) {
-      setDisabled1(false);
+      setDisabled(false);
       return;
     }
-    setDisabled1(true);
+    setDisabled(true);
   }, [previewUrl, firstName, lastName]);
 
   useEffect(() => {
@@ -300,19 +352,6 @@ function ProfilePage() {
       }
     };
   }, [previewUrl]);
-
-  useEffect(() => {
-    if (!mounted) {
-      setDisabled2(true);
-      setMounted(true);
-      return;
-    }
-    if (currentPasswordError || passwordError || confirmPasswordError) {
-      setDisabled2(true);
-    } else {
-      setDisabled2(false);
-    }
-  }, [currentPasswordError, passwordError, confirmPasswordError]);
 
   return (
     <AccountLayout>
@@ -337,7 +376,7 @@ function ProfilePage() {
             <form action="">
               <div className="flex space-x-4 items-center mb-[24px]">
                 <img
-                  className="w-[120px] rounded-full aspect-square"
+                  className="w-[120px] rounded-full aspect-square object-cover"
                   src={previewUrl || imageUrl || DefaultAvatar}
                   alt="Ảnh đại diện"
                 />
@@ -410,7 +449,7 @@ function ProfilePage() {
                 <Button
                   title="Lưu thay đổi"
                   type="submit"
-                  isDisable={disabled1}
+                  isDisable={disabled}
                   handleClick={handleUpdateProfile}
                 />
               </div>
@@ -422,7 +461,7 @@ function ProfilePage() {
                 <div className="relative flex flex-col justify-center mb-[24px]">
                   <label
                     className="transition-all font-vs-std text-[16px] text-vinamilk-blue italic mb-[8px] flex font-[450] leading-[19px]"
-                    htmlFor="password"
+                    htmlFor="currentPassword"
                   >
                     Mật khẩu hiện tại*
                   </label>
@@ -432,7 +471,7 @@ function ProfilePage() {
                       value={currentPassword}
                       placeholder="Nhập mật khẩu hiện tại*"
                       handleChange={handleCurrentPasswordChange}
-                      id="password"
+                      id="currentPassword"
                       ref={currentPasswordRef}
                     />
                     <div className="h-auto w-[24px] cursor-pointer absolute top-10 right-2">
@@ -475,7 +514,7 @@ function ProfilePage() {
                 <div className="relative flex flex-col justify-center mb-[24px]">
                   <label
                     className="transition-all font-vs-std text-[16px] text-vinamilk-blue italic mb-[8px] flex font-[450] leading-[19px]"
-                    htmlFor="password"
+                    htmlFor="confirmPassword"
                   >
                     Xác nhận mật khẩu mới*
                   </label>
@@ -485,7 +524,7 @@ function ProfilePage() {
                       value={confirmPassword}
                       placeholder="Nhập lại mật khẩu phía trên*"
                       handleChange={handleConfirmPasswordChange}
-                      id="password"
+                      id="confirmPassword"
                       ref={confirmPasswordRef}
                     />
                     <div className="h-auto w-[24px] cursor-pointer absolute top-10 right-2">
@@ -505,7 +544,7 @@ function ProfilePage() {
                   <Button
                     title="Xác nhận"
                     type="submit"
-                    isDisable={disabled2}
+                    isDisable={!!(currentPasswordError || passwordError || confirmPasswordError)}
                     handleClick={handleChangePassword}
                   />
                 </div>

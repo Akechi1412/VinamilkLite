@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useReducer, useRef, useEffect, useState } from 'react';
 import { useAuth } from '../../hooks';
 import { Loading } from '../../components/common';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,28 +7,31 @@ import eye from '../../assets/images/eye-solid.svg';
 import eyeslash from '../../assets/images/eye-slash-solid.svg';
 import Swal from 'sweetalert2';
 import { MainLayout } from '../../components/layout';
+import {
+  loginActionTypes,
+  loginInitialState,
+  loginFormReducer,
+} from '../../reducers/loginFormReducer';
 
 function LoginPage() {
   const eyeiconRef = useRef(null);
   const passwordRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const { profile, login, refresh } = useAuth();
   const navigate = useNavigate();
-  const [emailCheck, setEmailCheck] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+  const [formState, dispatch] = useReducer(loginFormReducer, loginInitialState);
+  const { email, password, emailCheck, passwordCheck } = formState;
+  const [loading, setLoading] = useState(true);
 
   const changePasswordType = () => {
-    if (passwordRef) {
-      if (passwordRef.current.type == 'password') {
+    if (passwordRef.current) {
+      if (passwordRef.current.type === 'password') {
         passwordRef.current.type = 'text';
-        if (eyeiconRef) {
+        if (eyeiconRef.current) {
           eyeiconRef.current.src = eye;
         }
       } else {
         passwordRef.current.type = 'password';
-        if (eyeiconRef) {
+        if (eyeiconRef.current) {
           eyeiconRef.current.src = eyeslash;
         }
       }
@@ -36,44 +39,47 @@ function LoginPage() {
   };
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    dispatch({ type: loginActionTypes.SET_EMAIL, payload: event.target.value });
     const email = event.target.value.trim();
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
     if (email === '') {
-      setEmailCheck('Email là bắt buộc!');
+      dispatch({ type: loginActionTypes.SET_EMAIL_CHECK, payload: 'Email là bắt buộc!' });
       return;
     }
     if (!emailRegex.test(email)) {
-      setEmailCheck('Email không hợp lệ!');
+      dispatch({ type: loginActionTypes.SET_EMAIL_CHECK, payload: 'Email không hợp lệ!' });
       return;
     }
-    setEmailCheck('');
+    dispatch({ type: loginActionTypes.SET_EMAIL_CHECK, payload: '' });
   };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
     const password = event.target.value;
+    dispatch({ type: loginActionTypes.SET_PASSWORD, payload: password });
+
     if (password === '') {
-      setPasswordCheck('Mật khẩu là bắt buộc!');
+      dispatch({ type: loginActionTypes.SET_PASSWORD_CHECK, payload: 'Mật khẩu là bắt buộc!' });
       return;
     }
-    setPasswordCheck('');
+    dispatch({ type: loginActionTypes.SET_PASSWORD_CHECK, payload: '' });
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     if (!email.trim()) {
-      setEmailCheck('Email là bắt buộc!');
+      dispatch({ type: loginActionTypes.SET_EMAIL_CHECK, payload: 'Email là bắt buộc!' });
       return;
     }
     if (!password) {
-      setPasswordCheck('Mật khẩu là bắt buộc!');
+      dispatch({ type: loginActionTypes.SET_PASSWORD_CHECK, payload: 'Mật khẩu là bắt buộc!' });
       return;
     }
 
     setLoading(true);
+
     try {
       await login({ email: email.trim(), password });
       setLoading(false);

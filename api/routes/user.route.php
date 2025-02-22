@@ -21,6 +21,10 @@ $router->get('/users/:id', function ($params) use ($userController) {
     echo $userController->getById($params['id']);
 })->addMiddleware(new AuthMiddleware(true));
 
+$router->get('/users/:id/public', function ($params) use ($userController) {
+    echo $userController->getPublicInfo($params['id']);
+});
+
 $router->delete('/users/:id', function ($params) use ($userController) {
     echo $userController->delete($params['id']);
 })->addMiddleware(new AuthMiddleware(true));

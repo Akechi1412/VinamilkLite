@@ -3,10 +3,15 @@ import AddressIcon from '../../assets/images/address.svg';
 import PhoneIcon from '../../assets/images/phone.svg';
 import FaxIcon from '../../assets/images/fax.svg';
 import MailIcon from '../../assets/images/mail.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { Loading, Input, TextArea, Button } from '../../components/common';
 import Swal from 'sweetalert2';
 import { contactApi, optionApi } from '../../api';
+import {
+  contactActionTypes,
+  contactInitialState,
+  contactFormReducer,
+} from '../../reducers/contactFormReducer';
 
 function ContactPage() {
   const [loading, setLoading] = useState(false);
@@ -15,63 +20,75 @@ function ContactPage() {
   const [contactPhone, setContactPhone] = useState('');
   const [contactFax, setContactFax] = useState('');
   const [contactEmail, setContactEmail] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [content, setContent] = useState('');
-  const [fullNameError, setFullNameError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [contentError, setContentError] = useState('');
-  const [mounted, setMounted] = useState(false);
-  const [disabled, setDisabled] = useState(true);
+  const [formState, dispatch] = useReducer(contactFormReducer, contactInitialState);
+  const { fullName, email, content, fullNameError, emailError, contentError } = formState;
 
   const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
+    dispatch({ type: contactActionTypes.SET_FULL_NAME, payload: event.target.value });
     const fullName = event.target.value.trim();
     const alphaRegex =
       /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/;
+
     if (fullName === '') {
-      setFullNameError('Họ và tên bắt buộc!');
+      dispatch({ type: contactActionTypes.SET_FULL_NAME_ERROR, payload: 'Họ và tên bắt buộc!' });
       return;
     }
     if (fullName.length < 2 || fullName.length > 50) {
-      setFullNameError('Họ và tên phải có độ dài từ 2 đến 50 ký tự!');
+      dispatch({
+        type: contactActionTypes.SET_FULL_NAME_ERROR,
+        payload: 'Họ và tên phải có độ dài từ 2 đến 50 ký tự!',
+      });
       return;
     }
     if (!alphaRegex.test(fullName)) {
-      setFullNameError('Họ và tên không được chứa số hoặc ký tự đặc biệt!');
+      dispatch({
+        type: contactActionTypes.SET_FULL_NAME_ERROR,
+        payload: 'Họ và tên không được chứa số hoặc ký tự đặc biệt!',
+      });
       return;
     }
-    setFullNameError('');
+    dispatch({
+      type: contactActionTypes.SET_FULL_NAME_ERROR,
+      payload: '',
+    });
   };
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    dispatch({ type: contactActionTypes.SET_EMAIL, payload: event.target.value });
     const email = event.target.value.trim();
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
     if (email === '') {
-      setEmailError('Email là bắt buộc!');
+      dispatch({ type: contactActionTypes.SET_EMAIL_ERROR, payload: 'Email là bắt buộc!' });
       return;
     }
     if (!emailRegex.test(email)) {
-      setEmailError('Email không hợp lệ!');
+      dispatch({ type: contactActionTypes.SET_EMAIL_ERROR, payload: 'Email không hợp lệ!' });
       return;
     }
-    setEmailError('');
+    dispatch({ type: contactActionTypes.SET_EMAIL_ERROR, payload: '' });
   };
 
   const handleContentChange = (event) => {
-    setContent(event.target.value);
+    dispatch({ type: contactActionTypes.SET_CONTENT, payload: event.target.value });
     const content = event.target.value.trim();
+
     if (content === '') {
-      setContentError('Nội dung là bắt buộc!');
+      dispatch({ type: contactActionTypes.SET_CONTENT_ERROR, payload: 'Nội dung là bắt buộc!' });
       return;
     }
     if (content.length > 10000) {
-      setContent('Nội dung có tối đa 10000 ký tự');
+      dispatch({
+        type: contactActionTypes.SET_CONTENT_ERROR,
+        payload: 'Nội dung có tối đa 10000 ký tự',
+      });
       return;
     }
-    setContentError('');
+    dispatch({
+      type: contactActionTypes.SET_CONTENT_ERROR,
+      payload: '',
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -80,16 +97,16 @@ function ContactPage() {
     setLoading(true);
     try {
       await contactApi.submit({ full_name: fullName, email, content });
-      setFullName('');
-      setEmail('');
-      setContent('');
-      setLoading(false);
+      dispatch({
+        type: contactActionTypes.RESET_FORM,
+      });
       await Swal.fire({
         icon: 'success',
         title: 'Gửi liên hệ thành công',
         text: 'Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất',
         timer: 2000,
       });
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       const errorMessage = error.response?.data?.message || 'Something went wrong!';
@@ -100,19 +117,6 @@ function ContactPage() {
       });
     }
   };
-
-  useEffect(() => {
-    if (!mounted) {
-      setDisabled(true);
-      setMounted(true);
-      return;
-    }
-    if (fullNameError || emailError || contentError) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [fullNameError, emailError, contentError]);
 
   useEffect(() => {
     (async () => {
@@ -251,7 +255,7 @@ function ContactPage() {
                     <Button
                       title="Gửi"
                       type="submit"
-                      isDisable={disabled}
+                      isDisable={!!(fullNameError || emailError || contentError)}
                       handleClick={handleSubmit}
                     />
                   </div>

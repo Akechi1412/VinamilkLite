@@ -128,7 +128,7 @@ function AccountLayout({ children }) {
             </div>
             <div className="hidden lg:block relative">
               <select
-                className="cursor-pointer block bg-secondary py-4 pl-3 pr-10 w-full rounded-md border border-primary focus:border-vinamilk-blue-light"
+                className="cursor-pointer block bg-secondary py-4 pl-3 pr-10 w-full rounded-md border border-primary focus:border-vinamilk-blue-light outline-none"
                 value={selected}
                 onChange={handleChange}
               >
@@ -139,7 +139,7 @@ function AccountLayout({ children }) {
                 ))}
               </select>
               <img
-                className="absolute bg-secondary top-0 translate-y-1/2 right-1 w-[30px] h-[30px]"
+                className="absolute bg-secondary top-1/2 -translate-y-1/2 right-3 w-[30px] h-[30px]"
                 src={ArrowBottom}
                 alt="\/"
               />

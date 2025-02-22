@@ -5,16 +5,25 @@ import 'slick-carousel/slick/slick-theme.css';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { productApi, productImageApi } from '../../api';
-import { Button, Cart, Loading, Overlay } from '../../components/common';
+import { productApi, productImageApi, commentApi } from '../../api';
+import {
+  Button,
+  Cart,
+  Loading,
+  Overlay,
+  CommentBlock,
+  CommentInput,
+} from '../../components/common';
 import parse from 'html-react-parser';
 import { useCart } from '../../hooks';
+import { UserCacheProvider } from '../../contexts';
 
 function ProductDetailPage() {
   const { addToCart, getQuantityFromCart, increaseQuantity } = useCart();
   const { slug } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [commentLoading, setCommentLoading] = useState(false);
   const [product, setProduct] = useState(null);
   const [productImages, setProductImages] = useState([]);
   const [nav1, setNav1] = useState(null);
@@ -24,6 +33,9 @@ function ProductDetailPage() {
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCart, setShowCart] = useState(false);
+  const [parentComments, setParentComments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleAdd = () => {
     if (getQuantityFromCart(product.id) > 0) {
@@ -33,6 +45,62 @@ function ProductDetailPage() {
     }
     setCount(1);
     setShowCart(true);
+  };
+
+  const fetchComments = async () => {
+    if (!product) return;
+
+    try {
+      setCommentLoading(true);
+      const { data: commentData } = await commentApi.getComments(
+        `product_id=${product.id}&parent_id_null&&_sort=-created_at&_page=${currentPage}&_per_page=10`
+      );
+      setParentComments((prevComments) => {
+        const existingIds = new Set(prevComments.map((c) => c.id));
+        const newComments = commentData.rows.filter((c) => !existingIds.has(c.id));
+
+        return [...prevComments, ...newComments];
+      });
+      setTotalPages(commentData.pagination?.totalPages || 0);
+      setCommentLoading(false);
+    } catch (error) {
+      setCommentLoading(false);
+      const errorMessage = error.response?.data?.message || 'Something went wrong!';
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: errorMessage,
+      });
+    }
+  };
+
+  const fetchParentComments = async () => {
+    if (currentPage === 1) {
+      await fetchComments();
+    } else {
+      setCurrentPage(1);
+    }
+  };
+
+  const handleSubmit = async (comment) => {
+    try {
+      await commentApi.create({ product_id: product.id, content: comment });
+      Swal.fire({
+        title: 'Đã gửi!',
+        text: 'Bình luận đã được gửi thành công.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      await fetchParentComments();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Something went wrong!';
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: errorMessage,
+      });
+    }
   };
 
   useEffect(() => {
@@ -45,7 +113,6 @@ function ProductDetailPage() {
       setLoading(true);
       try {
         const { data: productData } = await productApi.getProducts(`slug=${slug}`);
-        setLoading(false);
         const product = productData.rows?.[0];
         if (product) {
           setProduct(product);
@@ -61,6 +128,7 @@ function ProductDetailPage() {
           productImages = [{ id: 0, src: product.thumbnail }, ...productImages];
         }
         setProductImages(productImages);
+        setLoading(false);
       } catch (error) {
         setLoading(false);
         const errorMessage = error.response?.data?.message || 'Something went wrong!';
@@ -72,6 +140,10 @@ function ProductDetailPage() {
       }
     })();
   }, [slug]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [product?.id, currentPage]);
 
   return (
     <MainLayout>
@@ -177,6 +249,37 @@ function ProductDetailPage() {
             </div>
           </div>
         </div>
+        <UserCacheProvider>
+          <div className="text-primary mb-10">
+            <h2 className="mb-5 font-vsd-regular text-[2.5rem] sm:text-[2rem]">Bình luận</h2>
+            <div className="mx-auto max-w-5xl">
+              <CommentInput type={'comment'} handleSubmit={handleSubmit} />
+              {commentLoading ? (
+                <Loading />
+              ) : (
+                <>
+                  {parentComments.map((comment) => (
+                    <CommentBlock
+                      key={comment.id}
+                      parentComment={comment}
+                      fetchParentComments={fetchParentComments}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+            {currentPage < totalPages && !commentLoading && (
+              <div className="flex justify-center mt-5">
+                <button
+                  onClick={() => setCurrentPage((page) => page + 1)}
+                  className="px-4 py-2 text-vinamilk-blue-light"
+                >
+                  Xem bình luận cũ hơn
+                </button>
+              </div>
+            )}
+          </div>
+        </UserCacheProvider>
       </div>
       {showCart && (
         <Overlay handleClickOut={() => setShowCart(false)}>

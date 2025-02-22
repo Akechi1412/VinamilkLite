@@ -109,8 +109,8 @@ class Model
     /**
      * Get a record by its ID from the table.
      *
-     * @param   string  $id The ID of the record to select
-     * @return  mixed   Array of results if successful, false otherwise
+     * @param   string|int  $id The ID of the record to select
+     * @return  mixed       Array of results if successful, false otherwise
      */
     public function getById($id)
     {
@@ -140,11 +140,11 @@ class Model
     /**
      * Update a record with some attributes in the table.
      *
-     * @param   array   $data The data to update
-     * @param   string  $id The ID of the record to update
-     * @return  bool    True if successful, false otherwise
+     * @param   array       $data The data to update
+     * @param   string|int  $id The ID of the record to update
+     * @return  bool        True if successful, false otherwise
      */
-    public function update(array $data, string $id)
+    public function update(array $data, mixed $id)
     {
         return $this->db->table($this->tableName)
             ->update($data)->where(['id' => $id])->execute();
@@ -153,11 +153,11 @@ class Model
     /**
      * Update a record with all attributes in the table.
      *
-     * @param   array   $data The data to update
-     * @param   string  $id The ID of the record to update
-     * @return  bool    True if successful, false otherwise
+     * @param   array       $data The data to update
+     * @param   string|int  $id The ID of the record to update
+     * @return  bool        True if successful, false otherwise
      */
-    public function updateAll(array $data, string $id)
+    public function updateAll(array $data, mixed $id)
     {
         return $this->db->table($this->tableName)
             ->update($data)->where(['id' => $id])->execute();
@@ -166,7 +166,7 @@ class Model
     /**
      * Delete a record in the table where the ID matches, 
      *
-     * @param   string  $id The ID of the record to delete
+     * @param   string|int  $id The ID of the record to delete
      * @return  bool    True if successful, false otherwise
      */
     public function delete($id)

@@ -7,6 +7,9 @@ const userApi = {
   getById(id) {
     return axiosClient.get(`/users/${id}`);
   },
+  getPublicInfo(id) {
+    return axiosClient.get(`/users/${id}/public`);
+  },
   create(data) {
     return axiosClient.post('/users', data);
   },

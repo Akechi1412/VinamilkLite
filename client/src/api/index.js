@@ -9,3 +9,5 @@ export { default as optionApi } from './optionApi';
 export { default as firebaseApi } from './firebaseApi';
 export { default as productImageApi } from './productImageApi';
 export { default as newsCategoryApi } from './newsCategoryApi';
+export { default as commentApi } from './commentApi';
+export { default as addressApi } from './addressApi';

@@ -170,7 +170,8 @@ function ProductsPage() {
           <h1 className="font-vs-std font-semibold text-[3rem] text-primary mb-5">
             {collection?.name || 'Tất cả sản phẩm'}
           </h1>
-          <ProductList productList={productList} />
+          {loading ? <Loading /> : <ProductList productList={productList} />}
+
           <div className="text-primary font-inter font-[500] mt-6 flex items-end justify-between md:flex-col lg:space-y-4">
             <p>
               Đang hiển thị {productList.length} trên tổng số {totalRows}
@@ -199,7 +200,6 @@ function ProductsPage() {
           </div>
         </div>
       </div>
-      {loading && <Loading fullScreen />}
     </MainLayout>
   );
 }

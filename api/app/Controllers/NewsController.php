@@ -18,16 +18,16 @@ class newsController extends Controller
     }
 
     /**
-     * Get newss.
+     * Get news.
      *
      * @return  string  The JSON response
      */
     public function getNews()
     {
         $queryParams = $this->request->params();
-        $newss = $this->newsModel->getMultiple($queryParams);
+        $news = $this->newsModel->getMultiple($queryParams);
 
-        if ($newss === false) {
+        if ($news === false) {
             return $this->response->status(500)->json(
                 0,
                 [],
@@ -37,7 +37,7 @@ class newsController extends Controller
 
         return $this->response->status(200)->json(
             1,
-            $newss,
+            $news,
         );
     }
 

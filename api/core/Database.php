@@ -185,6 +185,12 @@ class Database
                 $newField = substr($field, 0, -3);
                 $this->params[$newField] = $params[$field];
                 return $newField . ' <> ?';
+            } elseif (substr($field, -5) === '_null') {
+                $newField = substr($field, 0, -5);
+                return $newField . ' IS NULL';
+            } elseif (substr($field, -8) === '_notnull') {
+                $newField = substr($field, 0, -8);
+                return $newField . ' IS NOT NULL';
             } else {
                 $this->params[$field] = $params[$field];
                 return $field . ' = ?';

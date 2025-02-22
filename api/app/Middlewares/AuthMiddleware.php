@@ -47,6 +47,7 @@ class AuthMiddleware extends Middleware
                     return false;
                 }
             }
+            $GLOBALS['isAdmin'] = $userRole === 'admin';
 
             $banExpired = $userData['ban_expired'];
             if ($banExpired !== null && strtotime($banExpired) > time()) {

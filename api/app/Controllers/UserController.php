@@ -66,6 +66,30 @@ class UserController extends Controller
     }
 
     /**
+     * Get public info of a user by ID.
+     *
+     * @param    int         $id The ID of the user to retrieve
+     * @return   string      The JSON response
+     */
+    public function getPublicInfo($id)
+    {
+        $user = $this->userModel->getPublicInfo($id);
+
+        if ($user === false) {
+            return $this->response->status(500)->json(
+                0,
+                [],
+                'Something was wrong!'
+            );
+        }
+
+        return $this->response->status(200)->json(
+            1,
+            $user
+        );
+    }
+
+    /**
      * Create a new user.
      *
      * @return  string  The JSON response

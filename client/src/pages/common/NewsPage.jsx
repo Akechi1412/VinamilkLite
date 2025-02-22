@@ -2,7 +2,7 @@ import { MainLayout } from '../../components/layout';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { newsCategoryApi, newsApi } from '../../api';
 import { Loading, NewsList } from '../../components/common';
 import Swal from 'sweetalert2';
@@ -13,11 +13,11 @@ function NewsPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [newsCategoryList, setNewsCategoryList] = useState([]);
-  const [newsMap, setNewsMap] = useState(new Map());
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [newsCategory, setNewsCategory] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
+  const newsMapRef = useRef(new Map());
 
   const mutateNews = async () => {
     try {
@@ -31,12 +31,8 @@ function NewsPage() {
       }
       const { data: newsData } = await newsApi.getNews(paramString);
       setTotalPages(newsData.pagination?.totalPages || 0);
-      setNewsMap((newsMap) => {
-        newsMap.set(currentPage, newsData.rows);
-        setNewsList(Array.from(newsMap.values()).flat());
-        return newsMap;
-      });
-      console.log(newsMap);
+      newsMapRef.current.set(currentPage, newsData.rows);
+      setNewsList(Array.from(newsMapRef.current.values()).flat());
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -131,7 +127,12 @@ function NewsPage() {
 
   useEffect(() => {
     mutateNews();
-  }, [currentPage, newsCategory]);
+  }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    mutateNews();
+  }, [newsCategory]);
 
   return (
     <MainLayout>
@@ -164,7 +165,8 @@ function NewsPage() {
             {newsCategory?.name ? 'Tin tức - ' + newsCategory?.name : 'Tất cả tin tức'}
           </h1>
 
-          <NewsList newsList={newsList} />
+          {loading ? <Loading /> : <NewsList newsList={newsList} />}
+
           <div className="mt-5 flex justify-center mb-20">
             {currentPage < totalPages ? (
               <button
@@ -179,7 +181,6 @@ function NewsPage() {
           </div>
         </div>
       </div>
-      {loading && <Loading fullScreen />}
     </MainLayout>
   );
 }

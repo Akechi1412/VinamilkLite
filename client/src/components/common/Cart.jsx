@@ -25,14 +25,14 @@ function Cart({ handleClose }) {
         <h4 className="text-xl font-vs-std text-primary">Giỏ hàng</h4>
         <img
           onClick={() => handleClose()}
-          className="cursor-pointer w-10 h-10 object-cover hover:bg-tertiary rounded-md"
+          className="cursor-pointer w-10 h-10 object-cover transition-all hover:bg-tertiary rounded-md"
           src={CloseIcon}
           alt="X"
         />
       </div>
       {cartData?.length > 0 ? (
         <div className="flex flex-col flex-1 overflow-y-hidden">
-          <ul className="flex-1 overflow-auto">
+          <ul className="flex-1 overflow-auto mb-3">
             {cartData.map((item) => (
               <li
                 className="flex justify-start px-6 sm:px-4 py-3 last:pb-0 [&:not(:last-child)]:border-b border-dashed border-[#999]"
@@ -50,7 +50,7 @@ function Cart({ handleClose }) {
                     </h6>
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="flex items-center h-8 px-3 flex-shrink-0 hover:bg-tertiary rounded-md"
+                      className="flex items-center h-8 px-3 flex-shrink-0 transition-all hover:bg-tertiary rounded-md"
                     >
                       <img className="w-4 h-4" src={TrashBinBlue} alt="Xóa" />
                     </button>
@@ -59,7 +59,7 @@ function Cart({ handleClose }) {
                     <div className="border border-primary rounded-[6px] text-primary flex items-center h-8 leading-[1] w-fit">
                       <button
                         onClick={() => decreaseQuantity(item.id)}
-                        className={`ml-1 px-3 py-1 rounded-md${
+                        className={`ml-1 px-3 py-1 transition-all rounded-md${
                           getQuantityFromCart(item.id) > 1
                             ? ' hover:bg-tertiary'
                             : ' text-gray-400 cursor-default'
@@ -70,7 +70,7 @@ function Cart({ handleClose }) {
                       <span className="px-3 py-1">{item.quantity}</span>
                       <button
                         onClick={() => increaseQuantity(item.id)}
-                        className="mr-1 px-3 py-1 rounded-md hover:bg-tertiary"
+                        className="mr-1 px-3 py-1 rounded-md transition-all hover:bg-tertiary"
                       >
                         +
                       </button>

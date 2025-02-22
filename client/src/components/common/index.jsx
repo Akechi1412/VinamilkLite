@@ -16,3 +16,7 @@ export { default as ProductItem } from './ProductItem';
 export { default as NewsList } from './NewsList';
 export { default as NewsItem } from './NewsItem';
 export { default as Cart } from './Cart';
+export { default as CommentItem } from './CommentItem';
+export { default as CommentBlock } from './CommentBlock';
+export { default as CommentInput } from './CommentInput';
+export { default as AddressForm } from './AddressForm';

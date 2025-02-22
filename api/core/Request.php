@@ -209,6 +209,10 @@ class Request
             if ($value < $minValue) {
                 return "The value of $field field may not be greater than $minValue.";
             }
+        } elseif ($rule === 'phone') {
+            if (!preg_match('/^(\+84|0)[1-9][0-9]{8,14}$/', $value)) {
+                return "The $field field must be a valid phone number.";
+            }
         }
 
         return true;
